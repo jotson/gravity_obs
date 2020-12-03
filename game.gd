@@ -22,6 +22,11 @@ func _ready():
 	start_round()
 
 
+func _input(event):
+	if Input.is_action_just_pressed("fullscreen"):
+		OS.window_fullscreen = !OS.window_fullscreen
+		
+
 func start_round():
 	state = STATE.WAITING
 	emit_signal("state_changed")

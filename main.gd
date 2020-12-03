@@ -4,6 +4,7 @@ extends Node2D
 func _ready():
 	$roundTimer.start()
 	
+# warning-ignore:return_value_discarded
 	Game.connect("state_changed", self, "state_changed")
 	
 	# TODO Listen for commands
@@ -14,7 +15,7 @@ func _ready():
 	# TODO !selfdestruct !destruct
 
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if Game.state == Game.STATE.WAITING:
 		$roundCountdown.text = "GET READY! Waiting for players..."
 	

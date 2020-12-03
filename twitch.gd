@@ -40,11 +40,11 @@ func command_test(cmd_info : CommandInfo) -> void:
 	prints("Test!", cmd_info)
 
 
-func unhandled_message(message, tags):
+func unhandled_message(_message, _tags):
 	#prints(message, tags)
 	pass
 
 
-func chat_message(sender_data, command):
+func chat_message(sender_data, _command):
 	var username = sender_data.user
 	Game.add_ship(username)
