@@ -145,14 +145,7 @@ func kill_ship(killer, victim):
 
 		
 func reset_players():
-	last_winner = ""
-	high_score = 0
-	
 	for key in players.keys():
-		if players[key].kills >= high_score:
-			high_score = players[key].kills
-			last_winner = key
-			
 		players[key].kills = 0
 		players[key].deaths = 0
 

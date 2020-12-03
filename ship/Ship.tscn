@@ -1,11 +1,9 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://ship/Ship.gd" type="Script" id=1]
 [ext_resource path="res://common/fonts/small.tres" type="DynamicFont" id=2]
 [ext_resource path="res://textures/crown.png" type="Texture" id=3]
 [ext_resource path="res://ship/textures/flame.png" type="Texture" id=10]
-[ext_resource path="res://ship/materials/distortion.tres" type="Material" id=12]
-[ext_resource path="res://ship/textures/distortion.png" type="Texture" id=13]
 [ext_resource path="res://ship/textures/ship.png" type="Texture" id=14]
 [ext_resource path="res://ship/textures/turret.png" type="Texture" id=15]
 [ext_resource path="res://ship/textures/muzzle-flash.png" type="Texture" id=16]
@@ -204,12 +202,6 @@ hframes = 4
 autoplay = "default"
 playback_speed = 10.0
 anims/default = SubResource( 5 )
-
-[node name="exhaust" type="Sprite" parent="."]
-material = ExtResource( 12 )
-position = Vector2( -52, 0 )
-scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 13 )
 
 [node name="Sprite" type="Sprite" parent="."]
 

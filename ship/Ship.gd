@@ -238,13 +238,11 @@ func stop_shooting():
 
 func emit_exhaust(on):
 	if on:
-		$exhaust.show()
 		$flame.show()
 		$flame.rotation = PI/2 - angular_velocity * PI/36
 		$flame/flare.global_rotation = 0
 		$flame/flare.scale = Vector2(rand_range(.5,1), 1)
 	else:
-		$exhaust.hide()
 		$flame.hide()
 
 
