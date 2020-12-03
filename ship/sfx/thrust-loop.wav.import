@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/thrust-loop.wav-67bf2d1cf669219edc67a27088d2adea.sample"
+
+[deps]
+
+source_file="res://ship/sfx/thrust-loop.wav"
+dest_files=[ "res://.import/thrust-loop.wav-67bf2d1cf669219edc67a27088d2adea.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop=true
+compress/mode=0

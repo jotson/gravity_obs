@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/stars-from-kaadesh.ogg-8e71e21dbc4b1396312778cf20189007.oggstr"
+
+[deps]
+
+source_file="res://common/music/stars-from-kaadesh.ogg"
+dest_files=[ "res://.import/stars-from-kaadesh.ogg-8e71e21dbc4b1396312778cf20189007.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

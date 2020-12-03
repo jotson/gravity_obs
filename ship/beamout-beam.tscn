@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://ship/materials/tractor.tres" type="Material" id=1]
+[ext_resource path="res://beacon/textures/tractor-beam.png" type="Texture" id=2]
+[ext_resource path="res://ship/beamout-beam.gd" type="Script" id=3]
+
+[node name="BeamoutBeam" type="Sprite" groups=[
+"transient",
+]]
+modulate = Color( 0, 0.584314, 0.913725, 1 )
+material = ExtResource( 1 )
+z_index = 1
+texture = ExtResource( 2 )
+offset = Vector2( 0, -200 )
+script = ExtResource( 3 )

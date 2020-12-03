@@ -1,0 +1,257 @@
+extends RigidBody2D
+
+var LINEAR_ACCELERATION = 450.0 # px/s/s
+var ANGULAR_ACCELERATION = 10.0 # radians/s/s
+var ANGULAR_MAX = PI * 2 # radians/s
+var TRACTOR_RANGE = 100 # px
+var STARTING_HEALTH = 1
+var health = 0
+
+var _editor_transform = null
+
+var fuel = 0.0 # Starting fuel is set during level init
+var _thrust_duration = 0
+var thrusting_last_frame = false
+var turn = 0
+var _turn_duration = 0
+var _shoot_duration = 0
+var landed = false
+
+var tractor_target = '' # Node path to the target object
+var tractor_can_toggle = true # Controls when beam input can toggle
+var closest_beamable = null # Keeps track of closest beamable object
+var beam_priority = ['fuel-pod', 'person', 'generator', 'cargo-box']
+
+var _teleport = null
+
+var FUEL_CONSUMPTION_RATE = 20.0 # units/s
+
+var Bullet = preload("res://ship/bullet.tscn")
+var Respawn = preload("res://ship/respawn.tscn")
+
+var last_velocity = Vector2()
+var local_gravity = Vector2()
+var _thrust_dir = Vector2(0, 0)
+var aim_dir = Vector2(0, -1)
+var turret_locked = false
+var is_shooting = false
+
+var shootSfx = []
+
+onready var alive = true
+onready var initial_collision_layer = collision_layer
+onready var initial_collision_mask = collision_mask
+onready var initial_transform = transform
+
+signal destroyed
+signal revived
+
+const ENTITY_TYPE_ID = 'player'
+
+
+func _ready():
+	lock_turret()
+	emit_exhaust(0)
+	$flash.hide()
+	alive = false
+	hide()
+	revive()
+
+
+func _physics_process(_delta):
+	if not alive:
+		return
+		
+	# Track last known velocity
+	last_velocity = linear_velocity
+	
+	# Random move
+	if randi() % 100 == 0:
+		thrust()
+		
+	if randi() % 200 == 0:
+		if randi() % 2 == 1:
+			turn_left(0.5)
+		else:
+			turn_right(0.5)
+
+	if randi() % 100 == 0:
+		shoot()
+		
+	if _shoot_duration > 0:
+		_shoot_duration -= _delta
+		shoot(_shoot_duration)
+
+func _integrate_forces(state):
+	if not alive:
+		return
+		
+	local_gravity = state.total_gravity
+
+	var bearing = Vector2(1,0).rotated(rotation).normalized()
+	var delta = state.get_step()
+
+	# Animate hull
+	if _thrust_duration > 0:
+		_thrust_duration -= delta
+		linear_velocity += _thrust_dir.normalized() * LINEAR_ACCELERATION/mass * delta
+		thrust(_thrust_duration)
+		
+	$flamePort.hide()
+	$flameStarboard.hide()
+	if _turn_duration > 0:
+		_turn_duration -= delta
+		angular_velocity += turn * ANGULAR_ACCELERATION * delta
+		if abs(angular_velocity) > ANGULAR_MAX:
+			angular_velocity = ANGULAR_MAX * angular_velocity / abs(angular_velocity)
+
+		if turn > 0:
+			$flamePort.show()
+		if turn < 0:
+			$flameStarboard.show()
+
+	if _thrust_duration > 0:
+		# Thrust animation
+		if $Sprite/hull.frame != 3 and not $Sprite/hull/AnimationPlayer.is_playing():
+			$Sprite/hull/AnimationPlayer.play('thrust')
+	else:
+		# Reverse thrust animation
+		if $Sprite/hull.frame == 3 and not $Sprite/hull/AnimationPlayer.is_playing():
+			$Sprite/hull/AnimationPlayer.play('thrust', -1, -1, true)
+
+	# Aim turret
+	if turret_locked:
+		aim_dir = bearing
+
+	# Consume fuel and turn on engine
+	if _thrust_duration > 0:
+		emit_exhaust(1)
+	else:
+		emit_exhaust(0)
+
+	# Thrust sound
+	if _thrust_duration > 0:
+		thrusting_last_frame = true
+	else:
+		thrusting_last_frame = false
+
+
+func thrust(duration = 0.5):
+	var bearing = Vector2(1,0).rotated(rotation).normalized()
+	_thrust_duration = duration
+	thrust_dir(bearing)
+
+func turn_left(duration = 0.25):
+	_turn_duration = duration
+	turn = -1
+
+func turn_right(duration = 0.25):
+	_turn_duration = duration
+	turn = 1
+
+func thrust_dir(direction):
+	_thrust_dir = direction
+
+func aim(direction):
+	aim_dir = direction
+
+func lock_turret():
+	turret_locked = true
+
+func unlock_turret():
+	turret_locked = false
+
+func shoot(duration = 0.2):
+	if !alive:
+		return
+		
+	_shoot_duration = duration
+	
+	$shootTimer.wait_time = 0.1
+
+	if $shootTimer.is_stopped():
+		is_shooting = true
+		
+		# Fire bullet
+		var bullet = Bullet.instance()
+		bullet.position = position + Vector2(32,0).rotated(rotation)
+		bullet.apply_central_impulse(Vector2(1200, 0).rotated($Sprite/turret.rotation + rotation) + linear_velocity)
+		Game.add_child(bullet)
+
+		# Apply recoil force to ship
+		apply_impulse(Vector2(0,0), Vector2(-30, 0).rotated($Sprite/turret.rotation + rotation))
+		$flash.rotation = $Sprite/turret.rotation
+
+		$flash.show()
+		if not $flash/AnimationPlayer.is_playing():
+			var anims = $flash/AnimationPlayer.get_animation_list()
+			var a = anims[randi() % anims.size()]
+			$flash/AnimationPlayer.play(a)
+		$shootTimer.start()
+
+
+func stop_shooting():
+	is_shooting = false
+
+	$shieldEnergyTimer.stop()
+	$shootTimer.stop()
+
+
+func emit_exhaust(on):
+	if on:
+		$exhaust.show()
+		$flame.show()
+		$flame.rotation = PI/2 - angular_velocity * PI/36
+		$flame/flare.global_rotation = 0
+		$flame/flare.scale = Vector2(rand_range(.5,1), 1)
+	else:
+		$exhaust.hide()
+		$flame.hide()
+
+
+func hurt(amount):
+	if alive:
+		#print('ship damaged ', amount, ', remaining health ', health)
+		health -= amount
+
+		if health <= 0:
+			health = 0
+			die()
+
+	return true
+
+
+func revive():
+	# Respawn
+	var r = Respawn.instance()
+	r.position = position
+	Game.call_deferred("add_child", r)
+
+	# Wait here until the respawn is complete
+	yield(r, 'done')
+	
+	alive = true
+
+	health = STARTING_HEALTH
+
+	# Shield watches for this signal to enable
+	emit_signal('revived')
+
+	show()
+
+	aim_dir = Vector2(0, -1)
+	aim(aim_dir)
+
+
+func die():
+	if alive:
+		alive = false
+
+		# Explosion
+		Game.explode(position, linear_velocity, 0, true)
+		Game.explode(position + Vector2(32,0).rotated(randf()*2*PI), linear_velocity, 0.1, true)
+		Game.explode(position + Vector2(32,0).rotated(randf()*2*PI), linear_velocity, 0.2, true)
+
+		emit_signal("destroyed")
+
+		queue_free()

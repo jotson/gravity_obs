@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/bullet-hit-enemy-2.wav-6af3317f7184ac86aa9f61d2f71f8aeb.sample"
+
+[deps]
+
+source_file="res://ship/sfx/bullet-hit-enemy-2.wav"
+dest_files=[ "res://.import/bullet-hit-enemy-2.wav-6af3317f7184ac86aa9f61d2f71f8aeb.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop=false
+compress/mode=0

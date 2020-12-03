@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/orbiting-malakor.ogg-059fb488612268e7ebe89c512742eb1e.oggstr"
+
+[deps]
+
+source_file="res://common/music/orbiting-malakor.ogg"
+dest_files=[ "res://.import/orbiting-malakor.ogg-059fb488612268e7ebe89c512742eb1e.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

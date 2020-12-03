@@ -1,0 +1,127 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://common/beam-icon.gd" type="Script" id=1]
+[ext_resource path="res://common/textures/gamepad.png" type="Texture" id=2]
+[ext_resource path="res://common/textures/mouse.png" type="Texture" id=3]
+[ext_resource path="res://common/textures/key.png" type="Texture" id=4]
+[ext_resource path="res://common/fonts/small.tres" type="DynamicFont" id=5]
+
+[sub_resource type="Animation" id=1]
+resource_name = "gamepad"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("gamepad:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("mouse:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("gamepad:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "mouse"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("mouse:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("gamepad:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("mouse:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 2 ]
+}
+
+[sub_resource type="CanvasItemMaterial" id=3]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=4]
+blend_mode = 1
+
+[node name="BeamIcon" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/gamepad = SubResource( 1 )
+anims/mouse = SubResource( 2 )
+
+[node name="gamepad" type="Sprite" parent="."]
+visible = false
+material = SubResource( 3 )
+texture = ExtResource( 2 )
+hframes = 7
+frame = 1
+
+[node name="mouse" type="Sprite" parent="."]
+material = SubResource( 4 )
+z_index = 1
+texture = ExtResource( 3 )
+hframes = 3
+frame = 2
+
+[node name="key" type="Sprite" parent="mouse"]
+position = Vector2( -21, 0 )
+texture = ExtResource( 4 )
+
+[node name="Label" type="Label" parent="mouse/key"]
+margin_left = -4.0
+margin_top = -5.0
+margin_right = 5.0
+margin_bottom = 5.0
+custom_fonts/font = ExtResource( 5 )
+text = "x"
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/thrust-out.wav-7198ccd3a877cbba0f3bde6f2a802396.sample"
+
+[deps]
+
+source_file="res://ship/sfx/thrust-out.wav"
+dest_files=[ "res://.import/thrust-out.wav-7198ccd3a877cbba0f3bde6f2a802396.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop=false
+compress/mode=0

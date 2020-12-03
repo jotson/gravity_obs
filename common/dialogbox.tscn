@@ -1,0 +1,252 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://common/gui/ui-theme.tres" type="Theme" id=1]
+[ext_resource path="res://common/dialogbox.gd" type="Script" id=2]
+[ext_resource path="res://common/portraits/lt.png" type="Texture" id=3]
+[ext_resource path="res://common/textures/dialog-bg.png" type="Texture" id=4]
+[ext_resource path="res://common/gui/continue-button.png" type="Texture" id=5]
+[ext_resource path="res://addons/sound_button/button.gd" type="Script" id=6]
+[ext_resource path="res://addons/sound_button/icon-button.png" type="Texture" id=7]
+[ext_resource path="res://common/sfx/typing.wav" type="AudioStream" id=8]
+[ext_resource path="res://common/gui/gamepad-button.tscn" type="PackedScene" id=9]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 5 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 5 )
+region = Rect2( 64, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 5 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 5 )
+region = Rect2( 128, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 5 )
+region = Rect2( 160, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=7]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"loop": true,
+"name": "default",
+"speed": 12.0
+} ]
+
+[sub_resource type="StyleBoxFlat" id=8]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.227451, 0.266667, 0.4, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.14902, 0.168627, 0.266667, 1 )
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id=9]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.227451, 0.266667, 0.4, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.14902, 0.168627, 0.266667, 1 )
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id=10]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.227451, 0.266667, 0.4, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.14902, 0.168627, 0.266667, 1 )
+anti_aliasing = false
+
+[sub_resource type="Animation" id=11]
+tracks/0/type = "value"
+tracks/0/path = NodePath("HBoxContainer/Panel/text:percent_visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+
+[node name="dialogbox" type="Control" groups=[
+"transient",
+]]
+pause_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -288.5
+margin_top = -128.0
+margin_right = 288.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="portrait" type="TextureRect" parent="HBoxContainer"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -160.0
+margin_right = 128.0
+texture = ExtResource( 3 )
+
+[node name="Panel" type="TextureRect" parent="HBoxContainer"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -448.0
+margin_top = -80.0
+rect_min_size = Vector2( 448, 80 )
+texture = ExtResource( 4 )
+
+[node name="text" type="RichTextLabel" parent="HBoxContainer/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -8.0
+rect_clip_content = false
+custom_colors/font_color_shadow = Color( 0.0941176, 0.0784314, 0.145098, 1 )
+custom_constants/line_separation = 3
+custom_constants/shadow_as_outline = 1
+bbcode_enabled = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ContinueButton" type="Control" parent="HBoxContainer"]
+margin_left = 548.447
+margin_top = 101.0
+margin_right = 564.447
+margin_bottom = 117.0
+rect_min_size = Vector2( 16, 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="HBoxContainer/ContinueButton"]
+visible = false
+position = Vector2( 7, 8 )
+frames = SubResource( 7 )
+frame = 5
+playing = true
+
+[node name="GamepadButton" parent="HBoxContainer/ContinueButton" instance=ExtResource( 9 )]
+margin_right = 20.0
+shadows = NodePath("../AnimatedSprite")
+text = "  "
+button = 2
+
+[node name="responseContainer" type="VBoxContainer" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -148.5
+margin_top = -71.0
+margin_right = 278.5
+margin_bottom = -6.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="response1" type="Button" parent="responseContainer"]
+margin_right = 427.0
+margin_bottom = 18.0
+focus_next = NodePath("../response2")
+focus_previous = NodePath("../response3")
+custom_styles/normal = SubResource( 8 )
+text = "choice 1"
+script = ExtResource( 6 )
+__meta__ = {
+"_editor_icon": ExtResource( 7 )
+}
+
+[node name="response2" type="Button" parent="responseContainer"]
+margin_top = 22.0
+margin_right = 427.0
+margin_bottom = 40.0
+focus_next = NodePath("../response3")
+focus_previous = NodePath("../response1")
+custom_styles/normal = SubResource( 9 )
+text = "choice 2"
+script = ExtResource( 6 )
+__meta__ = {
+"_editor_icon": ExtResource( 7 )
+}
+
+[node name="response3" type="Button" parent="responseContainer"]
+margin_top = 44.0
+margin_right = 427.0
+margin_bottom = 62.0
+focus_next = NodePath("../response1")
+focus_previous = NodePath("../response2")
+custom_styles/normal = SubResource( 10 )
+text = "choice 3"
+script = ExtResource( 6 )
+__meta__ = {
+"_editor_icon": ExtResource( 7 )
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/change-text = SubResource( 11 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="autoAdvanceTimer" type="Timer" parent="."]
+pause_mode = 1
+wait_time = 4.0
+one_shot = true
+
+[node name="closeTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="sfxTyping" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+bus = "Fx"
+[connection signal="pressed" from="responseContainer/response1" to="." method="_on_response1_pressed"]
+[connection signal="pressed" from="responseContainer/response2" to="." method="_on_response2_pressed"]
+[connection signal="pressed" from="responseContainer/response3" to="." method="_on_response3_pressed"]
+[connection signal="timeout" from="autoAdvanceTimer" to="." method="_on_autoAdvanceTimer_timeout"]
+[connection signal="timeout" from="closeTimer" to="." method="_on_closeTimer_timeout"]

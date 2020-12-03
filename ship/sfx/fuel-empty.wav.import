@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/fuel-empty.wav-71eafee4203b1b766a8a3a73e877982b.sample"
+
+[deps]
+
+source_file="res://ship/sfx/fuel-empty.wav"
+dest_files=[ "res://.import/fuel-empty.wav-71eafee4203b1b766a8a3a73e877982b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop=false
+compress/mode=0

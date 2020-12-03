@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://common/fonts/GravityBold8.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://common/points.gd" type="Script" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 8
+font_data = ExtResource( 1 )
+
+[sub_resource type="Animation" id=2]
+resource_name = "colors"
+tracks/0/type = "value"
+tracks/0/path = NodePath("RichTextLabel:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.827672, 0.92306, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ true, false, true, false ]
+}
+
+[node name="points" type="Node2D"]
+position = Vector2( 320, 173 )
+script = ExtResource( 2 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+visible = false
+margin_left = 1.0
+margin_top = -6.0
+margin_right = 56.0
+margin_bottom = 3.0
+rect_scale = Vector2( 1.5, 1.5 )
+rect_clip_content = false
+custom_fonts/normal_font = SubResource( 1 )
+custom_colors/default_color = Color( 0.388235, 0.780392, 0.301961, 1 )
+custom_colors/font_color_shadow = Color( 0.0941176, 0.0784314, 0.145098, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 1
+text = "0000"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "colors"
+playback_speed = 2.0
+anims/colors = SubResource( 2 )
+[connection signal="tween_all_completed" from="Tween" to="." method="_on_Tween_tween_all_completed"]

@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://booms/debris.gd" type="Script" id=1]
+[ext_resource path="res://booms/textures/debris.png" type="Texture" id=2]
+
+[sub_resource type="PhysicsMaterial" id=1]
+friction = 0.5
+bounce = 0.5
+
+[sub_resource type="CircleShape2D" id=2]
+
+[node name="debris" type="RigidBody2D"]
+collision_layer = 1024
+collision_mask = 0
+mass = 0.1
+physics_material_override = SubResource( 1 )
+linear_damp = 0.0
+angular_damp = 0.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+vframes = 2
+hframes = 6
+
+[node name="deathTimer" type="Timer" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )
+[connection signal="timeout" from="deathTimer" to="." method="_on_deathTimer_timeout"]

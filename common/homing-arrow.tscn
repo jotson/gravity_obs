@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://common/arrow-icon.tscn" type="PackedScene" id=1]
+[ext_resource path="res://common/homing-arrow.gd" type="Script" id=2]
+
+[node name="HomingArrow" type="Node2D" groups=[
+"homingarrow",
+"transient",
+]]
+script = ExtResource( 2 )
+
+[node name="ArrowIcon" parent="." instance=ExtResource( 1 )]
+position = Vector2( 90, 0 )
+rotation = -1.5708
+collision_layer = 0
+collision_mask = 0
