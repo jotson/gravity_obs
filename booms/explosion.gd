@@ -21,7 +21,7 @@ func explode():
 
 	#$explosionSfx.play()
 
-	var debris_amount = 25
+	var debris_amount = 6
 
 	for _i in range(debris_amount):
 		var obj = Debris.instance()

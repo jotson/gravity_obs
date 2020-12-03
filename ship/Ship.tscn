@@ -1,6 +1,8 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://ship/Ship.gd" type="Script" id=1]
+[ext_resource path="res://common/fonts/small.tres" type="DynamicFont" id=2]
+[ext_resource path="res://textures/crown.png" type="Texture" id=3]
 [ext_resource path="res://ship/textures/flame.png" type="Texture" id=10]
 [ext_resource path="res://ship/materials/distortion.tres" type="Material" id=12]
 [ext_resource path="res://ship/textures/distortion.png" type="Texture" id=13]
@@ -144,7 +146,9 @@ tracks/0/keys = {
 "values": [ 18, 23 ]
 }
 
-[node name="ship" type="RigidBody2D"]
+[node name="ship" type="RigidBody2D" groups=[
+"player",
+]]
 z_index = 10
 mass = 2.0
 physics_material_override = SubResource( 1 )
@@ -254,3 +258,34 @@ one_shot = true
 
 [node name="shieldEnergyTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="ui" type="Node2D" parent="."]
+
+[node name="crown" type="Sprite" parent="ui"]
+position = Vector2( 0, -45 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 3 )
+
+[node name="username" type="Label" parent="ui"]
+margin_left = -64.0
+margin_top = -32.0
+margin_right = 65.0
+margin_bottom = -18.0
+custom_fonts/font = ExtResource( 2 )
+text = "username"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="kills" type="Label" parent="ui"]
+margin_left = -64.0
+margin_top = 23.0
+margin_right = 65.0
+margin_bottom = 37.0
+custom_fonts/font = ExtResource( 2 )
+text = "kills: 0"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

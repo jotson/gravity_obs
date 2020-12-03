@@ -1,14 +1,47 @@
 extends Node2D
 
-const ASTEROIDS_MAX = 10
-const Asteroid = preload("res://asteroid/Asteroid.tscn")
-const Ship = preload("res://ship/Ship.tscn")
-
 
 func _ready():
-	var ship = Ship.instance()
-	ship.position = Vector2(100,100)
-	Game.add_child(ship)
-	ship.thrust()
-	ship.turn_right()
-	pass # Replace with function body.
+	$roundTimer.start()
+	
+	Game.connect("state_changed", self, "state_changed")
+	
+	# TODO Listen for commands
+	# TODO !left
+	# TODO !right
+	# TODO !thrust
+	# TODO !pew !pewpew !zap !shoot !bang !pow !blammo !blast !kapow
+	# TODO !selfdestruct !destruct
+
+
+func _physics_process(delta):
+	if Game.state == Game.STATE.WAITING:
+		$roundCountdown.text = "GET READY! Waiting for players..."
+	
+	if Game.state == Game.STATE.PLAYING:
+		$roundCountdown.text = "Time left: " + str(round($roundTimer.time_left))
+
+	if Game.state == Game.STATE.COOLDOWN:
+		$roundCountdown.text = "Next round starting in %d..." % int($cooldownTimer.time_left)
+
+
+func _on_roundTimer_timeout():
+	Game.reset_players()
+
+
+func state_changed():
+	if Game.state == Game.STATE.COOLDOWN:
+		$cooldownTimer.start()
+		if Game.last_winner:
+			$lastWinner.text = "%s won with %d kills" % [Game.last_winner, Game.high_score]
+		else:
+			$lastWinner.text = ""
+		$lastWinner.show()
+		$lastWinner/AnimationPlayer.play("default")
+	
+	if Game.state == Game.STATE.PLAYING:
+		$roundTimer.start()
+
+
+func _on_cooldownTimer_timeout():
+	Game.start_round()

@@ -9,6 +9,9 @@ var gravity_well_deflect = 60
 var last_rot = 0.0
 var alive = true
 
+var username
+
+
 signal destroyed(position, body)
 
 const ENTITY_TYPE_ID = 'bullet'
@@ -25,6 +28,8 @@ func _physics_process(_delta):
 
 func _on_bullet_body_entered(body):
 	if body.has_method('hurt'):
+		if body.get("username") and body.alive:
+			Game.kill_ship(username, body.username)
 		if body.hurt(DAMAGE):
 			die()
 	else:
@@ -47,7 +52,6 @@ func die():
 	
 	# Hide it
 	$Sprite.hide()
-	$glow.hide()
 	$trail.hide()
 	$particleTrail.emitting = false
 	$trailDeathTimer.start()

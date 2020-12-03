@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://ship/bullet.gd" type="Script" id=1]
 [ext_resource path="res://ship/trail.tscn" type="PackedScene" id=2]
@@ -38,9 +38,6 @@ damping_random = 0.5
 scale = 2.0
 color_ramp = SubResource( 4 )
 
-[sub_resource type="CanvasItemMaterial" id=6]
-blend_mode = 1
-
 [node name="bullet" type="RigidBody2D" groups=[
 "bullet",
 "transient",
@@ -72,10 +69,6 @@ amount = 100
 visibility_rect = Rect2( -1000, -1000, 2000, 2000 )
 local_coords = false
 process_material = SubResource( 5 )
-
-[node name="glow" type="Sprite" parent="."]
-modulate = Color( 0, 0.584314, 0.913725, 1 )
-material = SubResource( 6 )
 
 [node name="deathTimer" type="Timer" parent="."]
 wait_time = 3.0

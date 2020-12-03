@@ -36,6 +36,10 @@ var aim_dir = Vector2(0, -1)
 var turret_locked = false
 var is_shooting = false
 
+var username setget set_username
+var color setget set_color
+var kills setget set_kills
+
 var shootSfx = []
 
 onready var alive = true
@@ -54,13 +58,47 @@ func _ready():
 	emit_exhaust(0)
 	$flash.hide()
 	alive = false
+	$ui/crown.hide()
 	hide()
 	revive()
 
 
+func update_ui():
+	$ui.global_rotation = 0
+	$ui/username.text = username
+	$Sprite/hull.modulate = color
+	$trail.modulate = color
+	$trail2.modulate = color
+	$ui/kills.text = "Kills: %d" % [kills]
+	if Game.last_winner == username:
+		$ui/crown.show()
+	else:
+		$ui/crown.hide()
+	
+
+func set_username(value):
+	username = value
+	if is_inside_tree():
+		update_ui()
+	
+
+func set_color(value):
+	color = value
+	if is_inside_tree():
+		update_ui()
+	
+
+func set_kills(value):
+	kills = value
+	if is_inside_tree():
+		update_ui()
+	
+
 func _physics_process(_delta):
 	if not alive:
 		return
+	
+	update_ui()
 		
 	# Track last known velocity
 	last_velocity = linear_velocity
@@ -174,6 +212,7 @@ func shoot(duration = 0.2):
 		
 		# Fire bullet
 		var bullet = Bullet.instance()
+		bullet.username = username
 		bullet.position = position + Vector2(32,0).rotated(rotation)
 		bullet.apply_central_impulse(Vector2(1200, 0).rotated($Sprite/turret.rotation + rotation) + linear_velocity)
 		Game.add_child(bullet)
@@ -249,8 +288,6 @@ func die():
 
 		# Explosion
 		Game.explode(position, linear_velocity, 0, true)
-		Game.explode(position + Vector2(32,0).rotated(randf()*2*PI), linear_velocity, 0.1, true)
-		Game.explode(position + Vector2(32,0).rotated(randf()*2*PI), linear_velocity, 0.2, true)
 
 		emit_signal("destroyed")
 

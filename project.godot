@@ -51,17 +51,19 @@ config/icon="res://icon.png"
 [autoload]
 
 Game="*res://game.gd"
+Twitch="*res://twitch.gd"
 
 [display]
 
-window/size/width=1280
-window/size/height=720
-window/stretch/mode="2d"
+window/size/width=960
+window/size/height=540
+window/size/fullscreen=true
+window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "ridiculous_coding" )
+enabled=PoolStringArray(  )
 
 [importer_defaults]
 
@@ -88,5 +90,12 @@ texture={
 
 [rendering]
 
-environment/default_clear_color=Color( 0, 1, 0, 1 )
+quality/2d/use_pixel_snap=true
+environment/default_clear_color=Color( 0, 0, 1, 1 )
 environment/default_environment="res://default_env.tres"
+quality/dynamic_fonts/use_oversampling=false
+
+[twitch]
+
+config/username="jotson"
+config/token="oauth:uykg55qmd8u0a9djvodafqv4dwm8xw"
