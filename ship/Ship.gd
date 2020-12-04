@@ -103,22 +103,22 @@ func _physics_process(_delta):
 	# Track last known velocity
 	last_velocity = linear_velocity
 	
-	# Random move
-	if randi() % 100 == 0:
+	if _shoot_duration > 0:
+		_shoot_duration -= _delta
+		shoot(_shoot_duration)
+
+func ai():
+	if randi() % 150 == 0:
 		thrust()
 		
-	if randi() % 200 == 0:
+	if randi() % 100 == 0:
 		if randi() % 2 == 1:
 			turn_left(0.5)
 		else:
 			turn_right(0.5)
 
-	if randi() % 100 == 0:
-		shoot()
-		
-	if _shoot_duration > 0:
-		_shoot_duration -= _delta
-		shoot(_shoot_duration)
+	# The AI never shoots
+
 
 func _integrate_forces(state):
 	if not alive:
@@ -278,6 +278,13 @@ func revive():
 
 	aim_dir = Vector2(0, -1)
 	aim(aim_dir)
+
+
+func self_destruct():
+	Game.explode(position + Vector2(32,0).rotated(randf()*2*PI), linear_velocity, 0.1, true)
+	Game.explode(position + Vector2(32,0).rotated(randf()*2*PI), linear_velocity, 0.2, true)
+	Game.explode(position + Vector2(32,0).rotated(randf()*2*PI), linear_velocity, 0.3, true)
+	die()
 
 
 func die():

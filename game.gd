@@ -16,13 +16,16 @@ var active_players = 0
 var last_winner = ""
 var high_score = 0
 
+var ACTION_THROTTLE = 500 # Minimum time between actions, millis
+var IDLE_TIMEOUT = 5000 # Milliseconds until AI takes over player control
+
 signal state_changed
 
 func _ready():
 	start_round()
 
 
-func _input(event):
+func _input(_event):
 	if Input.is_action_just_pressed("fullscreen"):
 		OS.window_fullscreen = !OS.window_fullscreen
 		
@@ -40,6 +43,8 @@ func _physics_process(_delta):
 		high_score = 0
 		state = STATE.PLAYING
 		emit_signal("state_changed")
+		
+	ai()
 
 
 func add_child(object, _default=false):
@@ -102,7 +107,6 @@ func add_ship(username):
 	var width = ProjectSettings.get("display/window/size/width")
 	var height = ProjectSettings.get("display/window/size/height")
 	if players.has(username):
-		players[username].updated = OS.get_ticks_msec()
 		var ship = players[username].ship
 		if ship == null or ship.get_ref() == null:
 			ship = Ship.instance()
@@ -124,7 +128,7 @@ func add_ship(username):
 		add_child(ship)
 		
 		players[username] = {
-			"updated": OS.get_ticks_msec(),
+			"last_action": OS.get_ticks_msec(),
 			"color": ship.color,
 			"ship": weakref(ship),
 			"kills": 0,
@@ -163,3 +167,27 @@ func reset_players():
 	active_players = 0
 	state = STATE.COOLDOWN
 	emit_signal("state_changed")
+
+
+func command(username, command):
+	if players.has(username):
+		var ship = players[username].ship
+		if OS.get_ticks_msec() - players[username].last_action < ACTION_THROTTLE:
+			return
+		players[username].last_action = OS.get_ticks_msec()
+		if ship != null and ship.get_ref() and ship.get_ref().alive:
+			match(command):
+				"left": ship.get_ref().turn_left()
+				"right": ship.get_ref().turn_right()
+				"thrust": ship.get_ref().thrust()
+				"shoot": ship.get_ref().shoot()
+				"destruct": ship.get_ref().self_destruct()
+
+
+func ai():
+	for username in players.keys():
+		var ship = players[username].ship
+		if OS.get_ticks_msec() - players[username].last_action < IDLE_TIMEOUT:
+			continue
+		if ship != null and ship.get_ref() and ship.get_ref().alive:
+			ship.get_ref().ai()

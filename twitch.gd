@@ -17,27 +17,27 @@ func _ready() -> void:
 	# to generate a token with custom scopes.
 	var username = ProjectSettings.get("twitch/config/username")
 	var token = ProjectSettings.get("twitch/config/token")
+	var channel = ProjectSettings.get("twitch/config/channel")
 	if token:
 		authenticate_oauth(username, token)
 		if(yield(self, "login_attempt") == false):
 			print("Invalid username or token.")
 			return
-	join_channel("gmhikaru")
+	join_channel(channel)
 	
-	# Adds a command with a specified permission flag.
-	# All implementations must take at least one arg for the command info.
-	# Implementations that recieve args requrires two args,
-	# the second arg will contain all params in a PoolStringArray
-	# This command can only be executed by VIPS/MODS/SUBS/STREAMER
-	add_command("test", self, "command_test")
+	add_command("left", self, "command_left")
+	add_command("right", self, "command_right")
+	add_command("thrust", self, "command_thrust")
+	add_command("shoot", self, "command_shoot")
+	add_command("destruct", self, "command_destruct")
 	
-	# Adds a command alias
-	add_alias("test","test1")
-
-
-# Check the CommandInfo class for the available info of the cmd_info.
-func command_test(cmd_info : CommandInfo) -> void:
-	prints("Test!", cmd_info)
+	add_alias("shoot", "zap")
+	add_alias("shoot", "bang")
+	add_alias("shoot", "kapow")
+	add_alias("shoot", "laser")
+	add_alias("shoot", "pew")
+	add_alias("shoot", "pewpew")
+	add_alias("destruct", "selfdestruct")
 
 
 func unhandled_message(_message, _tags):
@@ -48,3 +48,30 @@ func unhandled_message(_message, _tags):
 func chat_message(sender_data, _command):
 	var username = sender_data.user
 	Game.add_ship(username)
+
+
+func command_left(cmd_info : CommandInfo):
+	var username = cmd_info.sender_data.user
+	Game.command(username, "left")
+	
+
+func command_right(cmd_info : CommandInfo):
+	var username = cmd_info.sender_data.user
+	Game.command(username, "right")
+	
+	
+func command_thrust(cmd_info : CommandInfo):
+	var username = cmd_info.sender_data.user
+	Game.command(username, "thrust")
+	
+	
+func command_shoot(cmd_info : CommandInfo):
+	var username = cmd_info.sender_data.user
+	Game.command(username, "shoot")
+	
+	
+func command_destruct(cmd_info : CommandInfo):
+	var username = cmd_info.sender_data.user
+	Game.command(username, "destruct")
+	
+	

@@ -6,13 +6,6 @@ func _ready():
 	
 # warning-ignore:return_value_discarded
 	Game.connect("state_changed", self, "state_changed")
-	
-	# TODO Listen for commands
-	# TODO !left
-	# TODO !right
-	# TODO !thrust
-	# TODO !pew !pewpew !zap !shoot !bang !pow !blammo !blast !kapow
-	# TODO !selfdestruct !destruct
 
 
 func _physics_process(_delta):
