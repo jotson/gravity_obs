@@ -4,7 +4,7 @@ extends Node2D
 func _ready():
 	$roundTimer.start()
 	
-# warning-ignore:return_value_discarded
+	# warning-ignore:return_value_discarded
 	Game.connect("state_changed", self, "state_changed")
 
 

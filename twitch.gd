@@ -1,11 +1,11 @@
 extends Gift
 
 func _ready() -> void:
-# warning-ignore:return_value_discarded
+	# warning-ignore:return_value_discarded
 	connect("cmd_no_permission", self, "no_permission")
-# warning-ignore:return_value_discarded
+	# warning-ignore:return_value_discarded
 	connect("unhandled_message", self, "unhandled_message")
-# warning-ignore:return_value_discarded
+	# warning-ignore:return_value_discarded
 	connect("chat_message", self, "chat_message")
 	
 	connect_to_twitch()
