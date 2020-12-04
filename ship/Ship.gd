@@ -61,6 +61,8 @@ func _ready():
 	$ui/crown.hide()
 	hide()
 	revive()
+	
+	$collision.disabled = true
 
 
 func update_ui():
@@ -117,7 +119,8 @@ func ai():
 		else:
 			turn_right(0.5)
 
-	# The AI never shoots
+	if randi() % 100 == 0:
+		shoot()
 
 
 func _integrate_forces(state):
@@ -266,6 +269,8 @@ func revive():
 
 	# Wait here until the respawn is complete
 	yield(r, 'done')
+	
+	$collision.disabled = false
 	
 	alive = true
 

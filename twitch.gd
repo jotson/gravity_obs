@@ -4,9 +4,9 @@ func _ready() -> void:
 	# warning-ignore:return_value_discarded
 	connect("cmd_no_permission", self, "no_permission")
 	# warning-ignore:return_value_discarded
-	connect("unhandled_message", self, "unhandled_message")
-	# warning-ignore:return_value_discarded
 	connect("chat_message", self, "chat_message")
+	# warning-ignore:return_value_discarded
+	connect("chat_message", Game, "chat_message")
 	
 	connect_to_twitch()
 	yield(self, "twitch_connected")
@@ -40,12 +40,7 @@ func _ready() -> void:
 	add_alias("destruct", "selfdestruct")
 
 
-func unhandled_message(_message, _tags):
-	#prints(message, tags)
-	pass
-
-
-func chat_message(sender_data, _command):
+func chat_message(sender_data, _command, _full_message):
 	var username = sender_data.user
 	Game.add_ship(username)
 

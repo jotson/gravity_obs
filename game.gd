@@ -1,4 +1,4 @@
-extends Node
+extends Control
 
 const Explosion = preload("res://booms/explosion.tscn")
 const Spark = preload("res://booms/spark.tscn")
@@ -22,12 +22,20 @@ var IDLE_TIMEOUT = 5000 # Milliseconds until AI takes over player control
 signal state_changed
 
 func _ready():
+	$console.hide()
+	
 	start_round()
 
 
 func _input(_event):
 	if Input.is_action_just_pressed("fullscreen"):
 		OS.window_fullscreen = !OS.window_fullscreen
+		
+	if Input.is_action_just_pressed("toggle_console"):
+		if $console.visible:
+			$console.hide()
+		else:
+			$console.show()
 		
 
 func start_round():
@@ -93,7 +101,7 @@ func add_ship(username):
 	
 	var colors = []
 	colors.append(Color("#ffffff"))
-	colors.append(Color("#000000"))
+	colors.append(Color("#111111"))
 	colors.append(Color("#e43b44"))
 	colors.append(Color("#0095e9"))
 	colors.append(Color("#feae34"))
@@ -191,3 +199,13 @@ func ai():
 			continue
 		if ship != null and ship.get_ref() and ship.get_ref().alive:
 			ship.get_ref().ai()
+
+
+func chat_message(ender_data, command, full_message):
+	var MAX_LENGTH = 1000
+	$console.text += "\n" + full_message
+	var text_size = $console.text.length()
+	if text_size > MAX_LENGTH:
+		$console.text = $console.text.substr(text_size - MAX_LENGTH)
+	$console.scroll_vertical = MAX_LENGTH
+	$console.cursor_set_line($console.get_line_count())
