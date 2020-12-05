@@ -1,7 +1,7 @@
 extends RigidBody2D
 
-var LINEAR_ACCELERATION = 450.0 # px/s/s
-var ANGULAR_ACCELERATION = 10.0 # radians/s/s
+var LINEAR_ACCELERATION = 250.0 # px/s/s
+var ANGULAR_ACCELERATION = 8.0 # radians/s/s
 var ANGULAR_MAX = PI * 2 # radians/s
 var TRACTOR_RANGE = 100 # px
 var STARTING_HEALTH = 1
@@ -14,7 +14,7 @@ var _thrust_duration = 0
 var thrusting_last_frame = false
 var turn = 0
 var _turn_duration = 0
-var _shoot_duration = 0
+var _shoot_shots = 0
 var landed = false
 
 var tractor_target = '' # Node path to the target object
@@ -54,6 +54,8 @@ const ENTITY_TYPE_ID = 'player'
 
 
 func _ready():
+	randomize()
+	
 	lock_turret()
 	emit_exhaust(0)
 	$flash.hide()
@@ -96,7 +98,7 @@ func set_kills(value):
 		update_ui()
 	
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	if not alive:
 		return
 	
@@ -105,22 +107,27 @@ func _physics_process(_delta):
 	# Track last known velocity
 	last_velocity = linear_velocity
 	
-	if _shoot_duration > 0:
-		_shoot_duration -= _delta
-		shoot(_shoot_duration)
+	if _shoot_shots > 0:
+		shoot(_shoot_shots)
+		
+#	if _thrust_duration < 0:
+#		_thrust_duration += delta
+#	else:
+#		thrust()
+	
 
 func ai():
 	if randi() % 150 == 0:
-		thrust()
+		thrust(10)
 		
 	if randi() % 100 == 0:
 		if randi() % 2 == 1:
-			turn_left(0.5)
+			turn_left(0.3)
 		else:
-			turn_right(0.5)
+			turn_right(0.3)
 
 	if randi() % 100 == 0:
-		shoot()
+		shoot(3)
 
 
 func _integrate_forces(state):
@@ -202,15 +209,17 @@ func lock_turret():
 func unlock_turret():
 	turret_locked = false
 
-func shoot(duration = 0.2):
+func shoot(shots = 1):
 	if !alive:
 		return
 		
-	_shoot_duration = duration
+	_shoot_shots = shots
 	
 	$shootTimer.wait_time = 0.1
 
 	if $shootTimer.is_stopped():
+		_shoot_shots -= 1
+		
 		is_shooting = true
 		
 		# Fire bullet
@@ -221,7 +230,7 @@ func shoot(duration = 0.2):
 		Game.add_child(bullet)
 
 		# Apply recoil force to ship
-		apply_impulse(Vector2(0,0), Vector2(-30, 0).rotated($Sprite/turret.rotation + rotation))
+		#apply_impulse(Vector2(0,0), Vector2(-15, 0).rotated($Sprite/turret.rotation + rotation))
 		$flash.rotation = $Sprite/turret.rotation
 
 		$flash.show()
@@ -302,3 +311,8 @@ func die():
 		emit_signal("destroyed")
 
 		queue_free()
+
+
+func _on_ship_body_entered(body):
+	if body.is_in_group('wall'):
+		_thrust_duration = 0

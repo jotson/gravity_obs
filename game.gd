@@ -17,7 +17,7 @@ var last_winner = ""
 var high_score = 0
 
 var ACTION_THROTTLE = 500 # Minimum time between actions, millis
-var IDLE_TIMEOUT = 5000 # Milliseconds until AI takes over player control
+var IDLE_TIMEOUT = 30000 # Milliseconds until AI takes over player control
 
 signal state_changed
 
@@ -185,11 +185,19 @@ func command(username, command):
 		players[username].last_action = OS.get_ticks_msec()
 		if ship != null and ship.get_ref() and ship.get_ref().alive:
 			match(command):
-				"left": ship.get_ref().turn_left()
-				"right": ship.get_ref().turn_right()
-				"thrust": ship.get_ref().thrust()
-				"shoot": ship.get_ref().shoot()
-				"destruct": ship.get_ref().self_destruct()
+				"l":
+					ship.get_ref().turn_left(0.3)
+					ship.get_ref().shoot()
+				"r":
+					ship.get_ref().turn_right(0.3)
+					ship.get_ref().shoot()
+				"t":
+					ship.get_ref().thrust(10.0)
+					ship.get_ref().shoot()
+				"s":
+					ship.get_ref().shoot(5)
+				"destruct":
+					ship.get_ref().self_destruct()
 
 
 func ai():
@@ -201,7 +209,7 @@ func ai():
 			ship.get_ref().ai()
 
 
-func chat_message(ender_data, command, full_message):
+func chat_message(_sender_data, _command, full_message):
 	var MAX_LENGTH = 1000
 	$console.text += "\n" + full_message
 	var text_size = $console.text.length()

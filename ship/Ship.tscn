@@ -10,7 +10,7 @@
 [ext_resource path="res://ship/trail.tscn" type="PackedScene" id=17]
 [ext_resource path="res://ship/textures/flare.png" type="Texture" id=29]
 
-[sub_resource type="PhysicsMaterial" id=1]
+[sub_resource type="PhysicsMaterial" id=12]
 friction = 0.8
 bounce = 0.5
 
@@ -149,7 +149,7 @@ tracks/0/keys = {
 ]]
 z_index = 10
 mass = 2.0
-physics_material_override = SubResource( 1 )
+physics_material_override = SubResource( 12 )
 gravity_scale = 0.0
 contacts_reported = 5
 contact_monitor = true
@@ -246,7 +246,7 @@ position = Vector2( -6, -11 )
 MAX_LENGTH = 20
 
 [node name="shootTimer" type="Timer" parent="."]
-wait_time = 0.1
+wait_time = 0.2
 one_shot = true
 
 [node name="shieldEnergyTimer" type="Timer" parent="."]
@@ -282,3 +282,4 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="body_entered" from="." to="." method="_on_ship_body_entered"]

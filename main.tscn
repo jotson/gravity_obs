@@ -41,25 +41,33 @@ tracks/1/keys = {
 [node name="main" type="Node2D"]
 script = ExtResource( 2 )
 
-[node name="wall1" type="StaticBody2D" parent="."]
+[node name="wall1" type="StaticBody2D" parent="." groups=[
+"wall",
+]]
 position = Vector2( -60, 281 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall1"]
 shape = SubResource( 1 )
 
-[node name="wall2" type="StaticBody2D" parent="."]
+[node name="wall2" type="StaticBody2D" parent="." groups=[
+"wall",
+]]
 position = Vector2( 1020, 261 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall2"]
 shape = SubResource( 1 )
 
-[node name="wall3" type="StaticBody2D" parent="."]
+[node name="wall3" type="StaticBody2D" parent="." groups=[
+"wall",
+]]
 position = Vector2( 960, -60 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall3"]
 shape = SubResource( 2 )
 
-[node name="wall4" type="StaticBody2D" parent="."]
+[node name="wall4" type="StaticBody2D" parent="." groups=[
+"wall",
+]]
 position = Vector2( 958, 602 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall4"]

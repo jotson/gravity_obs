@@ -25,48 +25,47 @@ func _ready() -> void:
 			return
 	join_channel(channel)
 	
-	add_command("left", self, "command_left")
-	add_command("right", self, "command_right")
-	add_command("thrust", self, "command_thrust")
-	add_command("shoot", self, "command_shoot")
-	add_command("destruct", self, "command_destruct")
-	
-	add_alias("shoot", "zap")
-	add_alias("shoot", "bang")
-	add_alias("shoot", "kapow")
-	add_alias("shoot", "laser")
-	add_alias("shoot", "pew")
-	add_alias("shoot", "pewpew")
-	add_alias("destruct", "selfdestruct")
+#	add_command("left", self, "command_left")
+#	add_command("right", self, "command_right")
+#	add_command("thrust", self, "command_thrust")
+#	add_command("shoot", self, "command_shoot")
+#	add_command("destruct", self, "command_destruct")
+#
+#	add_alias("shoot", "zap")
+#	add_alias("shoot", "bang")
+#	add_alias("shoot", "kapow")
+#	add_alias("shoot", "laser")
+#	add_alias("shoot", "pew")
+#	add_alias("shoot", "pewpew")
+#	add_alias("destruct", "selfdestruct")
 
 
-func chat_message(sender_data, _command, _full_message):
+func chat_message(sender_data, command : String, _full_message : String):
 	var username = sender_data.user
 	Game.add_ship(username)
+	Game.command(username, command.to_lower())
 
 
-func command_left(cmd_info : CommandInfo):
-	var username = cmd_info.sender_data.user
-	Game.command(username, "left")
-	
-
-func command_right(cmd_info : CommandInfo):
-	var username = cmd_info.sender_data.user
-	Game.command(username, "right")
-	
-	
-func command_thrust(cmd_info : CommandInfo):
-	var username = cmd_info.sender_data.user
-	Game.command(username, "thrust")
-	
-	
-func command_shoot(cmd_info : CommandInfo):
-	var username = cmd_info.sender_data.user
-	Game.command(username, "shoot")
-	
-	
-func command_destruct(cmd_info : CommandInfo):
-	var username = cmd_info.sender_data.user
-	Game.command(username, "destruct")
-	
-	
+#func command_left(cmd_info : CommandInfo):
+#	var username = cmd_info.sender_data.user
+#	Game.command(username, "left")
+#
+#
+#func command_right(cmd_info : CommandInfo):
+#	var username = cmd_info.sender_data.user
+#	Game.command(username, "right")
+#
+#
+#func command_thrust(cmd_info : CommandInfo):
+#	var username = cmd_info.sender_data.user
+#	Game.command(username, "thrust")
+#
+#
+#func command_shoot(cmd_info : CommandInfo):
+#	var username = cmd_info.sender_data.user
+#	Game.command(username, "shoot")
+#
+#
+#func command_destruct(cmd_info : CommandInfo):
+#	var username = cmd_info.sender_data.user
+#	Game.command(username, "destruct")
