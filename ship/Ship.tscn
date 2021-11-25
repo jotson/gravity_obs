@@ -1,8 +1,9 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://ship/Ship.gd" type="Script" id=1]
 [ext_resource path="res://common/fonts/small.tres" type="DynamicFont" id=2]
 [ext_resource path="res://textures/crown.png" type="Texture" id=3]
+[ext_resource path="res://common/fonts/tiny.tres" type="DynamicFont" id=4]
 [ext_resource path="res://ship/textures/flame.png" type="Texture" id=10]
 [ext_resource path="res://ship/textures/ship.png" type="Texture" id=14]
 [ext_resource path="res://ship/textures/turret.png" type="Texture" id=15]
@@ -10,7 +11,7 @@
 [ext_resource path="res://ship/trail.tscn" type="PackedScene" id=17]
 [ext_resource path="res://ship/textures/flare.png" type="Texture" id=29]
 
-[sub_resource type="PhysicsMaterial" id=12]
+[sub_resource type="PhysicsMaterial" id=1]
 friction = 0.8
 bounce = 0.5
 
@@ -144,12 +145,40 @@ tracks/0/keys = {
 "values": [ 18, 23 ]
 }
 
+[sub_resource type="Animation" id=12]
+resource_name = "default"
+length = 6.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("chat:percent_visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2.5, 3.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 0.0, 1.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("chat:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5, 6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+
 [node name="ship" type="RigidBody2D" groups=[
 "player",
 ]]
 z_index = 10
 mass = 2.0
-physics_material_override = SubResource( 12 )
+physics_material_override = SubResource( 1 )
 gravity_scale = 0.0
 contacts_reported = 5
 contact_monitor = true
@@ -282,4 +311,22 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="chat" type="Label" parent="ui"]
+margin_left = 23.0
+margin_top = -9.0
+margin_right = 124.0
+margin_bottom = 10.0
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+valign = 1
+autowrap = true
+max_lines_visible = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="chatAnim" type="AnimationPlayer" parent="ui"]
+anims/default = SubResource( 12 )
 [connection signal="body_entered" from="." to="." method="_on_ship_body_entered"]

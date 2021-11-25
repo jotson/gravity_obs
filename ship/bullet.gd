@@ -29,7 +29,7 @@ func _physics_process(_delta):
 func _on_bullet_body_entered(body):
 	if body.has_method('hurt'):
 		if body.get("username") and body.alive:
-			Game.kill_ship(username, body.username)
+			Battle.kill_ship(username, body.username)
 		if body.hurt(DAMAGE):
 			die()
 	else:
@@ -80,9 +80,9 @@ func bullet_hit(pos, rot, body = null):
 	var i = Impact.instance()
 	i.position = pos
 	i.rotation = rot + PI
-	Game.add_child(i)
+	Helper.add_child(i)
 	
-	Game.spark(pos, Vector2(1, 0).rotated(rot) * 200)
+	Battle.spark(pos, Vector2(1, 0).rotated(rot) * 200)
 
 	if body and body.has_method("hurt"):
 		bullet_hit_enemy_sfx(pos)

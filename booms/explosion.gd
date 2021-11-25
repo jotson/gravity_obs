@@ -16,8 +16,8 @@ func _ready():
 
 
 func explode():
-	Game.burst(position)
-	Game.spark(position, Vector2.ZERO)
+	Battle.burst(position)
+	Battle.spark(position, Vector2.ZERO)
 
 	#$explosionSfx.play()
 
@@ -29,7 +29,7 @@ func explode():
 		obj.position = position
 		obj.global_position = position
 		obj.linear_velocity = velocity + Vector2(rand_range(-200,200), rand_range(-200,200))
-		Game.add_child(obj)
+		Helper.add_child(obj)
 
 	$explosion.rotation = randf() * 2 * PI
 	$AnimationPlayer.play('default')

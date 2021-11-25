@@ -61,11 +61,18 @@ func _ready():
 	$flash.hide()
 	alive = false
 	$ui/crown.hide()
+	$ui/chat.hide()
+	$ui/chat.text = ""
 	hide()
 	revive()
 	
 	$collision.disabled = true
 
+
+func say(text):
+	$ui/chat.text = text
+	$ui/chatAnim.play("default")
+	
 
 func update_ui():
 	$ui.global_rotation = 0
@@ -74,7 +81,7 @@ func update_ui():
 	$trail.modulate = color
 	$trail2.modulate = color
 	$ui/kills.text = "Kills: %d" % [kills]
-	if Game.last_winner == username:
+	if Battle.last_winner == username:
 		$ui/crown.show()
 	else:
 		$ui/crown.hide()
@@ -98,7 +105,7 @@ func set_kills(value):
 		update_ui()
 	
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if not alive:
 		return
 	
@@ -109,11 +116,6 @@ func _physics_process(delta):
 	
 	if _shoot_shots > 0:
 		shoot(_shoot_shots)
-		
-#	if _thrust_duration < 0:
-#		_thrust_duration += delta
-#	else:
-#		thrust()
 	
 
 func ai():
@@ -227,7 +229,7 @@ func shoot(shots = 1):
 		bullet.username = username
 		bullet.position = position + Vector2(32,0).rotated(rotation)
 		bullet.apply_central_impulse(Vector2(1200, 0).rotated($Sprite/turret.rotation + rotation) + linear_velocity)
-		Game.add_child(bullet)
+		Helper.add_child(bullet)
 
 		# Apply recoil force to ship
 		#apply_impulse(Vector2(0,0), Vector2(-15, 0).rotated($Sprite/turret.rotation + rotation))
@@ -274,7 +276,7 @@ func revive():
 	# Respawn
 	var r = Respawn.instance()
 	r.position = position
-	Game.call_deferred("add_child", r)
+	Helper.call_deferred("add_child", r)
 
 	# Wait here until the respawn is complete
 	yield(r, 'done')
@@ -295,9 +297,9 @@ func revive():
 
 
 func self_destruct():
-	Game.explode(position + Vector2(32,0).rotated(randf()*2*PI), linear_velocity, 0.1, true)
-	Game.explode(position + Vector2(32,0).rotated(randf()*2*PI), linear_velocity, 0.2, true)
-	Game.explode(position + Vector2(32,0).rotated(randf()*2*PI), linear_velocity, 0.3, true)
+	Battle.explode(position + Vector2(32,0).rotated(randf()*2*PI), linear_velocity, 0.1, true)
+	Battle.explode(position + Vector2(32,0).rotated(randf()*2*PI), linear_velocity, 0.2, true)
+	Battle.explode(position + Vector2(32,0).rotated(randf()*2*PI), linear_velocity, 0.3, true)
 	die()
 
 
@@ -306,7 +308,7 @@ func die():
 		alive = false
 
 		# Explosion
-		Game.explode(position, linear_velocity, 0, true)
+		Battle.explode(position, linear_velocity, 0, true)
 
 		emit_signal("destroyed")
 

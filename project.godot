@@ -50,14 +50,16 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Game="*res://game.tscn"
 Twitch="*res://twitch.gd"
+Helper="*res://helper.gd"
+Battle="*res://battle.tscn"
 
 [display]
 
 window/size/width=960
 window/size/height=540
-window/size/fullscreen=true
+window/per_pixel_transparency/allowed=true
+window/per_pixel_transparency/enabled=true
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 
@@ -92,24 +94,27 @@ texture={
 
 fullscreen={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777254,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777254,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 toggle_console={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":96,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":96,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+disconnect={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777217,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 
 [rendering]
 
-quality/2d/use_pixel_snap=true
-environment/default_clear_color=Color( 0, 0, 1, 1 )
+2d/snapping/use_gpu_pixel_snap=true
 environment/default_environment="res://default_env.tres"
 quality/dynamic_fonts/use_oversampling=false
+quality/2d/use_pixel_snap=true
 
 [twitch]
 
-config/username="jotson"
-config/token="oauth:uykg55qmd8u0a9djvodafqv4dwm8xw"
-config/channel="sykkuno"
+client_id="monjuytjs37yq38wueace2sen64hrq"

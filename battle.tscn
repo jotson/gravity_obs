@@ -1,0 +1,108 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://battle.gd" type="Script" id=1]
+[ext_resource path="res://common/fonts/small.tres" type="DynamicFont" id=2]
+[ext_resource path="res://common/fonts/bigger.tres" type="DynamicFont" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 64, 540 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 960, 64 )
+
+[sub_resource type="Animation" id=3]
+resource_name = "default"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 4, 5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[node name="battle" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="wall1" type="StaticBody2D" parent="." groups=["wall"]]
+position = Vector2( -60, 281 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="wall1"]
+shape = SubResource( 1 )
+
+[node name="wall2" type="StaticBody2D" parent="." groups=["wall"]]
+position = Vector2( 1020, 261 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="wall2"]
+shape = SubResource( 1 )
+
+[node name="wall3" type="StaticBody2D" parent="." groups=["wall"]]
+position = Vector2( 960, -60 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="wall3"]
+shape = SubResource( 2 )
+
+[node name="wall4" type="StaticBody2D" parent="." groups=["wall"]]
+position = Vector2( 958, 602 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="wall4"]
+shape = SubResource( 2 )
+
+[node name="roundCountdown" type="Label" parent="."]
+margin_left = 7.0
+margin_top = 17.0
+margin_right = 217.0
+margin_bottom = 33.0
+custom_fonts/font = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lastWinner" type="Label" parent="."]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = 242.0
+margin_right = 960.0
+margin_bottom = 266.0
+custom_fonts/font = ExtResource( 3 )
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="lastWinner"]
+anims/default = SubResource( 3 )
+
+[node name="roundTimer" type="Timer" parent="."]
+wait_time = 180.0
+one_shot = true
+
+[node name="cooldownTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[connection signal="timeout" from="roundTimer" to="." method="_on_roundTimer_timeout"]
+[connection signal="timeout" from="cooldownTimer" to="." method="_on_cooldownTimer_timeout"]

@@ -42,6 +42,6 @@ func die():
 		# Secondary explosion
 		var explosion = Secondary.instance()
 		explosion.position = position
-		Game.add_child(explosion)
+		Helper.add_child(explosion)
 
 	queue_free()

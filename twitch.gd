@@ -1,71 +1,25 @@
 extends Gift
 
-func _ready() -> void:
-	# warning-ignore:return_value_discarded
-	connect("cmd_no_permission", self, "no_permission")
-	# warning-ignore:return_value_discarded
-	connect("chat_message", self, "chat_message")
-	# warning-ignore:return_value_discarded
-	connect("chat_message", Game, "chat_message")
-	
+func _ready():
+	pass
+
+
+func join(channel):
 	connect_to_twitch()
-	yield(self, "twitch_connected")
+	yield(Twitch, "twitch_connected")
 	
-	# Login using your username and an oauth token.
-	# You will have to either get a oauth token yourself or use
-	# https://twitchapps.com/tokengen/
-	# to generate a token with custom scopes.
-	var username = ProjectSettings.get("twitch/config/username")
-	var token = ProjectSettings.get("twitch/config/token")
-	var channel = ProjectSettings.get("twitch/config/channel")
+	var token = Helper.get_saved_token()
 	if token:
-		authenticate_oauth(username, token)
-		if(yield(self, "login_attempt") == false):
-			print("Invalid username or token.")
-			return
+		# authorized login for reading and chatting
+		authenticate_oauth(channel, "oauth:" + token)
+	else:
+		# Anonymous login just for reading
+		print("Anonymous! No Oauth token available!")
+		var username = "justinfan" + str(int(rand_range(100000,999999)))
+		authenticate_oauth(username, str(randi()))
+	
+	Helper.save_channel(channel)
+	
 	join_channel(channel)
 	
-#	add_command("left", self, "command_left")
-#	add_command("right", self, "command_right")
-#	add_command("thrust", self, "command_thrust")
-#	add_command("shoot", self, "command_shoot")
-#	add_command("destruct", self, "command_destruct")
-#
-#	add_alias("shoot", "zap")
-#	add_alias("shoot", "bang")
-#	add_alias("shoot", "kapow")
-#	add_alias("shoot", "laser")
-#	add_alias("shoot", "pew")
-#	add_alias("shoot", "pewpew")
-#	add_alias("destruct", "selfdestruct")
-
-
-func chat_message(sender_data, command : String, _full_message : String):
-	var username = sender_data.user
-	Game.add_ship(username)
-	Game.command(username, command.to_lower())
-
-
-#func command_left(cmd_info : CommandInfo):
-#	var username = cmd_info.sender_data.user
-#	Game.command(username, "left")
-#
-#
-#func command_right(cmd_info : CommandInfo):
-#	var username = cmd_info.sender_data.user
-#	Game.command(username, "right")
-#
-#
-#func command_thrust(cmd_info : CommandInfo):
-#	var username = cmd_info.sender_data.user
-#	Game.command(username, "thrust")
-#
-#
-#func command_shoot(cmd_info : CommandInfo):
-#	var username = cmd_info.sender_data.user
-#	Game.command(username, "shoot")
-#
-#
-#func command_destruct(cmd_info : CommandInfo):
-#	var username = cmd_info.sender_data.user
-#	Game.command(username, "destruct")
+	yield(get_tree().create_timer(2.0), "timeout")
