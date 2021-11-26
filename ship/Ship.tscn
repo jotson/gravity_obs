@@ -2,7 +2,7 @@
 
 [ext_resource path="res://ship/Ship.gd" type="Script" id=1]
 [ext_resource path="res://common/fonts/small.tres" type="DynamicFont" id=2]
-[ext_resource path="res://textures/crown.png" type="Texture" id=3]
+[ext_resource path="res://ship/textures/crown.png" type="Texture" id=3]
 [ext_resource path="res://common/fonts/tiny.tres" type="DynamicFont" id=4]
 [ext_resource path="res://ship/textures/flame.png" type="Texture" id=10]
 [ext_resource path="res://ship/textures/ship.png" type="Texture" id=14]

@@ -29,11 +29,8 @@ func _ready():
 
 func _physics_process(_delta):
 	if state == STATE.PLAYING:
-		$roundCountdown.text = "Time left: " + str(round($roundTimer.time_left))
+		$roundCountdown.text = "Time left: " + str(round($roundTimer.time_left)) + " - Chat to join!"
 
-	if state == STATE.COOLDOWN:
-		$roundCountdown.text = "Next round starting in %d..." % int($cooldownTimer.time_left)
-		
 	active_players = get_tree().get_nodes_in_group("player").size()
 	if active_players >= 2 and state == STATE.WAITING:
 		last_winner = ""
@@ -48,6 +45,7 @@ func change_state(new_state):
 	
 	if state == STATE.IDLE:
 		$roundCountdown.text = ""
+		$lastWinner.hide()
 
 	if state == STATE.WAITING:
 		$roundCountdown.text = "GET READY! Waiting for players..."
@@ -72,7 +70,7 @@ func twitch_disconnect():
 
 
 func twitch_chat(sender_data, command : String, full_message : String):
-	if state != STATE.PLAYING:
+	if state == STATE.COOLDOWN or state == STATE.IDLE:
 		return
 		
 	command = command.to_lower()
@@ -122,7 +120,7 @@ func start_round():
 
 
 func add_ship(username):
-	if state == STATE.COOLDOWN:
+	if state == STATE.COOLDOWN or state == STATE.IDLE:
 		return
 		
 	yield(get_tree(), 'idle_frame')
@@ -216,7 +214,7 @@ func _on_roundTimer_timeout():
 	
 
 func _on_cooldownTimer_timeout():
-	start_round()
+	idle()
 
 
 func burst(position):

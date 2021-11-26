@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://battle.gd" type="Script" id=1]
-[ext_resource path="res://common/fonts/small.tres" type="DynamicFont" id=2]
 [ext_resource path="res://common/fonts/bigger.tres" type="DynamicFont" id=3]
+[ext_resource path="res://common/gui/ui-theme.tres" type="Theme" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 64, 540 )
@@ -41,6 +41,7 @@ tracks/1/keys = {
 [node name="battle" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme = ExtResource( 4 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -50,24 +51,28 @@ __meta__ = {
 position = Vector2( -60, 281 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall1"]
+position = Vector2( -4, 0 )
 shape = SubResource( 1 )
 
 [node name="wall2" type="StaticBody2D" parent="." groups=["wall"]]
 position = Vector2( 1020, 261 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall2"]
+position = Vector2( 4, 0 )
 shape = SubResource( 1 )
 
 [node name="wall3" type="StaticBody2D" parent="." groups=["wall"]]
 position = Vector2( 960, -60 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall3"]
+position = Vector2( 0, -3 )
 shape = SubResource( 2 )
 
 [node name="wall4" type="StaticBody2D" parent="." groups=["wall"]]
 position = Vector2( 958, 602 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall4"]
+position = Vector2( 0, 2 )
 shape = SubResource( 2 )
 
 [node name="roundCountdown" type="Label" parent="."]
@@ -75,7 +80,6 @@ margin_left = 7.0
 margin_top = 17.0
 margin_right = 217.0
 margin_bottom = 33.0
-custom_fonts/font = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -84,9 +88,8 @@ __meta__ = {
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_top = 242.0
-margin_right = 960.0
-margin_bottom = 266.0
+margin_top = -12.0
+margin_bottom = 12.0
 custom_fonts/font = ExtResource( 3 )
 align = 1
 __meta__ = {
