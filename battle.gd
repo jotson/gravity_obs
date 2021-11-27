@@ -29,7 +29,8 @@ func _ready():
 
 func _physics_process(_delta):
 	if state == STATE.PLAYING:
-		$roundCountdown.text = "Time left: " + str(round($roundTimer.time_left)) + " - Chat to join!"
+		$roundCountdown.text = "Time left: " + str(round($roundTimer.time_left))
+		$roundCountdown.text += " | CHAT to join the BATTLE!"
 
 	active_players = get_tree().get_nodes_in_group("player").size()
 	if active_players >= 2 and state == STATE.WAITING:
@@ -48,7 +49,7 @@ func change_state(new_state):
 		$lastWinner.hide()
 
 	if state == STATE.WAITING:
-		$roundCountdown.text = "GET READY! Waiting for players..."
+		$roundCountdown.text = "GET READY! CHAT to join the BATTLE!"
 		
 	if state == STATE.COOLDOWN:
 		$cooldownTimer.start()

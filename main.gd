@@ -24,6 +24,8 @@ func _ready():
 	Twitch.add_command("battle", self, "cmd_start_battle", 0, 0, Twitch.PermissionFlag.STREAMER)
 	Twitch.add_command("commands", self, "cmd_commands")
 	Twitch.add_command("info", self, "cmd_info")
+	Twitch.add_command("fod", self, "cmd_fod")
+	Twitch.add_command("event", self, "cmd_event")
 	Twitch.add_command("meaningoflife", self, "cmd_meaningoflife")
 
 
@@ -42,16 +44,35 @@ func cmd_start_battle(_cmd : CommandInfo):
 	Battle.start_round()
 	
 	
-func cmd_commands(_cmd : CommandInfo):
-	pass
-
-
 func cmd_info(_cmd : CommandInfo):
 	Twitch.chat("Hi, I'm working on Gravity Ace! It's a Godot Engine game and you can find out more at https://gravityace.com")
 	
 
+func cmd_fod(_cmd : CommandInfo):
+	Twitch.chat("Check out https://flockofdogs.com by Max Clark")
+	
+
+func cmd_event(_cmd : CommandInfo):
+	Twitch.chat("I am going to be at Ambitious Indies 3.0 in Long Beach on January 12th! More info coming soon!")
+	
+
 func cmd_meaningoflife(_cmd : CommandInfo):
 	Twitch.chat("42")
+
+
+func cmd_commands(_cmd : CommandInfo):
+	var commands : PoolStringArray = [
+		"!info for info about the game",
+		"!fod for info about flockofdogs",
+		"!event for info about Ambitious Indies 3.0",
+		"!commands (you're looking at it)",
+		"!meaningoflife"
+	]
+	
+	var chat = "Commands: " + commands.join(" // ")
+	print(chat)
+	
+	Twitch.chat(chat)
 
 
 func twitch_reward_redemption(who : String, reward : String):
