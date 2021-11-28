@@ -10,15 +10,17 @@ func _ready():
 	if channel:
 		$login/channel.text = channel
 
-	# warning-ignore:return_value_discarded
-	Twitch.connect("chat_message", self, "twitch_chat")
-	# warning-ignore:return_value_discarded
-	Twitch.connect("twitch_disconnected", self, "twitch_disconnect")
-	# warning-ignore:return_value_discarded
-	Twitch.connect("login_attempt", self, "twitch_login_attempt")
-	
-	# warning-ignore:return_value_discarded
-	TwitchPS.connect("reward_redemption", self, "twitch_reward_redemption")
+	if Twitch.connect("chat_message", self, "twitch_chat") != OK:
+		print_debug("Signal not connected")
+	if Twitch.connect("twitch_disconnected", self, "twitch_disconnect") != OK:
+		print_debug("Signal not connected")
+	if Twitch.connect("login_attempt", self, "twitch_login_attempt") != OK:
+		print_debug("Signal not connected")
+	if Twitch.connect("got_channel_info", self, "twitch_got_channel_info") != OK:
+		print_debug("Signal not connected")
+
+	if TwitchPS.connect("reward_redemption", self, "twitch_reward_redemption") != OK:
+		print_debug("Signal not connected")
 	
 	# commands
 	Twitch.add_command("battle", self, "cmd_start_battle", 0, 0, Twitch.PermissionFlag.STREAMER)
@@ -82,8 +84,11 @@ func twitch_reward_redemption(who : String, reward : String):
 func twitch_login_attempt(success):
 	if (success):
 		OS.window_minimized = true
-		
-		TwitchPS.connect_to_twitch()
+		OBS.connect_to_obs()
+
+
+func twitch_got_channel_info():
+	TwitchPS.connect_to_twitch()
 		
 
 func twitch_chat(sender_data, command : String, full_message : String):
@@ -127,5 +132,5 @@ func _on_authButton_pressed():
 	}
 	var qs = client.query_string_from_dict(fields)
 
-	# warning-ignore:return_value_discarded
-	OS.shell_open(uri + "?" + qs)
+	if OS.shell_open(uri + "?" + qs) != OK:
+		print_debug("Can't open browser")

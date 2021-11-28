@@ -54,9 +54,9 @@ config/icon="res://icon.png"
 Twitch="*res://twitch.gd"
 Helper="*res://helper.gd"
 Battle="*res://battle.tscn"
-TwitchPS="*res://twitchpubsub.tscn"
 Discord="*res://discord.gd"
 OBS="*res://obs.gd"
+TwitchPS="*res://twitchpubsub.gd"
 
 [display]
 

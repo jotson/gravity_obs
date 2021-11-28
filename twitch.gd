@@ -1,5 +1,15 @@
 extends Gift
 
+signal got_channel_info
+
+var broadcaster_id = null
+var broadcaster_login = null
+var broadcaster_name = null
+var channel_title = null
+var channel_game_id = null
+var channel_game_name = null
+
+
 func _ready():
 	pass
 
@@ -19,7 +29,40 @@ func join(channel):
 		authenticate_oauth(username, str(randi()))
 	
 	Helper.save_channel(channel)
-	
 	join_channel(channel)
+	get_channel_info()
+
+
+func get_channel_info():
+	# Get channel_info
+	var http : HTTPRequest = HTTPRequest.new()
+	add_child(http)
+	if http.connect("request_completed", self, "received_channel_info", [http]) != OK:
+		print_debug("Signal not connected")
 	
-	yield(get_tree().create_timer(2.0), "timeout")
+	var err = http.request("https://api.twitch.tv/helix/channels?broadcaster_id=%s" % str(80362534), ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], false, HTTPClient.METHOD_GET)
+	if err != OK:
+		print("Error getting stream info " + str(err))
+
+
+func received_channel_info(result: int, response_code: int, headers: PoolStringArray, body: PoolByteArray, http: HTTPRequest):
+	http.queue_free()
+	
+	if response_code != 200:
+		print("Twitch API Error:", result)
+		print("Twitch Response code:", response_code)
+		print(headers)
+		print(body.get_string_from_utf8())
+		return
+		
+	var data = body.get_string_from_utf8()
+	var message = parse_json(data)
+	broadcaster_id = message.data[0].broadcaster_id
+	broadcaster_login = message.data[0].broadcaster_login
+	broadcaster_name = message.data[0].broadcaster_name
+	channel_title = message.data[0].title
+	channel_game_id = message.data[0].game_id
+	channel_game_name = message.data[0].game_name
+	
+	emit_signal("got_channel_info")
+	

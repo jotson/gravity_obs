@@ -138,15 +138,14 @@ enum RequestStatus {
 
 
 func _ready():
-	# warning-ignore:return_value_discarded
-	websocket.connect("data_received", self, "data_received")
-	# warning-ignore:return_value_discarded
-	websocket.connect("connection_established", self, "connection_established")
-	# warning-ignore:return_value_discarded
-	websocket.connect("connection_closed", self, "connection_closed")
-	# warning-ignore:return_value_discarded
-	websocket.connect("connection_error", self, "connection_error")
-	# warning-ignore:return_value_discarded
+	if websocket.connect("data_received", self, "data_received") != OK:
+		print_debug("Signal not connected")
+	if websocket.connect("connection_established", self, "connection_established") != OK:
+		print_debug("Signal not connected")
+	if websocket.connect("connection_closed", self, "connection_closed") != OK:
+		print_debug("Signal not connected")
+	if websocket.connect("connection_error", self, "connection_error") != OK:
+		print_debug("Signal not connected")
 	#websocket.connect("server_close_request", self, "sever_close_request")
 
 
@@ -160,43 +159,91 @@ func websocket_connected() -> bool:
 
 
 func connect_to_obs():
-	var err = websocket.connect_to_url("wss://localhost:4444")
-	print("Connecting...")
+	# See https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#connection-steps
+	# This might be for a different version of OBS websocket than mine
+	var err = websocket.connect_to_url("ws://localhost:4444")
+	print("Connecting to OBS...")
 	if err != OK:
 		print("Error: " + str(err))
 
 
 func connection_established(protocol : String):
-	print("Connection established " + protocol)
+	print("OBS connection established " + protocol)
+	upgrade_connection()
 
 
 func connection_closed(clean_close : bool):
-	print("connection closed " + str(clean_close))
+	print("OBS connection closed " + str(clean_close))
 	
 
 func connection_error():
-	print("connection error")
+	print("OBS connection error")
 	
+	
+func upgrade_connection():
+	# This might be for a different version of OBS websocket than mine
+	print("OBS upgrade connection")
+
+	var http : HTTPRequest = HTTPRequest.new()
+	add_child(http)
+	if http.connect("request_completed", self, "upgrade_request_completed", [http]) != OK:
+		print_debug("Signal not connected")
+	
+	var headers = [ "Sec-WebSocket-Protocol: obswebsocket.json" ]
+	var err = http.request("http://localhost:4444", headers)
+	if err != OK:
+		print("OBS error upgrading connection " + str(err))
+
+
+func upgrade_request_completed(_result: int, _response_code: int, _headers: PoolStringArray, _body: PoolByteArray, http: HTTPRequest):
+	http.queue_free()
+	
+#	if response_code != 200:
+#		print("OBS API Error:", result)
+#		print("OBS Response code:", response_code)
+#		print(headers)
+#		print(body.get_string_from_utf8())
+#		return
+	
+	
+func hello():
+	# This might be for a different version of OBS websocket than mine
+	print("OBS hello")
+	send({
+		"op": WebSocketOpCode.Identify,
+		"d": {
+			"rpcVersion": 1,
+			"eventSubscriptions": EventSubscription.All
+		}
+	})
+
 
 func data_received() -> void:
 	var data : String = websocket.get_peer(1).get_packet().get_string_from_utf8()
 	if data:
-		var response = parse_json(data)
-		print(data)
-		
-		# Listen for Hello and send Identify response
-		if response.op == WebSocketOpCode.Hello:
-			send({
-				"op": WebSocketOpCode.Identify,
-				"d": {
-					"rpcVersion": 1,
-					"eventSubscriptions": EventSubscription.All
-				}
-			})
+		var response : Dictionary = parse_json(data)
+		print_debug("OBS: ", response)
+
+		if response.has("error"):
+			prints("OBS error:", response.error)
 			
-		if response.op == WebSocketOpCode.Event:
-			var event = response.d.eventType
-			if event == "StreamStarted":
+		if response.has("op"):
+			# This might be for a different version of OBS websocket than mine
+			# Listen for Hello and send Identify response
+			if response.op == WebSocketOpCode.Hello:
+				hello()
+				
+			if response.op == WebSocketOpCode.Event:
+				var event = response.d.eventType
+				if event == "StreamStarted":
+					print("Stream STARTED!")
+					Discord.post_announcement()
+
+		if response.has("update-type"):
+			# This might be for a different version of OBS websocket than mine
+			# Listen for Hello and send Identify response
+			if response["update-type"] == "StreamStarted":
+				print("Announcing OBS stream on Discord")
 				Discord.post_announcement()
 		
 

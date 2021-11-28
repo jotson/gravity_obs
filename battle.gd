@@ -21,10 +21,10 @@ var IDLE_TIMEOUT = 100 # Milliseconds until AI takes over player control
 func _ready():
 	idle()
 
-	# warning-ignore:return_value_discarded
-	Twitch.connect("chat_message", self, "twitch_chat")
-	# warning-ignore:return_value_discarded
-	Twitch.connect("twitch_disconnected", self, "twitch_disconnect")
+	if Twitch.connect("chat_message", self, "twitch_chat") != OK:
+		print_debug("Signal not connected")
+	if Twitch.connect("twitch_disconnected", self, "twitch_disconnect") != OK:
+		print_debug("Signal not connected")
 
 
 func _physics_process(_delta):
