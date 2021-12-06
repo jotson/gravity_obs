@@ -54,7 +54,9 @@ func change_state(new_state):
 	if state == STATE.COOLDOWN:
 		$cooldownTimer.start()
 		if last_winner:
-			$lastWinner.text = "%s won with %d kills" % [last_winner, high_score]
+			var winner_text = "%s won with %d kills" % [last_winner, high_score]
+			$lastWinner.text = winner_text
+			Twitch.chat(winner_text)
 		else:
 			$lastWinner.text = ""
 		$lastWinner.show()

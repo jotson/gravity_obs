@@ -79,6 +79,9 @@ func cmd_commands(_cmd : CommandInfo):
 
 func twitch_reward_redemption(who : String, reward : String):
 	print("%s redeemed %s" % [who, reward])
+	if reward.to_lower() == "this is fine":
+		var fire = preload("res://flames/flames.tscn").instance()
+		Helper.add_child(fire)
 	
 
 func twitch_login_attempt(success):
