@@ -1,5 +1,7 @@
 extends Control
 
+var commands : Dictionary
+
 
 func _ready():
 	Helper.set_transparent(false)
@@ -21,14 +23,73 @@ func _ready():
 
 	if TwitchPS.connect("reward_redemption", self, "twitch_reward_redemption") != OK:
 		print_debug("Signal not connected")
+
+	load_commands()
+
+
+func load_commands():
+	commands.clear()
+	Twitch.commands.clear()
 	
-	# commands
-	Twitch.add_command("battle", self, "cmd_start_battle", 0, 0, Twitch.PermissionFlag.STREAMER)
-	Twitch.add_command("commands", self, "cmd_commands")
-	Twitch.add_command("info", self, "cmd_info")
-	Twitch.add_command("fod", self, "cmd_fod")
-	Twitch.add_command("event", self, "cmd_event")
-	Twitch.add_command("meaningoflife", self, "cmd_meaningoflife")
+	var f = File.new()	
+	if f.open("user://commands.json", File.READ) != OK:
+		return
+	var command_data : Array = parse_json(f.get_as_text())
+	f.close()
+	
+	for c in command_data:
+		commands[c.command] = c
+		
+		var perm = Twitch.PermissionFlag.EVERYONE
+		if c.has("streamer") and c.streamer:
+			perm = Twitch.PermissionFlag.STREAMER
+			
+		if c.has("action") and c.action == "battle":
+			Twitch.add_command(c.command, self, "cmd_battle", 0, 0, perm)
+	
+		if c.has("action") and c.action == "commands":
+			Twitch.add_command(c.command, self, "cmd_commands", 0, 0, perm)
+	
+		if c.has("action") and c.action == "chat":
+			Twitch.add_command(c.command, self, "cmd_chat", 0, 0, perm)
+			
+		if c.has("aliases"):
+			for alias in c.aliases:
+				Twitch.add_alias(c.command, alias)
+				commands[alias] = {
+					"alias": c.command
+				}
+
+
+func cmd_commands(_cmd : CommandInfo):
+	Twitch.chat("Here's what you can do:")
+	
+	var chat = ""
+	for key in commands.keys():
+		var c = commands[key]
+		if c.has("streamer") && c.streamer == true:
+			continue
+		if c.has("alias"):
+			continue
+		
+		chat = "!%s: %s" % [c.command, c.help]
+		Twitch.chat(chat)
+
+
+func cmd_battle(_cmd : CommandInfo):
+	Battle.start_round()
+	
+	
+func cmd_chat(_cmd : CommandInfo):
+	var chat = ""
+	
+	if commands[_cmd.command].has("text"):
+		chat = commands[_cmd.command].text
+	if commands[_cmd.command].has("alias"):
+		var alias = commands[_cmd.command].alias
+		chat = commands[alias].text
+		
+	Twitch.chat(chat)
 
 
 func _on_joinButton_pressed(_text = ""):
@@ -40,41 +101,6 @@ func _on_joinButton_pressed(_text = ""):
 
 func _on_channel_text_entered(new_text):
 	_on_joinButton_pressed(new_text)
-
-
-func cmd_start_battle(_cmd : CommandInfo):
-	Battle.start_round()
-	
-	
-func cmd_info(_cmd : CommandInfo):
-	Twitch.chat("Hi, I'm working on Gravity Ace! It's a Godot Engine game and you can find out more at https://gravityace.com")
-	
-
-func cmd_fod(_cmd : CommandInfo):
-	Twitch.chat("Check out https://flockofdogs.com by Max Clark")
-	
-
-func cmd_event(_cmd : CommandInfo):
-	Twitch.chat("I am going to be at Ambitious Indies 3.0 in Long Beach on January 12th! More info coming soon!")
-	
-
-func cmd_meaningoflife(_cmd : CommandInfo):
-	Twitch.chat("42")
-
-
-func cmd_commands(_cmd : CommandInfo):
-	var commands : PoolStringArray = [
-		"!info for info about the game",
-		"!fod for info about flockofdogs",
-		"!event for info about Ambitious Indies 3.0",
-		"!commands (you're looking at it)",
-		"!meaningoflife"
-	]
-	
-	var chat = "Commands: " + commands.join(" // ")
-	print(chat)
-	
-	Twitch.chat(chat)
 
 
 func twitch_reward_redemption(who : String, reward : String):
