@@ -38,10 +38,8 @@ damping_random = 0.5
 scale = 2.0
 color_ramp = SubResource( 4 )
 
-[node name="bullet" type="RigidBody2D" groups=[
-"bullet",
-"transient",
-]]
+[node name="bullet" type="RigidBody2D" groups=["bullet", "transient"]]
+collision_mask = 3
 mass = 0.1
 physics_material_override = SubResource( 1 )
 contacts_reported = 1
@@ -89,6 +87,7 @@ attenuation = 2.0
 stream = ExtResource( 6 )
 volume_db = -8.0
 attenuation = 2.0
+
 [connection signal="body_entered" from="." to="." method="_on_bullet_body_entered"]
 [connection signal="timeout" from="deathTimer" to="." method="_on_deathTimer_timeout"]
 [connection signal="timeout" from="trailDeathTimer" to="." method="_on_trailDeathTimer_timeout"]

@@ -49,6 +49,7 @@ __meta__ = {
 
 [node name="wall1" type="StaticBody2D" parent="." groups=["wall"]]
 position = Vector2( -60, 281 )
+collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall1"]
 position = Vector2( -4, 0 )
@@ -56,6 +57,7 @@ shape = SubResource( 1 )
 
 [node name="wall2" type="StaticBody2D" parent="." groups=["wall"]]
 position = Vector2( 1020, 261 )
+collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall2"]
 position = Vector2( 4, 0 )
@@ -63,6 +65,7 @@ shape = SubResource( 1 )
 
 [node name="wall3" type="StaticBody2D" parent="." groups=["wall"]]
 position = Vector2( 960, -60 )
+collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall3"]
 position = Vector2( 0, -3 )
@@ -70,6 +73,7 @@ shape = SubResource( 2 )
 
 [node name="wall4" type="StaticBody2D" parent="." groups=["wall"]]
 position = Vector2( 958, 602 )
+collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall4"]
 position = Vector2( 0, 2 )

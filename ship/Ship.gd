@@ -7,7 +7,7 @@ var TRACTOR_RANGE = 100 # px
 var STARTING_HEALTH = 1
 var health = 0
 
-var _editor_transform = null
+var _transform = null
 
 var fuel = 0.0 # Starting fuel is set during level init
 var _thrust_duration = 0
@@ -116,26 +116,33 @@ func _physics_process(_delta):
 	
 	if _shoot_shots > 0:
 		shoot(_shoot_shots)
-	
 
-func ai():
+	# Change raycast aim
+	$aimRaycast.rotation = sin(OS.get_ticks_msec()/100.0) * 0.1 * PI
+	var on_target = $aimRaycast.is_colliding()
+	
 	if randi() % 150 == 0:
 		thrust(10)
-		
-	if randi() % 100 == 0:
-		if randi() % 2 == 1:
-			turn_left(0.3)
-		else:
-			turn_right(0.3)
-
-	if randi() % 100 == 0:
+	
+	if on_target:
 		shoot(3)
 
+	if not on_target:	
+		if randi() % 100 == 0:
+			if randi() % 2 == 1:
+				turn_left(0.3)
+			else:
+				turn_right(0.3)
 
+	
 func _integrate_forces(state):
 	if not alive:
 		return
 		
+	if _transform:
+		state.transform = _transform
+		_transform = null
+
 	local_gravity = state.total_gravity
 
 	var bearing = Vector2(1,0).rotated(rotation).normalized()
@@ -317,4 +324,7 @@ func die():
 
 func _on_ship_body_entered(body):
 	if body.is_in_group('wall'):
-		_thrust_duration = 0
+		var state = Physics2DServer.body_get_direct_state(get_rid())
+		if state.get_contact_count():
+			var normal = state.get_contact_local_normal(0)
+			_transform = Transform2D(normal.angle(), position)

@@ -47,6 +47,9 @@ func load_commands():
 		if c.has("action") and c.action == "battle":
 			Twitch.add_command(c.command, self, "cmd_battle", 0, 0, perm)
 	
+		if c.has("action") and c.action == "reload_commands":
+			Twitch.add_command(c.command, self, "cmd_reload_commands", 0, 0, perm)
+	
 		if c.has("action") and c.action == "commands":
 			Twitch.add_command(c.command, self, "cmd_commands", 0, 0, perm)
 	
@@ -75,6 +78,11 @@ func cmd_commands(_cmd : CommandInfo):
 		chat = "!%s: %s" % [c.command, c.help]
 		Twitch.chat(chat)
 
+
+func cmd_reload_commands(_cmd : CommandInfo):
+	load_commands()
+	cmd_commands(_cmd)
+	
 
 func cmd_battle(_cmd : CommandInfo):
 	Battle.start_round()

@@ -37,8 +37,6 @@ func _physics_process(_delta):
 		last_winner = ""
 		high_score = 0
 		change_state(STATE.PLAYING)
-		
-	ai()
 
 
 func change_state(new_state):
@@ -94,24 +92,6 @@ func twitch_chat(sender_data, command : String, full_message : String):
 			message = message.join(" ")
 			message = message.substr(1)
 			ship.get_ref().say(message)
-#		if OS.get_ticks_msec() - players[username].last_action < ACTION_THROTTLE:
-#			return
-#		players[username].last_action = OS.get_ticks_msec()
-#		if ship != null and ship.get_ref() and ship.get_ref().alive:
-#			match(command):
-#				"l":
-#					ship.get_ref().turn_left(0.3)
-#					ship.get_ref().shoot()
-#				"r":
-#					ship.get_ref().turn_right(0.3)
-#					ship.get_ref().shoot()
-#				"t":
-#					ship.get_ref().thrust(10.0)
-#					ship.get_ref().shoot()
-#				"s":
-#					ship.get_ref().shoot(5)
-#				"destruct":
-#					ship.get_ref().self_destruct()
 
 
 func idle():
@@ -201,15 +181,6 @@ func reset_players():
 			
 	active_players = 0
 	change_state(STATE.COOLDOWN)
-
-
-func ai():
-	for username in players.keys():
-		var ship = players[username].ship
-		if OS.get_ticks_msec() - players[username].last_action < IDLE_TIMEOUT:
-			continue
-		if ship != null and ship.get_ref() and ship.get_ref().alive:
-			ship.get_ref().ai()
 
 
 func _on_roundTimer_timeout():
