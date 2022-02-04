@@ -34,10 +34,13 @@ func websocket_connected() -> bool:
 
 
 func connect_to_twitch():
+	if websocket.get_connection_status() == websocket.CONNECTION_CONNECTED:
+		return
+		
 	var err = websocket.connect_to_url("wss://pubsub-edge.twitch.tv")
 	print("Connecting to Twitch PubSub...")
 	if err != OK:
-		print("Error: " + str(err))
+		print("Twitch PubSub Error: " + str(err))
 
 
 func connection_established(protocol : String):
@@ -89,11 +92,6 @@ func data_received() -> void:
 				var user = message.data.redemption.user.display_name
 				var reward_title = message.data.redemption.reward.title
 				emit_signal("reward_redemption", user, reward_title)
-				
-				var reward = preload("res://reward/reward.tscn").instance()
-				reward.who = user
-				reward.reward = reward_title
-				Helper.add_child(reward)
 
 
 func send(message : Dictionary) -> void:

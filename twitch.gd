@@ -43,6 +43,7 @@ func get_channel_info():
 	var err = http.request("https://api.twitch.tv/helix/channels?broadcaster_id=%s" % str(80362534), ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], false, HTTPClient.METHOD_GET)
 	if err != OK:
 		print("Error getting stream info " + str(err))
+	yield(http, "request_completed")
 
 
 func received_channel_info(result: int, response_code: int, headers: PoolStringArray, body: PoolByteArray, http: HTTPRequest):
@@ -63,6 +64,7 @@ func received_channel_info(result: int, response_code: int, headers: PoolStringA
 	channel_title = message.data[0].title
 	channel_game_id = message.data[0].game_id
 	channel_game_name = message.data[0].game_name
+	print(message.data[0])
 	
 	emit_signal("got_channel_info")
 	

@@ -20,6 +20,8 @@ func post_announcement():
 	if webhook_url == null:
 		return
 
+	yield(Twitch.get_channel_info(), "completed")
+	
 	var title = "@everyone %s is streaming %s" % [Twitch.broadcaster_name, Twitch.channel_title]
 	title += " [LIVE NOW on Twitch](<https://twitch.tv/%s>)"  % [Twitch.broadcaster_login]
 	var discord_json = {

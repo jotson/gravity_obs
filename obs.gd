@@ -164,7 +164,7 @@ func connect_to_obs():
 	var err = websocket.connect_to_url("ws://localhost:4444")
 	print("Connecting to OBS...")
 	if err != OK:
-		print("Error: " + str(err))
+		print("OBS error: " + str(err))
 
 
 func connection_established(protocol : String):
