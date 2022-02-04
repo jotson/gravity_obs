@@ -46,7 +46,6 @@ _global_script_class_icons={
 
 config/name="Gravity OBS"
 run/main_scene="res://main.tscn"
-run/low_processor_mode=true
 config/icon="res://icon.png"
 
 [autoload]
@@ -57,6 +56,7 @@ Battle="*res://battle.tscn"
 Discord="*res://discord.gd"
 OBS="*res://obs.gd"
 TwitchPS="*res://twitchpubsub.gd"
+Soundboard="*res://soundboard/Soundboard.tscn"
 
 [display]
 

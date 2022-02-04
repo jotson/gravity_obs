@@ -112,10 +112,23 @@ func _on_channel_text_entered(new_text):
 
 
 func twitch_reward_redemption(who : String, reward : String):
+	var notify = true
+	
 	print("%s redeemed %s" % [who, reward])
 	if reward.to_lower() == "this is fine":
 		var fire = preload("res://flames/flames.tscn").instance()
 		Helper.add_child(fire)
+		
+	if reward.begins_with("Play sound: "):
+		notify = false
+		var sound = reward.trim_prefix("Play sound: ")
+		Soundboard.play(sound)
+	
+	if notify:
+		var notification = preload("res://reward/reward.tscn").instance()
+		notification.who = who
+		notification.reward = reward
+		Helper.add_child(notification)
 	
 
 func twitch_login_attempt(success):
