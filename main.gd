@@ -55,6 +55,10 @@ func load_commands():
 	
 		if c.has("action") and c.action == "chat":
 			Twitch.add_command(c.command, self, "cmd_chat", 0, 0, perm)
+
+		if c.has("action") and c.action == "addtocredits":
+			Twitch.add_command(c.command, self, "cmd_addtocredits", 0, 0, perm)
+	
 			
 		if c.has("aliases"):
 			for alias in c.aliases:
@@ -81,7 +85,6 @@ func cmd_commands(_cmd : CommandInfo):
 
 func cmd_reload_commands(_cmd : CommandInfo):
 	load_commands()
-	cmd_commands(_cmd)
 	
 
 func cmd_battle(_cmd : CommandInfo):
@@ -99,6 +102,15 @@ func cmd_chat(_cmd : CommandInfo):
 		
 	Twitch.chat(chat)
 
+
+func cmd_addtocredits(_cmd : CommandInfo):
+	var filename = "user://twitch-credits.txt"
+	var f = File.new()
+	if f.open(filename, File.READ_WRITE) == OK:
+		f.seek_end()
+		f.store_line(_cmd.sender_data.user)
+	f.close()
+	
 
 func _on_joinButton_pressed(_text = ""):
 	if $login/channel.text:
