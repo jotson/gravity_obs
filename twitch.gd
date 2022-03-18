@@ -9,7 +9,6 @@ var channel_title = null
 var channel_game_id = null
 var channel_game_name = null
 
-
 func _ready():
 	pass
 
@@ -67,4 +66,3 @@ func received_channel_info(result: int, response_code: int, headers: PoolStringA
 	print(message.data[0])
 	
 	emit_signal("got_channel_info")
-	

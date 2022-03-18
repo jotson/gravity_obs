@@ -1,0 +1,220 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://chatter/textures/astronaut.png" type="Texture" id=1]
+[ext_resource path="res://chatter/chatter.gd" type="Script" id=2]
+[ext_resource path="res://chatter/textures/helmet.png" type="Texture" id=3]
+[ext_resource path="res://common/fonts/tiny.tres" type="DynamicFont" id=4]
+[ext_resource path="res://chatter/color.material" type="Material" id=5]
+[ext_resource path="res://chatter/textures/face.png" type="Texture" id=6]
+
+[sub_resource type="Animation" id=1]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/path = NodePath("body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 11 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "wave1"
+tracks/0/type = "value"
+tracks/0/path = NodePath("body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 12, 23 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "wave2"
+tracks/0/type = "value"
+tracks/0/path = NodePath("body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 24, 35 ]
+}
+
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, -3 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "default"
+loop = true
+step = 0.25
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
+"transitions": PoolRealArray( -2, -2, -2, -2 ),
+"update": 0,
+"values": [ Vector2( 0, -1 ), Vector2( 0, 1 ), Vector2( 0, -1 ), Vector2( 0, 1 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("..:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "speak"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("..:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5, 2.5, 3 ),
+"transitions": PoolRealArray( -2, 1, -2, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 2, 2 ), Vector2( 2, 2 ), Vector2( 1, 1 ) ]
+}
+
+[node name="Chatter" type="Node2D"]
+material = ExtResource( 5 )
+script = ExtResource( 2 )
+
+[node name="body" type="Sprite" parent="."]
+use_parent_material = true
+position = Vector2( 0, -24 )
+texture = ExtResource( 1 )
+hframes = 6
+vframes = 7
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 1 )
+anims/idle = SubResource( 2 )
+anims/wave1 = SubResource( 3 )
+anims/wave2 = SubResource( 4 )
+
+[node name="head" type="Node2D" parent="."]
+use_parent_material = true
+position = Vector2( 0, -3 )
+z_index = -1
+
+[node name="nametag" type="Label" parent="head"]
+margin_left = -49.0
+margin_top = -65.0
+margin_right = 49.0
+margin_bottom = -56.0
+custom_colors/font_color = Color( 0.541176, 0.541176, 0.541176, 1 )
+custom_fonts/font = ExtResource( 4 )
+text = "NAMETAG"
+align = 1
+valign = 1
+
+[node name="helmet" type="Sprite" parent="head"]
+use_parent_material = true
+position = Vector2( 0, -36 )
+texture = ExtResource( 3 )
+
+[node name="Face" type="Sprite" parent="head/helmet"]
+z_index = -1
+texture = ExtResource( 6 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="head"]
+autoplay = "default"
+anims/RESET = SubResource( 5 )
+anims/default = SubResource( 6 )
+
+[node name="speechBubble" type="Label" parent="."]
+margin_left = -47.0
+margin_top = -127.0
+margin_right = 47.0
+margin_bottom = -69.0
+rect_clip_content = true
+custom_fonts/font = ExtResource( 4 )
+align = 1
+valign = 2
+autowrap = true
+clip_text = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="speechBubble"]
+anims/RESET = SubResource( 7 )
+anims/speak = SubResource( 8 )
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

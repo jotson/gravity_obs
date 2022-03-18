@@ -43,9 +43,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 4 )
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="wall1" type="StaticBody2D" parent="." groups=["wall"]]
 position = Vector2( -60, 281 )

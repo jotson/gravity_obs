@@ -2,6 +2,11 @@ extends Control
 
 var commands : Dictionary
 
+var last_api_request = OS.get_ticks_msec()
+var profile_pics = {}
+var profile_pic_queue = []
+var MAX_CHATTERS = 50
+
 
 func _ready():
 	Helper.set_transparent(false)
@@ -117,6 +122,11 @@ func _on_joinButton_pressed(_text = ""):
 		$login.hide()
 		Helper.set_transparent(true)
 		Twitch.join($login/channel.text)
+		
+		profile_pics.clear()
+		profile_pic_queue.clear()
+		for c in $chatters.get_children():
+			c.queue_free()
 
 
 func _on_channel_text_entered(new_text):
@@ -145,18 +155,25 @@ func twitch_reward_redemption(who : String, reward : String):
 
 func twitch_login_attempt(success):
 	if (success):
-		OS.window_minimized = true
+		#OS.window_minimized = true
 		OBS.connect_to_obs()
 
 
 func twitch_got_channel_info():
 	TwitchPS.connect_to_twitch()
-		
+
 
 func twitch_chat(sender_data, command : String, full_message : String):
-	var _username = sender_data.user
+	var username = sender_data.user
 	
 	command = command.to_lower()
+	
+	var message = full_message.split(" ")
+	message.remove(0)
+	message.remove(0)
+	message.remove(0)
+	message = message.join(" ")
+	message = message.substr(1)
 	
 	var hearts = Helper.get_count(full_message, "<3")
 	if hearts >= 0:
@@ -175,6 +192,41 @@ func twitch_chat(sender_data, command : String, full_message : String):
 			var o = load("res://smiley/smiley.tscn").instance()
 			o.position = Helper.random_position()
 			Helper.add_child(o)
+
+	if not profile_pics.has(username) and not profile_pic_queue.has(username):
+		if profile_pics.size() > MAX_CHATTERS:
+			for j in range(profile_pics.size() - MAX_CHATTERS):
+				var i = randi() % MAX_CHATTERS
+				var keys = profile_pics.keys()
+				var key = keys[i]
+				var c = profile_pics[key]
+				if c["ready"]:
+					c["sprite"].queue_free()
+					profile_pics.erase(key)
+					print("killed %s" % key)
+			
+		profile_pics[username] = {
+			"url": null,
+			"sprite": null,
+			"ready": false
+		}
+		var first = false
+		if profile_pics.size() == 1:
+			first = true
+		var chatter = preload("res://chatter/chatter.tscn").instance()
+		profile_pics[username]["sprite"] = chatter
+		chatter.add_head(null, username, first)
+		$chatters.add_child(chatter)
+		chatter.say(message)
+		
+		profile_pic_queue.append(username)
+	
+	if profile_pic_queue.size() and OS.get_ticks_msec() > last_api_request + 3000:
+		get_profile_pic(profile_pic_queue)
+		profile_pic_queue.clear()
+		
+	if profile_pics.has(username):
+		profile_pics[username]["sprite"].say(message)
 
 
 func twitch_disconnect():
@@ -196,3 +248,53 @@ func _on_authButton_pressed():
 
 	if OS.shell_open(uri + "?" + qs) != OK:
 		print_debug("Can't open browser")
+
+
+func get_profile_pic(login:Array):
+	last_api_request = OS.get_ticks_msec()
+	
+	var http : HTTPRequest = HTTPRequest.new()
+	add_child(http)
+	if http.connect("request_completed", self, "received_profile_pic", [http]) != OK:
+		print_debug("Signal not connected")
+	
+	var url = "https://api.twitch.tv/helix/users?"
+	for l in login:
+		url += "login=%s&" % l
+	var err = http.request(url, ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], false, HTTPClient.METHOD_GET)
+	if err != OK:
+		print("Error getting profile pic " + str(err))
+
+
+func received_profile_pic(result: int, response_code: int, headers: PoolStringArray, body: PoolByteArray, http: HTTPRequest):
+	http.queue_free()
+	
+	var data = body.get_string_from_utf8()
+	var message = parse_json(data)
+	for user in message.data:
+		profile_pics[user.login]["url"] = user.profile_image_url
+		get_profile_image(user.login, user.profile_image_url)
+
+
+func get_profile_image(login:String, url:String):
+	var http : HTTPRequest = HTTPRequest.new()
+	add_child(http)
+	if http.connect("request_completed", self, "profile_image_received", [http, login, url]) != OK:
+		print_debug("Signal not connected")
+		
+	var err = http.request(url)
+	if err != OK:
+		print("Error getting profile image " + str(err))
+	
+	
+func profile_image_received(result: int, response_code: int, headers: PoolStringArray, body: PoolByteArray, http: HTTPRequest, login: String, url: String):
+	http.queue_free()
+	
+	var image = Image.new()
+	if url.ends_with("png"):
+		image.load_png_from_buffer(body)
+	else:
+		image.load_jpg_from_buffer(body)
+
+	profile_pics[login]["sprite"].add_head(image, login)
+	profile_pics[login]["ready"] = true
