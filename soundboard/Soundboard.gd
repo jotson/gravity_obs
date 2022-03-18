@@ -4,6 +4,13 @@ const s_applause = preload("res://soundboard/sfx/applause.wav")
 const s_hmm = preload("res://soundboard/sfx/interesting.wav")
 const s_laughter = preload("res://soundboard/sfx/laughter.wav")
 const s_ohno = preload("res://soundboard/sfx/ohno.wav")
+const s_spec50 = preload("res://soundboard/sfx/NASAspec50.ogg")
+const s_apolloproblem = preload("res://soundboard/sfx/NASAapolloproblem.ogg")
+const s_goahead = preload("res://soundboard/sfx/NASAgoahead.ogg")
+const s_fuelcells = preload("res://soundboard/sfx/NASAfuelcells.ogg")
+const s_eaglehaslanded = preload("res://soundboard/sfx/NASAeaglehaslanded.ogg")
+const s_welcome = preload("res://soundboard/sfx/welcome.wav")
+const s_airhorn = preload("res://soundboard/sfx/airhorn.wav")
 
 var sound_map = {
 	# bottom row green
