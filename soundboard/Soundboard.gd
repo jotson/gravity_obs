@@ -1,13 +1,51 @@
 extends Control
 
+const s_applause = preload("res://soundboard/sfx/applause.wav")
+const s_hmm = preload("res://soundboard/sfx/interesting.wav")
+const s_laughter = preload("res://soundboard/sfx/laughter.wav")
+const s_ohno = preload("res://soundboard/sfx/ohno.wav")
+
+var sound_map = {
+	# bottom row green
+	36: "welcome",
+	37: "airhorn",
+	38: "applause",
+	39: "eaglehaslanded",
+	# top row green
+	40: "goahead",
+	41: "fuelcells",
+	42: "spec50",
+	43: "apolloproblem",
+	# bottom row red
+	44: null,
+	45: null,
+	46: null,
+	47: null,
+	# top row red
+	48: null,
+	49: null,
+	50: null,
+	51: null,
+}
+
 func _ready():
-	pass
+	OS.open_midi_inputs()
 
 
-func play(sound : String) -> void:
-	sound = sound.trim_prefix(" ")
-	sound = sound.trim_suffix(" ")
+func play(sound: String) -> void:
+	sound = sound.replace(" ", "")
+	sound = sound.to_lower()
+	
+	if get("s_" + sound):
+		var stream = get("s_" + sound)
+		$AudioStreamPlayer.stream = stream
+		$AudioStreamPlayer.play()
 
-	var audio = find_node("sound_" + sound)
-	if audio:
-		audio.play()
+
+func _input(event):
+	if event is InputEventMIDI:
+		event = event as InputEventMIDI
+		prints("Ctr:", event.controller_number, "Val:", event.controller_value, "Not:", event.pitch, "Vel:", event.velocity)
+		
+		if event.velocity > 0 and sound_map.has(event.pitch):
+			play(sound_map[event.pitch])
