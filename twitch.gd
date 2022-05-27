@@ -2,7 +2,7 @@ extends Gift
 
 signal got_channel_info
 
-var broadcaster_id = null
+var broadcaster_id = "80362534"
 var broadcaster_login = null
 var broadcaster_name = null
 var channel_title = null
@@ -32,6 +32,19 @@ func join(channel):
 	get_channel_info()
 
 
+func update_reward_redemption_status(redemption_id: String, reward_id: String):
+	var http : HTTPRequest = HTTPRequest.new()
+	add_child(http)
+	if http.connect("request_completed", self, "received_channel_info", [http]) != OK:
+		print_debug("Signal not connected")
+
+	var err = http.request("https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions?broadcaster_id=%s&id=%s&reward_id=%s&status=FULFILLED" % [str(broadcaster_id), redemption_id, reward_id], ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], false, HTTPClient.METHOD_PATCH)
+	if err != OK:
+		print("Error getting stream info " + str(err))
+	yield(http, "request_completed")
+	http.queue_free()
+
+
 func get_channel_info():
 	# Get channel_info
 	var http : HTTPRequest = HTTPRequest.new()
@@ -39,7 +52,7 @@ func get_channel_info():
 	if http.connect("request_completed", self, "received_channel_info", [http]) != OK:
 		print_debug("Signal not connected")
 	
-	var err = http.request("https://api.twitch.tv/helix/channels?broadcaster_id=%s" % str(80362534), ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], false, HTTPClient.METHOD_GET)
+	var err = http.request("https://api.twitch.tv/helix/channels?broadcaster_id=%s" % str(broadcaster_id), ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], false, HTTPClient.METHOD_GET)
 	if err != OK:
 		print("Error getting stream info " + str(err))
 	yield(http, "request_completed")
@@ -63,6 +76,5 @@ func received_channel_info(result: int, response_code: int, headers: PoolStringA
 	channel_title = message.data[0].title
 	channel_game_id = message.data[0].game_id
 	channel_game_name = message.data[0].game_name
-	print(message.data[0])
 	
 	emit_signal("got_channel_info")

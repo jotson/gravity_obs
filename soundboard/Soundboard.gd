@@ -11,6 +11,8 @@ const s_fuelcells = preload("res://soundboard/sfx/NASAfuelcells.ogg")
 const s_eaglehaslanded = preload("res://soundboard/sfx/NASAeaglehaslanded.ogg")
 const s_welcome = preload("res://soundboard/sfx/welcome.wav")
 const s_airhorn = preload("res://soundboard/sfx/airhorn.wav")
+const s_pewpew = preload("res://soundboard/sfx/pewpew.wav")
+const s_pssthey = preload("res://soundboard/sfx/pssthey.wav")
 
 var sound_map = {
 	# bottom row green
@@ -19,7 +21,7 @@ var sound_map = {
 	38: "applause",
 	39: "eaglehaslanded",
 	# top row green
-	40: "goahead",
+	40: "pewpew",
 	41: "fuelcells",
 	42: "spec50",
 	43: "apolloproblem",
@@ -41,6 +43,9 @@ func _ready():
 
 func play(sound: String) -> void:
 	sound = sound.replace(" ", "")
+	sound = sound.replace("!", "")
+	sound = sound.replace(",", "")
+	sound = sound.replace(".", "")
 	sound = sound.to_lower()
 	
 	if get("s_" + sound):

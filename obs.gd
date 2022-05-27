@@ -161,6 +161,8 @@ func websocket_connected() -> bool:
 func connect_to_obs():
 	# See https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#connection-steps
 	# This might be for a different version of OBS websocket than mine
+	if websocket.get_peer(1).is_connected_to_host():
+		websocket.get_peer(1).close()
 	var err = websocket.connect_to_url("ws://localhost:4444")
 	print("Connecting to OBS...")
 	if err != OK:
