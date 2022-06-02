@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://common/gui/ui-theme.tres" type="Theme" id=1]
 [ext_resource path="res://main.gd" type="Script" id=2]
+[ext_resource path="res://soundboard/SoundButton.tscn" type="PackedScene" id=3]
 [ext_resource path="res://common/fonts/tiny.tres" type="DynamicFont" id=4]
 
 [sub_resource type="StyleBoxEmpty" id=6]
@@ -54,14 +55,12 @@ __meta__ = {
 }
 
 [node name="login" type="VBoxContainer" parent="."]
-anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -112.5
-margin_top = -24.0
-margin_right = 112.5
-margin_bottom = 24.0
+margin_left = 100.0
+margin_top = -34.0
+margin_right = 325.0
+margin_bottom = 34.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -81,6 +80,61 @@ margin_top = 48.0
 margin_right = 225.0
 margin_bottom = 68.0
 text = "Authorize"
+
+[node name="SoundButtonConfig" type="GridContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -318.0
+margin_top = -66.0
+margin_right = -50.0
+margin_bottom = 66.0
+columns = 4
+
+[node name="SoundButton40" parent="SoundButtonConfig" instance=ExtResource( 3 )]
+note = 40
+
+[node name="SoundButton41" parent="SoundButtonConfig" instance=ExtResource( 3 )]
+margin_left = 68.0
+margin_right = 132.0
+note = 41
+
+[node name="SoundButton42" parent="SoundButtonConfig" instance=ExtResource( 3 )]
+margin_left = 136.0
+margin_right = 200.0
+note = 42
+
+[node name="SoundButton43" parent="SoundButtonConfig" instance=ExtResource( 3 )]
+margin_left = 204.0
+margin_right = 268.0
+note = 43
+
+[node name="SoundButton36" parent="SoundButtonConfig" instance=ExtResource( 3 )]
+margin_top = 68.0
+margin_bottom = 132.0
+note = 36
+
+[node name="SoundButton37" parent="SoundButtonConfig" instance=ExtResource( 3 )]
+margin_left = 68.0
+margin_top = 68.0
+margin_right = 132.0
+margin_bottom = 132.0
+note = 37
+
+[node name="SoundButton38" parent="SoundButtonConfig" instance=ExtResource( 3 )]
+margin_left = 136.0
+margin_top = 68.0
+margin_right = 200.0
+margin_bottom = 132.0
+note = 38
+
+[node name="SoundButton39" parent="SoundButtonConfig" instance=ExtResource( 3 )]
+margin_left = 204.0
+margin_top = 68.0
+margin_right = 268.0
+margin_bottom = 132.0
+note = 39
 
 [node name="chatters" type="Node2D" parent="."]
 

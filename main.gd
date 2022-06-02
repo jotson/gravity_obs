@@ -57,6 +57,9 @@ func load_commands():
 	
 		if c.has("action") and c.action == "commands":
 			Twitch.add_command(c.command, self, "cmd_commands", 0, 0, perm)
+
+		if c.has("action") and c.action == "shoutout":
+			Twitch.add_command(c.command, self, "cmd_shoutout", 1, 0, perm)
 	
 		if c.has("action") and c.action == "chat":
 			Twitch.add_command(c.command, self, "cmd_chat", 0, 0, perm)
@@ -71,6 +74,10 @@ func load_commands():
 				commands[alias] = {
 					"alias": c.command
 				}
+
+
+func cmd_shoutout(_cmd : CommandInfo, username):
+	Twitch.chat("Go check out https://twitch.tv/%s because they are awesome!" % username[0])
 
 
 func cmd_commands(_cmd : CommandInfo):

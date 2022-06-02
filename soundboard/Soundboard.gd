@@ -1,44 +1,64 @@
 extends Control
 
-const s_applause = preload("res://soundboard/sfx/applause.wav")
-const s_hmm = preload("res://soundboard/sfx/interesting.wav")
-const s_laughter = preload("res://soundboard/sfx/laughter.wav")
-const s_ohno = preload("res://soundboard/sfx/ohno.wav")
-const s_spec50 = preload("res://soundboard/sfx/NASAspec50.ogg")
-const s_apolloproblem = preload("res://soundboard/sfx/NASAapolloproblem.ogg")
-const s_goahead = preload("res://soundboard/sfx/NASAgoahead.ogg")
-const s_fuelcells = preload("res://soundboard/sfx/NASAfuelcells.ogg")
-const s_eaglehaslanded = preload("res://soundboard/sfx/NASAeaglehaslanded.ogg")
-const s_welcome = preload("res://soundboard/sfx/welcome.wav")
-const s_airhorn = preload("res://soundboard/sfx/airhorn.wav")
-const s_pewpew = preload("res://soundboard/sfx/pewpew.wav")
-const s_pssthey = preload("res://soundboard/sfx/pssthey.wav")
+# soundboard.json:
+#
+# {
+#	"sounds": {
+#		"applause": "soundboard/applause.ogg",
+#		"hmm": "soundboard/interesting.ogg",
+#	},
+#	"midi": {
+#		"note_36": "applause"
+#	}
+# }
 
-var sound_map = {
-	# bottom row green
-	36: "welcome",
-	37: "airhorn",
-	38: "applause",
-	39: "eaglehaslanded",
-	# top row green
-	40: "pewpew",
-	41: "fuelcells",
-	42: "spec50",
-	43: "apolloproblem",
-	# bottom row red
-	44: null,
-	45: null,
-	46: null,
-	47: null,
-	# top row red
-	48: null,
-	49: null,
-	50: null,
-	51: null,
-}
+const SOUNDBOARD_JSON = "user://soundboard.json"
+
+var sound_map = {}
 
 func _ready():
+	load_sound_configuration()
 	OS.open_midi_inputs()
+
+
+func load_sound_configuration():
+	sound_map.clear()
+	
+	var f = File.new()
+	if not f.file_exists(SOUNDBOARD_JSON):
+		return
+		
+	# Load soundboard.json
+	if f.open(SOUNDBOARD_JSON, File.READ) != OK:
+		return
+		
+	var json = f.get_as_text()
+	sound_map = parse_json(json)
+	f.close()
+
+
+func sound_exists(sound: String) -> bool:
+	return sound_map["sounds"].has(sound)
+		
+
+# Load an ogg file into a stream
+func load_sound_file(sound: String) -> AudioStream:
+	load_sound_configuration()
+
+	var stream = AudioStreamOGGVorbis.new()
+	
+	if sound_exists(sound):
+		var f = File.new()
+		var sound_file = sound_map["sounds"][sound]
+		var path = "user://soundboard".plus_file(sound_file)
+		var err = f.open(path, File.READ)
+		if err != OK:
+			return stream
+		var bytes = f.get_buffer(f.get_len())
+		stream.data = bytes
+		f.close()
+		
+	return stream
 
 
 func play(sound: String) -> void:
@@ -48,16 +68,20 @@ func play(sound: String) -> void:
 	sound = sound.replace(".", "")
 	sound = sound.to_lower()
 	
-	if get("s_" + sound):
-		var stream = get("s_" + sound)
-		$AudioStreamPlayer.stream = stream
-		$AudioStreamPlayer.play()
+	$AudioStreamPlayer.stream = load_sound_file(sound)
+	$AudioStreamPlayer.play()
 
 
 func _input(event):
 	if event is InputEventMIDI:
 		event = event as InputEventMIDI
-		prints("Ctr:", event.controller_number, "Val:", event.controller_value, "Not:", event.pitch, "Vel:", event.velocity)
 		
-		if event.velocity > 0 and sound_map.has(event.pitch):
-			play(sound_map[event.pitch])
+		if event.velocity > 0:
+			play_midi(event.pitch)
+
+
+func play_midi(pitch: int):
+	#prints("Ctr:", event.controller_number, "Val:", event.controller_value, "Not:", event.pitch, "Vel:", event.velocity)
+	var key = "note_%d" % pitch
+	if sound_map["midi"].has(key):
+		play(sound_map["midi"][key])

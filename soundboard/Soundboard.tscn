@@ -8,3 +8,4 @@ anchor_bottom = 1.0
 script = ExtResource( 5 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+volume_db = -6.0
