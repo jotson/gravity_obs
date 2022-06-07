@@ -127,6 +127,7 @@ func cmd_addtocredits(_cmd : CommandInfo):
 func _on_joinButton_pressed(_text = ""):
 	if $login/channel.text:
 		$login.hide()
+		$SoundButtonConfig.hide()
 		Helper.set_transparent(true)
 		Twitch.join($login/channel.text)
 		
@@ -238,6 +239,7 @@ func twitch_chat(sender_data, command : String, full_message : String):
 
 func twitch_disconnect():
 	$login.show()
+	$SoundButtonConfig.show()
 	Helper.set_transparent(false)
 
 
