@@ -1,4 +1,4 @@
-extends Control
+extends Node
 
 var websocket : WebSocketClient = WebSocketClient.new()
 

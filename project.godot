@@ -46,6 +46,7 @@ _global_script_class_icons={
 
 config/name="Gravity OBS"
 run/main_scene="res://main.tscn"
+run/low_processor_mode=true
 config/icon="res://icon.png"
 
 [autoload]
@@ -62,6 +63,7 @@ Soundboard="*res://soundboard/Soundboard.tscn"
 
 window/size/width=960
 window/size/height=540
+window/vsync/use_vsync=false
 window/per_pixel_transparency/allowed=true
 window/per_pixel_transparency/enabled=true
 window/stretch/mode="viewport"

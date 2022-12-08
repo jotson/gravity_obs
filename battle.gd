@@ -17,12 +17,14 @@ var high_score = 0
 var ACTION_THROTTLE = 500 # Minimum time between actions, millis
 var IDLE_TIMEOUT = 100 # Milliseconds until AI takes over player control
 
+signal changed_state
+
 
 func _ready():
 	idle()
 
 	if Twitch.connect("chat_message", self, "twitch_chat") != OK:
-		print_debug("Signal not connected")
+		print_debug("Signal not connected`")
 	if Twitch.connect("twitch_disconnected", self, "twitch_disconnect") != OK:
 		print_debug("Signal not connected")
 
@@ -30,7 +32,7 @@ func _ready():
 func _physics_process(_delta):
 	if state == STATE.PLAYING:
 		$roundCountdown.text = "Time left: " + str(round($roundTimer.time_left))
-		$roundCountdown.text += " | CHAT to join the BATTLE!"
+		$roundCountdown.text += " -- CHAT to join the BATTLE!"
 
 	active_players = get_tree().get_nodes_in_group("player").size()
 	if active_players >= 2 and state == STATE.WAITING:
@@ -41,6 +43,7 @@ func _physics_process(_delta):
 
 func change_state(new_state):
 	state = new_state
+	emit_signal("changed_state", state)
 	
 	if state == STATE.IDLE:
 		$roundCountdown.text = ""

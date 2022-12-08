@@ -7,12 +7,21 @@ var profile_pics = {}
 var profile_pic_queue = []
 var MAX_CHATTERS = 50
 
+const AstronautChatter = preload("res://chatter/Astronaut.tscn")
+const AstronautContainer = preload("res://chatter/AstronautContainer.tscn")
+const MarbleChatter = preload("res://chatter/Marble.tscn")
+const MarbleContainer = preload("res://chatter/MarbleContainer.tscn")
+onready var Chatter = MarbleChatter
+onready var ChatterContainer = MarbleContainer.instance()
+
 
 func _ready():
 	Helper.set_transparent(false)
 	$console.hide()
 	$login/channel.grab_focus()
 
+	add_child(ChatterContainer)
+	
 	var channel = Helper.get_saved_channel()
 	if channel:
 		$login/channel.text = channel
@@ -133,7 +142,7 @@ func _on_joinButton_pressed(_text = ""):
 		
 		profile_pics.clear()
 		profile_pic_queue.clear()
-		for c in $chatters.get_children():
+		for c in get_tree().get_nodes_in_group("chatter"):
 			c.queue_free()
 
 
@@ -203,7 +212,7 @@ func twitch_chat(sender_data, command : String, full_message : String):
 
 	if not profile_pics.has(username) and not profile_pic_queue.has(username):
 		if profile_pics.size() > MAX_CHATTERS:
-			for j in range(profile_pics.size() - MAX_CHATTERS):
+			for _j in range(profile_pics.size() - MAX_CHATTERS):
 				var i = randi() % MAX_CHATTERS
 				var keys = profile_pics.keys()
 				var key = keys[i]
@@ -221,10 +230,10 @@ func twitch_chat(sender_data, command : String, full_message : String):
 		var first = false
 		if profile_pics.size() == 1:
 			first = true
-		var chatter = preload("res://chatter/chatter.tscn").instance()
+		var chatter = Chatter.instance()
 		profile_pics[username]["sprite"] = chatter
 		chatter.add_head(null, username, first)
-		$chatters.add_child(chatter)
+		ChatterContainer.add_child(chatter)
 		chatter.say(message)
 		
 		profile_pic_queue.append(username)
@@ -275,7 +284,7 @@ func get_profile_pic(login:Array):
 		print("Error getting profile pic " + str(err))
 
 
-func received_profile_pic(result: int, response_code: int, headers: PoolStringArray, body: PoolByteArray, http: HTTPRequest):
+func received_profile_pic(_result: int, _response_code: int, _headers: PoolStringArray, body: PoolByteArray, http: HTTPRequest):
 	http.queue_free()
 	
 	var data = body.get_string_from_utf8()
@@ -296,7 +305,7 @@ func get_profile_image(login:String, url:String):
 		print("Error getting profile image " + str(err))
 	
 	
-func profile_image_received(result: int, response_code: int, headers: PoolStringArray, body: PoolByteArray, http: HTTPRequest, login: String, url: String):
+func profile_image_received(_result: int, _response_code: int, _headers: PoolStringArray, body: PoolByteArray, http: HTTPRequest, login: String, url: String):
 	http.queue_free()
 	
 	var image = Image.new()

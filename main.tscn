@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://common/gui/ui-theme.tres" type="Theme" id=1]
 [ext_resource path="res://main.gd" type="Script" id=2]
@@ -30,9 +30,16 @@ VScrollBar/styles/scroll_focus = SubResource( 5 )
 
 [sub_resource type="StyleBoxEmpty" id=11]
 
+[sub_resource type="RectangleShape2D" id=12]
+extents = Vector2( 64, 540 )
+
+[sub_resource type="RectangleShape2D" id=13]
+extents = Vector2( 960, 64 )
+
 [node name="main" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 theme = ExtResource( 1 )
 script = ExtResource( 2 )
 
@@ -42,6 +49,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -112.0
+mouse_filter = 2
 theme = SubResource( 9 )
 custom_colors/font_color_readonly = Color( 1, 1, 1, 1 )
 custom_fonts/font = ExtResource( 4 )
@@ -136,7 +144,25 @@ margin_right = 268.0
 margin_bottom = 132.0
 note = 39
 
-[node name="chatters" type="Node2D" parent="."]
+[node name="walls" type="StaticBody2D" parent="." groups=["wall"]]
+position = Vector2( -60, 281 )
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="walls"]
+position = Vector2( -4, 0 )
+shape = SubResource( 12 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="walls"]
+position = Vector2( 537, -344 )
+shape = SubResource( 13 )
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="walls"]
+position = Vector2( 1084, -20 )
+shape = SubResource( 12 )
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="walls"]
+position = Vector2( 535, 323 )
+shape = SubResource( 13 )
 
 [connection signal="text_entered" from="login/channel" to="." method="_on_channel_text_entered"]
 [connection signal="pressed" from="login/joinButton" to="." method="_on_joinButton_pressed"]

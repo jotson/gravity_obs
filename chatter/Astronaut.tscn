@@ -1,71 +1,120 @@
 [gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://chatter/textures/astronaut.png" type="Texture" id=1]
-[ext_resource path="res://chatter/chatter.gd" type="Script" id=2]
+[ext_resource path="res://common/fonts/tiny.tres" type="DynamicFont" id=1]
+[ext_resource path="res://chatter/textures/astronaut.png" type="Texture" id=2]
 [ext_resource path="res://chatter/textures/helmet.png" type="Texture" id=3]
-[ext_resource path="res://common/fonts/tiny.tres" type="DynamicFont" id=4]
+[ext_resource path="res://chatter/textures/face.png" type="Texture" id=4]
 [ext_resource path="res://chatter/color.material" type="Material" id=5]
-[ext_resource path="res://chatter/textures/face.png" type="Texture" id=6]
+
+[sub_resource type="GDScript" id=9]
+script/source = "extends Node2D
+
+var FLOOR = Helper.WINDOW_H
+var first = false
+var velocity: Vector2
+const GRAVITY = 50.0
+
+func _ready():
+	play_animation()
+
+	# Seek to a random starting location on the first
+	# animation so that the animations for all people
+	# are out of phase
+	$AnimationPlayer.seek(randf())
+	
+	position = Helper.random_position()
+	
+	var colors = []
+	colors.append(Color(\"#e43b44\")) # red
+	colors.append(Color(\"#63c74d\")) # green
+	colors.append(Color(\"#0095e9\")) # blue
+	var c = colors[randi() % colors.size()]
+	
+	if first:
+		c = Color(\"#f77622\") # special orange
+	
+	material = material.duplicate()
+	material.set_shader_param(\"color\", c)
+	
+	velocity = Vector2.ZERO
+
+
+func _physics_process(delta):
+	if position.y > FLOOR:
+		position.y = FLOOR
+		velocity = Vector2.ZERO
+		
+	if position.y < FLOOR:
+		velocity.y += GRAVITY * delta
+
+	if position.x < 250:
+		position.x = 250
+		velocity.x = -velocity.x
+		
+	if position.x > Helper.WINDOW_W-16:
+		position.x = Helper.WINDOW_W-16
+		velocity.x = -velocity.x
+		
+	position += velocity * delta
+
+	# Moon jump
+	if position.y == FLOOR and rand_range(0, 60) < 1:
+		velocity = Vector2.ZERO
+		if randf() < 0.5:
+			velocity = Vector2(1, -1)
+			if randf() < 0.5: velocity = Vector2(-1, -1)
+		velocity *= rand_range(30, 60)
+
+
+func say(message:String):
+	$speechBubble.text = message
+	$speechBubble/AnimationPlayer.play(\"speak\")
+	
+		
+func add_head(image:Image = null, login:String = \"\", first_chatter:bool = false):
+	$head/nametag.text = login
+	if image:
+		var tex = ImageTexture.new()
+		tex.create_from_image(image)
+		
+		var s = Sprite.new()
+		s.texture = tex
+		s.scale *= 0.1
+		s.position = Vector2(0, -2)
+		s.show_behind_parent = true
+		$head/helmet.add_child(s)	
+		
+	self.first = first_chatter
+	
+
+func _on_AnimationPlayer_animation_finished(_anim_name):
+	play_animation()
+
+
+func play_animation():
+	# Play a random (non-death) animation
+	var anims = $AnimationPlayer.get_animation_list()
+	var anim = anims[randi() % anims.size()]
+	$AnimationPlayer.play(anim)
+
+	# Flip sprite for extra variety
+	if randf() < 0.5:
+		$body.flip_h = true
+	else:
+		$body.flip_h = false
+"
 
 [sub_resource type="Animation" id=1]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("body:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 0 ]
-}
 
 [sub_resource type="Animation" id=2]
 resource_name = "idle"
-tracks/0/type = "value"
-tracks/0/path = NodePath("body:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = false
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.9 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ 0, 11 ]
-}
 
 [sub_resource type="Animation" id=3]
 resource_name = "wave1"
-tracks/0/type = "value"
-tracks/0/path = NodePath("body:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = false
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.9 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ 12, 23 ]
-}
 
 [sub_resource type="Animation" id=4]
 resource_name = "wave2"
-tracks/0/type = "value"
-tracks/0/path = NodePath("body:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = false
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.9 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ 24, 35 ]
-}
 
 [sub_resource type="Animation" id=5]
 length = 0.001
@@ -154,14 +203,14 @@ tracks/1/keys = {
 "values": [ Vector2( 1, 1 ), Vector2( 2, 2 ), Vector2( 2, 2 ), Vector2( 1, 1 ) ]
 }
 
-[node name="Chatter" type="Node2D"]
+[node name="Chatter" type="Node2D" groups=["chatter"]]
 material = ExtResource( 5 )
-script = ExtResource( 2 )
+script = SubResource( 9 )
 
 [node name="body" type="Sprite" parent="."]
 use_parent_material = true
 position = Vector2( 0, -24 )
-texture = ExtResource( 1 )
+texture = ExtResource( 2 )
 hframes = 6
 vframes = 7
 
@@ -182,7 +231,7 @@ margin_top = -65.0
 margin_right = 49.0
 margin_bottom = -56.0
 custom_colors/font_color = Color( 0.541176, 0.541176, 0.541176, 1 )
-custom_fonts/font = ExtResource( 4 )
+custom_fonts/font = ExtResource( 1 )
 text = "NAMETAG"
 align = 1
 valign = 1
@@ -194,7 +243,7 @@ texture = ExtResource( 3 )
 
 [node name="Face" type="Sprite" parent="head/helmet"]
 z_index = -1
-texture = ExtResource( 6 )
+texture = ExtResource( 4 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="head"]
 autoplay = "default"
@@ -207,7 +256,7 @@ margin_top = -127.0
 margin_right = 47.0
 margin_bottom = -69.0
 rect_clip_content = true
-custom_fonts/font = ExtResource( 4 )
+custom_fonts/font = ExtResource( 1 )
 align = 1
 valign = 2
 autowrap = true

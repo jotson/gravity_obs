@@ -1,4 +1,4 @@
-extends Control
+extends Node
 
 # soundboard.json:
 #
