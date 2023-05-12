@@ -136,6 +136,8 @@ enum RequestStatus {
 	CannotAct = 703,
 }
 
+var obs_port = 4455
+var obs_pass = ""
 
 func _ready():
 	if websocket.connect("data_received", self, "data_received") != OK:
@@ -147,6 +149,12 @@ func _ready():
 	if websocket.connect("connection_error", self, "connection_error") != OK:
 		print_debug("Signal not connected")
 	#websocket.connect("server_close_request", self, "sever_close_request")
+
+	var config = ConfigFile.new()
+	var err = config.load("user://obs.ini")
+	if err == OK:
+		obs_port = config.get_value("obs", "port", null)
+		obs_pass = config.get_value("obs", "password", null)
 
 
 func _process(_delta : float) -> void:
@@ -163,7 +171,7 @@ func connect_to_obs():
 	# This might be for a different version of OBS websocket than mine
 	if websocket.get_peer(1).is_connected_to_host():
 		websocket.get_peer(1).close()
-	var err = websocket.connect_to_url("ws://localhost:4444")
+	var err = websocket.connect_to_url("ws://localhost:%s" % [obs_port])
 	print("Connecting to OBS...")
 	if err != OK:
 		print("OBS error: " + str(err))
@@ -192,7 +200,7 @@ func upgrade_connection():
 		print_debug("Signal not connected")
 	
 	var headers = [ "Sec-WebSocket-Protocol: obswebsocket.json" ]
-	var err = http.request("http://localhost:4444", headers)
+	var err = http.request("http://localhost:%s" % [obs_port], headers)
 	if err != OK:
 		print("OBS error upgrading connection " + str(err))
 
@@ -208,14 +216,22 @@ func upgrade_request_completed(_result: int, _response_code: int, _headers: Pool
 #		return
 	
 	
-func hello():
+func hello(challenge, salt):
 	# This might be for a different version of OBS websocket than mine
-	print("OBS hello")
+	prints("OBS hello", challenge, salt)
+	
+	# See https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md
+	var auth = obs_pass + salt
+	auth = Marshalls.raw_to_base64(auth.sha256_buffer())
+	auth = auth + challenge
+	auth = Marshalls.raw_to_base64(auth.sha256_buffer())
+	
 	send({
 		"op": WebSocketOpCode.Identify,
 		"d": {
 			"rpcVersion": 1,
-			"eventSubscriptions": EventSubscription.All
+			"eventSubscriptions": EventSubscription.All,
+			"authentication": auth
 		}
 	})
 
@@ -233,7 +249,7 @@ func data_received() -> void:
 			# This might be for a different version of OBS websocket than mine
 			# Listen for Hello and send Identify response
 			if response.op == WebSocketOpCode.Hello:
-				hello()
+				hello(response.d.authentication.challenge, response.d.authentication.salt)
 				
 			if response.op == WebSocketOpCode.Event:
 				var event = response.d.eventType
