@@ -6,6 +6,7 @@ var last_api_request = OS.get_ticks_msec()
 var profile_pics = {}
 var profile_pic_queue = []
 var MAX_CHATTERS = 50
+var lastChannel = ""
 
 const AstronautChatter = preload("res://chatter/Astronaut.tscn")
 const AstronautContainer = preload("res://chatter/AstronautContainer.tscn")
@@ -90,7 +91,7 @@ func cmd_shoutout(_cmd : CommandInfo, username):
 
 
 func cmd_commands(_cmd : CommandInfo):
-	Twitch.chat("Here's what you can do:")
+	var response = "Commmand list:"
 	
 	var chat = ""
 	for key in commands.keys():
@@ -99,9 +100,9 @@ func cmd_commands(_cmd : CommandInfo):
 			continue
 		if c.has("alias"):
 			continue
+		response += " !%s" % [c.command]
 		
-		chat = "!%s: %s" % [c.command, c.help]
-		Twitch.chat(chat)
+	Twitch.chat(response)
 
 
 func cmd_reload_commands(_cmd : CommandInfo):
@@ -134,7 +135,8 @@ func cmd_addtocredits(_cmd : CommandInfo):
 	
 
 func _on_joinButton_pressed(_text = ""):
-	if $login/channel.text:
+	var thisChannel = $login/channel.text
+	if thisChannel:
 		$login.hide()
 		$SoundButtonConfig.hide()
 		Helper.set_transparent(true)
@@ -142,8 +144,13 @@ func _on_joinButton_pressed(_text = ""):
 		
 		profile_pics.clear()
 		profile_pic_queue.clear()
-		for c in get_tree().get_nodes_in_group("chatter"):
-			c.queue_free()
+		
+		if thisChannel != lastChannel:
+			# Only clear chatters if NOT reconnecting to same channel
+			for c in get_tree().get_nodes_in_group("chatter"):
+				c.queue_free()
+		
+		lastChannel = thisChannel
 
 
 func _on_channel_text_entered(new_text):
@@ -161,7 +168,7 @@ func twitch_reward_redemption(who : String, reward : String):
 	if reward.begins_with("Play sound: "):
 		notify = false
 		var sound = reward.trim_prefix("Play sound: ")
-		Soundboard.play(sound)
+		Soundboard.play_queue(sound)
 	
 	if notify:
 		var notification = preload("res://reward/reward.tscn").instance()

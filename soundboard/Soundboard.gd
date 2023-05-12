@@ -37,21 +37,37 @@ func load_sound_configuration():
 	f.close()
 
 
-func sound_exists(sound: String) -> bool:
-	return sound_map["sounds"].has(sound)
+func get_sound_file(sound: String) -> String:
+	var SOUND_PATH = "user://soundboard"
+	var sound_file = null
+	if sound_map["sounds"].has(sound):
+		sound_file = SOUND_PATH.plus_file(sound_map["sounds"][sound])
+	else:
+		var f = File.new()
+		var path = SOUND_PATH.plus_file(sound) + ".ogg"
+		if f.file_exists(path):
+			sound_file = path
+	return sound_file
 		
 
 # Load an ogg file into a stream
 func load_sound_file(sound: String) -> AudioStream:
+	sound = sound.replace(" ", "")
+	sound = sound.replace("!", "")
+	sound = sound.replace("?", "")
+	sound = sound.replace("'", "")
+	sound = sound.replace(",", "")
+	sound = sound.replace(".", "")
+	sound = sound.to_lower()
+
 	load_sound_configuration()
 
 	var stream = AudioStreamOGGVorbis.new()
 	
-	if sound_exists(sound):
+	var sound_file = get_sound_file(sound)
+	if sound_file:
 		var f = File.new()
-		var sound_file = sound_map["sounds"][sound]
-		var path = "user://soundboard".plus_file(sound_file)
-		var err = f.open(path, File.READ)
+		var err = f.open(sound_file, File.READ)
 		if err != OK:
 			return stream
 		var bytes = f.get_buffer(f.get_len())
@@ -61,15 +77,33 @@ func load_sound_file(sound: String) -> AudioStream:
 	return stream
 
 
-func play(sound: String) -> void:
-	sound = sound.replace(" ", "")
-	sound = sound.replace("!", "")
-	sound = sound.replace(",", "")
-	sound = sound.replace(".", "")
-	sound = sound.to_lower()
+# Queue sounds and play them one after another
+var sound_queue = []
+func play_queue(sound = null) -> void:
+	if sound:
+		sound_queue.append(sound)
 	
-	$AudioStreamPlayer.stream = load_sound_file(sound)
-	$AudioStreamPlayer.play()
+	if sound_queue.size() == 0:
+		return
+		
+	if not $QueuedPlayer.playing:
+		sound = sound_queue.pop_front()
+		$QueuedPlayer.stream = load_sound_file(sound)
+		$QueuedPlayer.play()
+	
+		
+func play(sound: String, single = false) -> void:
+	var player: AudioStreamPlayer
+	if single:
+		# Play non-overlapping
+		player = $SinglePlayer
+	else:
+		# Play overlapping sounds
+		player = AudioStreamPlayer.new()
+		add_child(player)
+		player.connect("finished", player, "queue_free")
+	player.stream = load_sound_file(sound)
+	player.play()
 
 
 func _input(event):
@@ -84,4 +118,4 @@ func play_midi(pitch: int):
 	#prints("Ctr:", event.controller_number, "Val:", event.controller_value, "Not:", event.pitch, "Vel:", event.velocity)
 	var key = "note_%d" % pitch
 	if sound_map["midi"].has(key):
-		play(sound_map["midi"][key])
+		play(sound_map["midi"][key], true)
