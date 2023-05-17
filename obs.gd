@@ -246,23 +246,13 @@ func data_received() -> void:
 			prints("OBS error:", response.error)
 			
 		if response.has("op"):
-			# This might be for a different version of OBS websocket than mine
-			# Listen for Hello and send Identify response
 			if response.op == WebSocketOpCode.Hello:
 				hello(response.d.authentication.challenge, response.d.authentication.salt)
 				
 			if response.op == WebSocketOpCode.Event:
-				var event = response.d.eventType
-				if event == "StreamStarted":
+				if response.d.eventType == "StreamStateChanged" and response.d.eventData.outputState == "OBS_WEBSOCKET_OUTPUT_STARTING":
 					print("Stream STARTED!")
 					Discord.post_announcement()
-
-		if response.has("update-type"):
-			# This might be for a different version of OBS websocket than mine
-			# Listen for Hello and send Identify response
-			if response["update-type"] == "StreamStarted":
-				print("Announcing OBS stream on Discord")
-				Discord.post_announcement()
 		
 
 func send(message : Dictionary) -> void:
