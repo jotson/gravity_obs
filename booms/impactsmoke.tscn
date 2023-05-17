@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://booms/textures/smoke.png" type="Texture" id=1]
+[ext_resource path="res://booms/textures/smoke.png" type="Texture2D" id=1]
 [ext_resource path="res://booms/impactsmoke.gd" type="Script" id=2]
 
 [sub_resource type="Curve" id=1]
@@ -9,7 +9,7 @@ _data = [ Vector2( 0, 0.327273 ), 0.0, 0.0810209, 0, 0, Vector2( 1, 0 ), -0.0334
 [sub_resource type="CurveTexture" id=2]
 curve = SubResource( 1 )
 
-[sub_resource type="ParticlesMaterial" id=3]
+[sub_resource type="ParticleProcessMaterial" id=3]
 lifetime_randomness = 0.37
 emission_shape = 1
 emission_sphere_radius = 10.0
@@ -29,7 +29,7 @@ color = Color( 0.407843, 0.219608, 0.423529, 1 )
 [node name="ImpactSmoke" type="Node2D"]
 script = ExtResource( 2 )
 
-[node name="Particles2D" type="Particles2D" parent="."]
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 amount = 120
 lifetime = 3.0
 explosiveness = 0.95

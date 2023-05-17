@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/bullet-hit-enemy-1.wav-619d1072f8d82967385a925a381759b2.sample"
+type="AudioStreamWAV"
+uid="uid://rujtrq6gyysq"
+path="res://.godot/imported/bullet-hit-enemy-1.wav-619d1072f8d82967385a925a381759b2.sample"
 
 [deps]
 
 source_file="res://ship/sfx/bullet-hit-enemy-1.wav"
-dest_files=[ "res://.import/bullet-hit-enemy-1.wav-619d1072f8d82967385a925a381759b2.sample" ]
+dest_files=["res://.godot/imported/bullet-hit-enemy-1.wav-619d1072f8d82967385a925a381759b2.sample"]
 
 [params]
 
@@ -17,5 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=true
 edit/normalize=false
-edit/loop=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
 compress/mode=0

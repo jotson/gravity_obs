@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/thrust-in.wav-5f4e4b4aadb51af080f4f15ea6ecfe35.sample"
+type="AudioStreamWAV"
+uid="uid://g2ogqooje0u5"
+path="res://.godot/imported/thrust-in.wav-5f4e4b4aadb51af080f4f15ea6ecfe35.sample"
 
 [deps]
 
 source_file="res://ship/sfx/thrust-in.wav"
-dest_files=[ "res://.import/thrust-in.wav-5f4e4b4aadb51af080f4f15ea6ecfe35.sample" ]
+dest_files=["res://.godot/imported/thrust-in.wav-5f4e4b4aadb51af080f4f15ea6ecfe35.sample"]
 
 [params]
 
@@ -17,5 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=true
 edit/normalize=false
-edit/loop=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
 compress/mode=0

@@ -1,9 +1,8 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=2]
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cv7xdgnqt2p8g"]
 
-[ext_resource path="res://ship/materials/noise.shader" type="Shader" id=1]
-[ext_resource path="res://ship/textures/dust-noise.png" type="Texture" id=2]
+[ext_resource type="Shader" path="res://ship/materials/noise.gdshader" id="1"]
+[ext_resource type="Texture2D" uid="uid://xrs8btih27k2" path="res://ship/textures/dust-noise.png" id="2"]
 
 [resource]
-shader = ExtResource( 1 )
-shader_param/noise = ExtResource( 2 )
-
+shader = ExtResource("1")
+shader_parameter/noise = ExtResource("2")

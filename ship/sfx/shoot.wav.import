@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/shoot.wav-972423e0d1b876175f30730a1dae183f.sample"
+type="AudioStreamWAV"
+uid="uid://bb4pnpglm1t0x"
+path="res://.godot/imported/shoot.wav-972423e0d1b876175f30730a1dae183f.sample"
 
 [deps]
 
 source_file="res://ship/sfx/shoot.wav"
-dest_files=[ "res://.import/shoot.wav-972423e0d1b876175f30730a1dae183f.sample" ]
+dest_files=["res://.godot/imported/shoot.wav-972423e0d1b876175f30730a1dae183f.sample"]
 
 [params]
 
@@ -17,5 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=true
 edit/normalize=false
-edit/loop=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
 compress/mode=0

@@ -1,7 +1,7 @@
 extends Node
 
-var WINDOW_W = ProjectSettings.get("display/window/size/width")
-var WINDOW_H = ProjectSettings.get("display/window/size/height")
+var WINDOW_W = ProjectSettings.get("display/window/size/viewport_width")
+var WINDOW_H = ProjectSettings.get("display/window/size/viewport_height")
 
 const SETTINGS_FILE = "user://twitch.ini"
 
@@ -37,7 +37,7 @@ func save_channel(channel):
 	
 func _input(_event):
 	if Input.is_action_just_pressed("fullscreen"):
-		OS.window_fullscreen = !OS.window_fullscreen
+		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (!((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN))) else Window.MODE_WINDOWED
 		
 	if Input.is_action_just_pressed("disconnect"):
 		Twitch.websocket.disconnect_from_host()
@@ -49,12 +49,12 @@ func _input(_event):
 			$console.show()
 		
 
-func add_child(object, _default=false):
+func add(object: Node):
 	get_tree().current_scene.call_deferred('add_child', object)
 
 
 func random_position():
-	var pos = Vector2(rand_range(64,WINDOW_W-64), rand_range(64,WINDOW_H-64))
+	var pos = Vector2(randf_range(64,WINDOW_W-64), randf_range(64,WINDOW_H-64))
 	return pos
 
 

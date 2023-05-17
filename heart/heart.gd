@@ -9,5 +9,5 @@ func _ready():
 
 func _on_spawnTimer_timeout():
 	show()
-	$AnimatedSprite.play("default")
+	$AnimatedSprite2D.play("default")
 	$AnimationPlayer.play("default")

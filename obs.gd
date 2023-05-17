@@ -1,6 +1,7 @@
 extends Node
 
-var websocket : WebSocketClient = WebSocketClient.new()
+var websocket : WebSocketPeer = WebSocketPeer.new()
+var websocket_state = -1
 
 enum WebSocketOpCode {
 	Hello = 0,
@@ -140,16 +141,6 @@ var obs_port = 4455
 var obs_pass = ""
 
 func _ready():
-	if websocket.connect("data_received", self, "data_received") != OK:
-		print_debug("Signal not connected")
-	if websocket.connect("connection_established", self, "connection_established") != OK:
-		print_debug("Signal not connected")
-	if websocket.connect("connection_closed", self, "connection_closed") != OK:
-		print_debug("Signal not connected")
-	if websocket.connect("connection_error", self, "connection_error") != OK:
-		print_debug("Signal not connected")
-	#websocket.connect("server_close_request", self, "sever_close_request")
-
 	var config = ConfigFile.new()
 	var err = config.load("user://obs.ini")
 	if err == OK:
@@ -157,33 +148,51 @@ func _ready():
 		obs_pass = config.get_value("obs", "password", null)
 
 
+func update_socket_state(state):
+	if websocket_state != state:
+		websocket_state = state
+		
+		match websocket_state:
+			WebSocketPeer.STATE_CLOSED:
+				connection_closed()
+			WebSocketPeer.STATE_CLOSING:
+				pass
+			WebSocketPeer.STATE_CONNECTING:
+				pass
+			WebSocketPeer.STATE_OPEN:
+				connection_established()
+		
 func _process(_delta : float) -> void:
-	if websocket_connected():
-		websocket.poll()
+	websocket.poll()
+	var state = websocket.get_ready_state()
+	update_socket_state(state)
+	if state == WebSocketPeer.STATE_OPEN:
+		while websocket.get_available_packet_count():
+			data_received()
 
 
 func websocket_connected() -> bool:
-	return websocket.get_connection_status() != NetworkedMultiplayerPeer.CONNECTION_DISCONNECTED
+	return websocket.get_ready_state() == WebSocketPeer.STATE_OPEN
 
 
 func connect_to_obs():
 	# See https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#connection-steps
 	# This might be for a different version of OBS websocket than mine
-	if websocket.get_peer(1).is_connected_to_host():
-		websocket.get_peer(1).close()
+	if websocket_connected():
+		websocket.close()
 	var err = websocket.connect_to_url("ws://localhost:%s" % [obs_port])
 	print("Connecting to OBS...")
 	if err != OK:
 		print("OBS error: " + str(err))
 
 
-func connection_established(protocol : String):
-	print("OBS connection established " + protocol)
+func connection_established():
+	print("OBS connection established")
 	upgrade_connection()
 
 
-func connection_closed(clean_close : bool):
-	print("OBS connection closed " + str(clean_close))
+func connection_closed():
+	print("OBS connection closed")
 	
 
 func connection_error():
@@ -196,7 +205,7 @@ func upgrade_connection():
 
 	var http : HTTPRequest = HTTPRequest.new()
 	add_child(http)
-	if http.connect("request_completed", self, "upgrade_request_completed", [http]) != OK:
+	if http.connect("request_completed", Callable(self, "upgrade_request_completed").bind(http)) != OK:
 		print_debug("Signal not connected")
 	
 	var headers = [ "Sec-WebSocket-Protocol: obswebsocket.json" ]
@@ -205,7 +214,7 @@ func upgrade_connection():
 		print("OBS error upgrading connection " + str(err))
 
 
-func upgrade_request_completed(_result: int, _response_code: int, _headers: PoolStringArray, _body: PoolByteArray, http: HTTPRequest):
+func upgrade_request_completed(_result: int, _response_code: int, _headers: PackedStringArray, _body: PackedByteArray, http: HTTPRequest):
 	http.queue_free()
 	
 #	if response_code != 200:
@@ -239,7 +248,9 @@ func hello(challenge, salt):
 func data_received() -> void:
 	var data : String = websocket.get_peer(1).get_packet().get_string_from_utf8()
 	if data:
-		var response : Dictionary = parse_json(data)
+		var test_json_conv = JSON.new()
+		test_json_conv.parse(data)
+		var response : Dictionary = test_json_conv.get_data()
 		print_debug("OBS: ", response)
 
 		if response.has("error"):
@@ -261,9 +272,9 @@ func send(message : Dictionary) -> void:
 		return
 		
 	websocket.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
-	var text = JSON.print(message)
+	var text = JSON.stringify(message)
 	print_debug(text)
-	var err = websocket.get_peer(1).put_packet(text.to_utf8())
+	var err = websocket.get_peer(1).put_packet(text.to_utf8_buffer())
 	if err != OK:
 		print_debug("Failed to send message, error: " + str(err))
 	

@@ -1,12 +1,12 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=18 format=3 uid="uid://bjt7axh3xs8d5"]
 
-[ext_resource path="res://common/fonts/tiny.tres" type="DynamicFont" id=1]
-[ext_resource path="res://chatter/textures/astronaut.png" type="Texture" id=2]
-[ext_resource path="res://chatter/textures/helmet.png" type="Texture" id=3]
-[ext_resource path="res://chatter/textures/face.png" type="Texture" id=4]
-[ext_resource path="res://chatter/color.material" type="Material" id=5]
+[ext_resource type="FontFile" path="res://common/fonts/tiny.tres" id="1"]
+[ext_resource type="Texture2D" uid="uid://k5hohc4ttuhh" path="res://chatter/textures/astronaut.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://c8afxwam0vsus" path="res://chatter/textures/helmet.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bqnhnq6xvubqp" path="res://chatter/textures/face.png" id="4"]
+[ext_resource type="Material" uid="uid://d15kkyrusbpla" path="res://chatter/color.material" id="5"]
 
-[sub_resource type="GDScript" id=9]
+[sub_resource type="GDScript" id="9"]
 script/source = "extends Node2D
 
 var FLOOR = Helper.WINDOW_H
@@ -34,7 +34,7 @@ func _ready():
 		c = Color(\"#f77622\") # special orange
 	
 	material = material.duplicate()
-	material.set_shader_param(\"color\", c)
+	material.set_shader_parameter(\"color\", c)
 	
 	velocity = Vector2.ZERO
 
@@ -58,12 +58,12 @@ func _physics_process(delta):
 	position += velocity * delta
 
 	# Moon jump
-	if position.y == FLOOR and rand_range(0, 60) < 1:
+	if position.y == FLOOR and randf_range(0, 60) < 1:
 		velocity = Vector2.ZERO
 		if randf() < 0.5:
 			velocity = Vector2(1, -1)
 			if randf() < 0.5: velocity = Vector2(-1, -1)
-		velocity *= rand_range(30, 60)
+		velocity *= randf_range(30, 60)
 
 
 func say(message:String):
@@ -77,7 +77,7 @@ func add_head(image:Image = null, login:String = \"\", first_chatter:bool = fals
 		var tex = ImageTexture.new()
 		tex.create_from_image(image)
 		
-		var s = Sprite.new()
+		var s = Sprite2D.new()
 		s.texture = tex
 		s.scale *= 0.1
 		s.position = Vector2(0, -2)
@@ -104,166 +104,183 @@ func play_animation():
 		$body.flip_h = false
 "
 
-[sub_resource type="Animation" id=1]
+[sub_resource type="Animation" id="1"]
 length = 0.001
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id="2"]
 resource_name = "idle"
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id="3"]
 resource_name = "wave1"
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id="4"]
 resource_name = "wave2"
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ra7ws"]
+_data = {
+"RESET": SubResource("1"),
+"idle": SubResource("2"),
+"wave1": SubResource("3"),
+"wave2": SubResource("4")
+}
+
+[sub_resource type="Animation" id="5"]
 length = 0.001
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ Vector2( 0, -3 ) ]
+"values": [Vector2(0, -3)]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id="6"]
 resource_name = "default"
-loop = true
 step = 0.25
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.25, 0.5, 0.75 ),
-"transitions": PoolRealArray( -2, -2, -2, -2 ),
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(-2, -2, -2, -2),
 "update": 0,
-"values": [ Vector2( 0, -1 ), Vector2( 0, 1 ), Vector2( 0, -1 ), Vector2( 0, 1 ) ]
+"values": [Vector2(0, -1), Vector2(0, 1), Vector2(0, -1), Vector2(0, 1)]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_t6kgn"]
+_data = {
+"RESET": SubResource("5"),
+"default": SubResource("6")
+}
+
+[sub_resource type="Animation" id="7"]
 length = 0.001
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ true ]
+"values": [true]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath("..:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ Vector2( 1, 1 ) ]
+"values": [Vector2(1, 1)]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id="8"]
 resource_name = "speak"
 length = 3.0
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 3 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ true, false ]
+"values": [true, false]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath("..:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.5, 2.5, 3 ),
-"transitions": PoolRealArray( -2, 1, -2, 1 ),
+"times": PackedFloat32Array(0, 0.5, 2.5, 3),
+"transitions": PackedFloat32Array(-2, 1, -2, 1),
 "update": 0,
-"values": [ Vector2( 1, 1 ), Vector2( 2, 2 ), Vector2( 2, 2 ), Vector2( 1, 1 ) ]
+"values": [Vector2(1, 1), Vector2(2, 2), Vector2(2, 2), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nuonn"]
+_data = {
+"RESET": SubResource("7"),
+"speak": SubResource("8")
 }
 
 [node name="Chatter" type="Node2D" groups=["chatter"]]
-material = ExtResource( 5 )
-script = SubResource( 9 )
+material = ExtResource("5")
+script = SubResource("9")
 
-[node name="body" type="Sprite" parent="."]
+[node name="body" type="Sprite2D" parent="."]
 use_parent_material = true
-position = Vector2( 0, -24 )
-texture = ExtResource( 2 )
+position = Vector2(0, -24)
+texture = ExtResource("2")
 hframes = 6
 vframes = 7
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/RESET = SubResource( 1 )
-anims/idle = SubResource( 2 )
-anims/wave1 = SubResource( 3 )
-anims/wave2 = SubResource( 4 )
+libraries = {
+"": SubResource("AnimationLibrary_ra7ws")
+}
 
 [node name="head" type="Node2D" parent="."]
-use_parent_material = true
-position = Vector2( 0, -3 )
 z_index = -1
+use_parent_material = true
+position = Vector2(0, -3)
 
 [node name="nametag" type="Label" parent="head"]
-margin_left = -49.0
-margin_top = -65.0
-margin_right = 49.0
-margin_bottom = -56.0
-custom_colors/font_color = Color( 0.541176, 0.541176, 0.541176, 1 )
-custom_fonts/font = ExtResource( 1 )
+offset_left = -49.0
+offset_top = -65.0
+offset_right = 49.0
+offset_bottom = -56.0
+theme_override_colors/font_color = Color(0.541176, 0.541176, 0.541176, 1)
+theme_override_fonts/font = ExtResource("1")
+theme_override_font_sizes/font_size = 8
 text = "NAMETAG"
-align = 1
-valign = 1
 
-[node name="helmet" type="Sprite" parent="head"]
+[node name="helmet" type="Sprite2D" parent="head"]
 use_parent_material = true
-position = Vector2( 0, -36 )
-texture = ExtResource( 3 )
+position = Vector2(0, -36)
+texture = ExtResource("3")
 
-[node name="Face" type="Sprite" parent="head/helmet"]
+[node name="Face" type="Sprite2D" parent="head/helmet"]
 z_index = -1
-texture = ExtResource( 4 )
+texture = ExtResource("4")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="head"]
 autoplay = "default"
-anims/RESET = SubResource( 5 )
-anims/default = SubResource( 6 )
+libraries = {
+"": SubResource("AnimationLibrary_t6kgn")
+}
 
 [node name="speechBubble" type="Label" parent="."]
-margin_left = -47.0
-margin_top = -127.0
-margin_right = 47.0
-margin_bottom = -69.0
-rect_clip_content = true
-custom_fonts/font = ExtResource( 1 )
-align = 1
-valign = 2
-autowrap = true
+clip_contents = true
+offset_left = -47.0
+offset_top = -127.0
+offset_right = 47.0
+offset_bottom = -69.0
+theme_override_fonts/font = ExtResource("1")
+theme_override_font_sizes/font_size = 8
 clip_text = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="speechBubble"]
-anims/RESET = SubResource( 7 )
-anims/speak = SubResource( 8 )
+libraries = {
+"": SubResource("AnimationLibrary_nuonn")
+}
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

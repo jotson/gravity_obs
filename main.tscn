@@ -1,169 +1,149 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=15 format=3 uid="uid://cbk436yvfqwfb"]
 
-[ext_resource path="res://common/gui/ui-theme.tres" type="Theme" id=1]
-[ext_resource path="res://main.gd" type="Script" id=2]
-[ext_resource path="res://soundboard/SoundButton.tscn" type="PackedScene" id=3]
-[ext_resource path="res://common/fonts/tiny.tres" type="DynamicFont" id=4]
+[ext_resource type="Theme" uid="uid://dsv53i3qgqnl3" path="res://common/gui/ui-theme.tres" id="1"]
+[ext_resource type="Script" path="res://main.gd" id="2"]
+[ext_resource type="PackedScene" path="res://soundboard/SoundButton.tscn" id="3"]
+[ext_resource type="FontFile" path="res://common/fonts/tiny.tres" id="4"]
 
-[sub_resource type="StyleBoxEmpty" id=6]
+[sub_resource type="StyleBoxEmpty" id="6"]
 
-[sub_resource type="StyleBoxEmpty" id=7]
+[sub_resource type="StyleBoxEmpty" id="7"]
 
-[sub_resource type="StyleBoxEmpty" id=8]
+[sub_resource type="StyleBoxEmpty" id="8"]
 
-[sub_resource type="StyleBoxEmpty" id=4]
+[sub_resource type="StyleBoxEmpty" id="4"]
 
-[sub_resource type="StyleBoxEmpty" id=5]
+[sub_resource type="StyleBoxEmpty" id="5"]
 
-[sub_resource type="Theme" id=9]
+[sub_resource type="Theme" id="9"]
 VScrollBar/icons/decrement = null
 VScrollBar/icons/decrement_highlight = null
 VScrollBar/icons/increment = null
 VScrollBar/icons/increment_highlight = null
-VScrollBar/styles/grabber = SubResource( 6 )
-VScrollBar/styles/grabber_highlight = SubResource( 7 )
-VScrollBar/styles/grabber_pressed = SubResource( 8 )
-VScrollBar/styles/scroll = SubResource( 4 )
-VScrollBar/styles/scroll_focus = SubResource( 5 )
+VScrollBar/styles/grabber = SubResource("6")
+VScrollBar/styles/grabber_highlight = SubResource("7")
+VScrollBar/styles/grabber_pressed = SubResource("8")
+VScrollBar/styles/scroll = SubResource("4")
+VScrollBar/styles/scroll_focus = SubResource("5")
 
-[sub_resource type="StyleBoxEmpty" id=10]
+[sub_resource type="StyleBoxEmpty" id="11"]
 
-[sub_resource type="StyleBoxEmpty" id=11]
+[sub_resource type="StyleBoxEmpty" id="10"]
 
-[sub_resource type="RectangleShape2D" id=12]
-extents = Vector2( 64, 540 )
+[sub_resource type="RectangleShape2D" id="12"]
+size = Vector2(64, 540)
 
-[sub_resource type="RectangleShape2D" id=13]
-extents = Vector2( 960, 64 )
+[sub_resource type="RectangleShape2D" id="13"]
+size = Vector2(960, 64)
 
 [node name="main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-theme = ExtResource( 1 )
-script = ExtResource( 2 )
+theme = ExtResource("1")
+script = ExtResource("2")
 
 [node name="console" type="TextEdit" parent="."]
-modulate = Color( 1, 1, 1, 0.501961 )
+modulate = Color(1, 1, 1, 0.501961)
+layout_mode = 0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -112.0
+offset_top = -112.0
 mouse_filter = 2
-theme = SubResource( 9 )
-custom_colors/font_color_readonly = Color( 1, 1, 1, 1 )
-custom_fonts/font = ExtResource( 4 )
-custom_styles/read_only = SubResource( 10 )
-custom_styles/normal = SubResource( 11 )
-readonly = true
-smooth_scrolling = true
-wrap_enabled = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+theme = SubResource("9")
+theme_override_fonts/font = ExtResource("4")
+theme_override_styles/normal = SubResource("11")
+theme_override_styles/read_only = SubResource("10")
 
 [node name="login" type="VBoxContainer" parent="."]
+layout_mode = 0
 anchor_top = 0.5
 anchor_bottom = 0.5
-margin_left = 100.0
-margin_top = -34.0
-margin_right = 325.0
-margin_bottom = 34.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_left = 100.0
+offset_top = -34.0
+offset_right = 325.0
+offset_bottom = 34.0
 
 [node name="channel" type="LineEdit" parent="login"]
-margin_right = 225.0
-margin_bottom = 20.0
+layout_mode = 2
 
 [node name="joinButton" type="Button" parent="login"]
-margin_top = 24.0
-margin_right = 225.0
-margin_bottom = 44.0
+layout_mode = 2
 text = "Connect"
 
 [node name="authButton" type="Button" parent="login"]
-margin_top = 48.0
-margin_right = 225.0
-margin_bottom = 68.0
+layout_mode = 2
 text = "Authorize"
 
 [node name="SoundButtonConfig" type="GridContainer" parent="."]
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = -318.0
-margin_top = -66.0
-margin_right = -50.0
-margin_bottom = 66.0
+offset_left = -318.0
+offset_top = -66.0
+offset_right = -50.0
+offset_bottom = 66.0
 columns = 4
 
-[node name="SoundButton40" parent="SoundButtonConfig" instance=ExtResource( 3 )]
+[node name="SoundButton40" parent="SoundButtonConfig" instance=ExtResource("3")]
+layout_mode = 2
 note = 40
 
-[node name="SoundButton41" parent="SoundButtonConfig" instance=ExtResource( 3 )]
-margin_left = 68.0
-margin_right = 132.0
+[node name="SoundButton41" parent="SoundButtonConfig" instance=ExtResource("3")]
+layout_mode = 2
 note = 41
 
-[node name="SoundButton42" parent="SoundButtonConfig" instance=ExtResource( 3 )]
-margin_left = 136.0
-margin_right = 200.0
+[node name="SoundButton42" parent="SoundButtonConfig" instance=ExtResource("3")]
+layout_mode = 2
 note = 42
 
-[node name="SoundButton43" parent="SoundButtonConfig" instance=ExtResource( 3 )]
-margin_left = 204.0
-margin_right = 268.0
+[node name="SoundButton43" parent="SoundButtonConfig" instance=ExtResource("3")]
+layout_mode = 2
 note = 43
 
-[node name="SoundButton36" parent="SoundButtonConfig" instance=ExtResource( 3 )]
-margin_top = 68.0
-margin_bottom = 132.0
+[node name="SoundButton36" parent="SoundButtonConfig" instance=ExtResource("3")]
+layout_mode = 2
 note = 36
 
-[node name="SoundButton37" parent="SoundButtonConfig" instance=ExtResource( 3 )]
-margin_left = 68.0
-margin_top = 68.0
-margin_right = 132.0
-margin_bottom = 132.0
+[node name="SoundButton37" parent="SoundButtonConfig" instance=ExtResource("3")]
+layout_mode = 2
 note = 37
 
-[node name="SoundButton38" parent="SoundButtonConfig" instance=ExtResource( 3 )]
-margin_left = 136.0
-margin_top = 68.0
-margin_right = 200.0
-margin_bottom = 132.0
+[node name="SoundButton38" parent="SoundButtonConfig" instance=ExtResource("3")]
+layout_mode = 2
 note = 38
 
-[node name="SoundButton39" parent="SoundButtonConfig" instance=ExtResource( 3 )]
-margin_left = 204.0
-margin_top = 68.0
-margin_right = 268.0
-margin_bottom = 132.0
+[node name="SoundButton39" parent="SoundButtonConfig" instance=ExtResource("3")]
+layout_mode = 2
 note = 39
 
 [node name="walls" type="StaticBody2D" parent="." groups=["wall"]]
-position = Vector2( -60, 281 )
+position = Vector2(-60, 281)
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="walls"]
-position = Vector2( -4, 0 )
-shape = SubResource( 12 )
+position = Vector2(28, -11)
+shape = SubResource("12")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="walls"]
-position = Vector2( 537, -344 )
-shape = SubResource( 13 )
+position = Vector2(540, -311)
+shape = SubResource("13")
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="walls"]
-position = Vector2( 1084, -20 )
-shape = SubResource( 12 )
+position = Vector2(1053, -9)
+shape = SubResource("12")
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="walls"]
-position = Vector2( 535, 323 )
-shape = SubResource( 13 )
+position = Vector2(539, 292)
+shape = SubResource("13")
 
-[connection signal="text_entered" from="login/channel" to="." method="_on_channel_text_entered"]
+[connection signal="text_submitted" from="login/channel" to="." method="_on_channel_text_entered"]
 [connection signal="pressed" from="login/joinButton" to="." method="_on_joinButton_pressed"]
 [connection signal="pressed" from="login/authButton" to="." method="_on_authButton_pressed"]

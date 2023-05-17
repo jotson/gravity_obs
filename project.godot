@@ -6,46 +6,13 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
-
-_global_script_classes=[ {
-"base": "Reference",
-"class": "CommandData",
-"language": "GDScript",
-"path": "res://addons/gift/util/cmd_data.gd"
-}, {
-"base": "Reference",
-"class": "CommandInfo",
-"language": "GDScript",
-"path": "res://addons/gift/util/cmd_info.gd"
-}, {
-"base": "Node",
-"class": "Gift",
-"language": "GDScript",
-"path": "res://addons/gift/gift_node.gd"
-}, {
-"base": "Node",
-"class": "ImageCache",
-"language": "GDScript",
-"path": "res://addons/gift/util/image_cache.gd"
-}, {
-"base": "Reference",
-"class": "SenderData",
-"language": "GDScript",
-"path": "res://addons/gift/util/sender_data.gd"
-} ]
-_global_script_class_icons={
-"CommandData": "",
-"CommandInfo": "",
-"Gift": "",
-"ImageCache": "",
-"SenderData": ""
-}
+config_version=5
 
 [application]
 
 config/name="Gravity OBS"
 run/main_scene="res://main.tscn"
+config/features=PackedStringArray("4.0")
 run/low_processor_mode=true
 config/icon="res://icon.png"
 
@@ -61,17 +28,16 @@ Soundboard="*res://soundboard/Soundboard.tscn"
 
 [display]
 
-window/size/width=960
-window/size/height=540
-window/vsync/use_vsync=false
-window/per_pixel_transparency/allowed=true
-window/per_pixel_transparency/enabled=true
+window/size/viewport_width=960
+window/size/viewport_height=540
 window/stretch/mode="viewport"
-window/stretch/aspect="keep"
+window/per_pixel_transparency/allowed=true
+window/vsync/vsync_mode=false
+window/per_pixel_transparency/enabled=true
 
 [editor_plugins]
 
-enabled=PoolStringArray(  )
+enabled=PackedStringArray()
 
 [importer_defaults]
 
@@ -100,24 +66,28 @@ texture={
 
 fullscreen={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777254,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
 }
 toggle_console={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":96,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
 }
 disconnect={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777217,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
 }
+
+[physics]
+
+2d/default_gravity=100.0
 
 [rendering]
 
+environment/defaults/default_environment="res://default_env.tres"
 2d/snapping/use_gpu_pixel_snap=true
-environment/default_environment="res://default_env.tres"
 quality/dynamic_fonts/use_oversampling=false
 quality/2d/use_pixel_snap=true
 

@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/shield-down.wav-037e591ed61c0f9c470393a813fbb5c1.sample"
+type="AudioStreamWAV"
+uid="uid://0j1cncp6ua0m"
+path="res://.godot/imported/shield-down.wav-037e591ed61c0f9c470393a813fbb5c1.sample"
 
 [deps]
 
 source_file="res://ship/sfx/shield-down.wav"
-dest_files=[ "res://.import/shield-down.wav-037e591ed61c0f9c470393a813fbb5c1.sample" ]
+dest_files=["res://.godot/imported/shield-down.wav-037e591ed61c0f9c470393a813fbb5c1.sample"]
 
 [params]
 
@@ -17,5 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=true
 edit/normalize=false
-edit/loop=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
 compress/mode=0

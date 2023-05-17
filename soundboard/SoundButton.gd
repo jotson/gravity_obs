@@ -1,6 +1,6 @@
 extends TextureButton
 
-export var note: int
+@export var note: int
 
 
 func _ready():
@@ -16,6 +16,6 @@ func _input(event):
 		event = event as InputEventMIDI
 		
 		if event.velocity > 0 and event.pitch == note:
-			pressed = true
+			set_pressed_no_signal(true)
 		else:
-			pressed = false
+			set_pressed_no_signal(false)

@@ -2,7 +2,7 @@ extends Control
 
 var commands : Dictionary
 
-var last_api_request = OS.get_ticks_msec()
+var last_api_request = Time.get_ticks_msec()
 var profile_pics = {}
 var profile_pic_queue = []
 var MAX_CHATTERS = 50
@@ -12,8 +12,8 @@ const AstronautChatter = preload("res://chatter/Astronaut.tscn")
 const AstronautContainer = preload("res://chatter/AstronautContainer.tscn")
 const MarbleChatter = preload("res://chatter/Marble.tscn")
 const MarbleContainer = preload("res://chatter/MarbleContainer.tscn")
-onready var Chatter = MarbleChatter
-onready var ChatterContainer = MarbleContainer.instance()
+@onready var Chatter = MarbleChatter
+@onready var ChatterContainer = MarbleContainer.instantiate()
 
 
 func _ready():
@@ -27,16 +27,16 @@ func _ready():
 	if channel:
 		$login/channel.text = channel
 
-	if Twitch.connect("chat_message", self, "twitch_chat") != OK:
+	if Twitch.connect("chat_message", Callable(self, "twitch_chat")) != OK:
 		print_debug("Signal not connected")
-	if Twitch.connect("twitch_disconnected", self, "twitch_disconnect") != OK:
+	if Twitch.connect("twitch_disconnected", Callable(self, "twitch_disconnect")) != OK:
 		print_debug("Signal not connected")
-	if Twitch.connect("login_attempt", self, "twitch_login_attempt") != OK:
+	if Twitch.connect("login_attempt", Callable(self, "twitch_login_attempt")) != OK:
 		print_debug("Signal not connected")
-	if Twitch.connect("got_channel_info", self, "twitch_got_channel_info") != OK:
+	if Twitch.connect("got_channel_info", Callable(self, "twitch_got_channel_info")) != OK:
 		print_debug("Signal not connected")
 
-	if TwitchPS.connect("reward_redemption", self, "twitch_reward_redemption") != OK:
+	if TwitchPS.connect("reward_redemption", Callable(self, "twitch_reward_redemption")) != OK:
 		print_debug("Signal not connected")
 
 	load_commands()
@@ -46,10 +46,12 @@ func load_commands():
 	commands.clear()
 	Twitch.commands.clear()
 	
-	var f = File.new()	
-	if f.open("user://commands.json", File.READ) != OK:
+	var f = FileAccess.open("user://commands.json", FileAccess.READ)
+	if f == null:
 		return
-	var command_data : Array = parse_json(f.get_as_text())
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(f.get_as_text())
+	var command_data : Array = test_json_conv.get_data()
 	f.close()
 	
 	for c in command_data:
@@ -60,22 +62,22 @@ func load_commands():
 			perm = Twitch.PermissionFlag.STREAMER
 			
 		if c.has("action") and c.action == "battle":
-			Twitch.add_command(c.command, self, "cmd_battle", 0, 0, perm)
+			Twitch.add_command(c.command, cmd_battle, 0, 0, perm)
 	
 		if c.has("action") and c.action == "reload_commands":
-			Twitch.add_command(c.command, self, "cmd_reload_commands", 0, 0, perm)
+			Twitch.add_command(c.command, cmd_reload_commands, 0, 0, perm)
 	
 		if c.has("action") and c.action == "commands":
-			Twitch.add_command(c.command, self, "cmd_commands", 0, 0, perm)
+			Twitch.add_command(c.command, cmd_commands, 0, 0, perm)
 
 		if c.has("action") and c.action == "shoutout":
-			Twitch.add_command(c.command, self, "cmd_shoutout", 1, 0, perm)
+			Twitch.add_command(c.command, cmd_shoutout, 1, 0, perm)
 	
 		if c.has("action") and c.action == "chat":
-			Twitch.add_command(c.command, self, "cmd_chat", 0, 0, perm)
+			Twitch.add_command(c.command, cmd_chat, 0, 0, perm)
 
 		if c.has("action") and c.action == "addtocredits":
-			Twitch.add_command(c.command, self, "cmd_addtocredits", 0, 0, perm)
+			Twitch.add_command(c.command, cmd_addtocredits, 0, 0, perm)
 	
 			
 		if c.has("aliases"):
@@ -127,8 +129,8 @@ func cmd_chat(_cmd : CommandInfo):
 
 func cmd_addtocredits(_cmd : CommandInfo):
 	var filename = "user://twitch-credits.txt"
-	var f = File.new()
-	if f.open(filename, File.READ_WRITE) == OK:
+	var f = FileAccess.open(filename, FileAccess.READ_WRITE)
+	if f:
 		f.seek_end()
 		f.store_line(_cmd.sender_data.user)
 	f.close()
@@ -162,7 +164,7 @@ func twitch_reward_redemption(who : String, reward : String):
 	
 	print("%s redeemed %s" % [who, reward])
 	if reward.to_lower() == "this is fine":
-		var fire = preload("res://flames/flames.tscn").instance()
+		var fire = preload("res://flames/flames.tscn").instantiate()
 		Helper.add_child(fire)
 		
 	if reward.begins_with("Play sound: "):
@@ -171,7 +173,8 @@ func twitch_reward_redemption(who : String, reward : String):
 		Soundboard.play_queue(sound)
 	
 	if notify:
-		var notification = preload("res://reward/reward.tscn").instance()
+		@warning_ignore("shadowed_variable_base_class")
+		var notification = preload("res://reward/reward.tscn").instantiate()
 		notification.who = who
 		notification.reward = reward
 		Helper.add_child(notification)
@@ -193,16 +196,16 @@ func twitch_chat(sender_data, command : String, full_message : String):
 	command = command.to_lower()
 	
 	var message = full_message.split(" ")
-	message.remove(0)
-	message.remove(0)
-	message.remove(0)
-	message = message.join(" ")
+	message.remove_at(0)
+	message.remove_at(0)
+	message.remove_at(0)
+	message = " ".join(message)
 	message = message.substr(1)
 	
 	var hearts = Helper.get_count(full_message, "<3")
 	if hearts >= 0:
 		for _n in range(hearts):
-			var o = load("res://heart/heart.tscn").instance()
+			var o = load("res://heart/heart.tscn").instantiate()
 			o.position = Helper.random_position()
 			Helper.add_child(o)
 		
@@ -213,7 +216,7 @@ func twitch_chat(sender_data, command : String, full_message : String):
 		smiles = 3
 	if smiles >= 0:
 		for _n in range(smiles):
-			var o = load("res://smiley/smiley.tscn").instance()
+			var o = load("res://smiley/smiley.tscn").instantiate()
 			o.position = Helper.random_position()
 			Helper.add_child(o)
 
@@ -237,7 +240,7 @@ func twitch_chat(sender_data, command : String, full_message : String):
 		var first = false
 		if profile_pics.size() == 1:
 			first = true
-		var chatter = Chatter.instance()
+		var chatter = Chatter.instantiate()
 		profile_pics[username]["sprite"] = chatter
 		chatter.add_head(null, username, first)
 		ChatterContainer.add_child(chatter)
@@ -245,7 +248,7 @@ func twitch_chat(sender_data, command : String, full_message : String):
 		
 		profile_pic_queue.append(username)
 	
-	if profile_pic_queue.size() and OS.get_ticks_msec() > last_api_request + 3000:
+	if profile_pic_queue.size() and Time.get_ticks_msec() > last_api_request + 3000:
 		get_profile_pic(profile_pic_queue)
 		profile_pic_queue.clear()
 		
@@ -276,26 +279,28 @@ func _on_authButton_pressed():
 
 
 func get_profile_pic(login:Array):
-	last_api_request = OS.get_ticks_msec()
+	last_api_request = Time.get_ticks_msec()
 	
 	var http : HTTPRequest = HTTPRequest.new()
 	add_child(http)
-	if http.connect("request_completed", self, "received_profile_pic", [http]) != OK:
+	if http.connect("request_completed", Callable(self, "received_profile_pic").bind(http)) != OK:
 		print_debug("Signal not connected")
 	
 	var url = "https://api.twitch.tv/helix/users?"
 	for l in login:
 		url += "login=%s&" % l
-	var err = http.request(url, ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], false, HTTPClient.METHOD_GET)
+	var err = http.request(url, ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], HTTPClient.METHOD_GET)
 	if err != OK:
 		print("Error getting profile pic " + str(err))
 
 
-func received_profile_pic(_result: int, _response_code: int, _headers: PoolStringArray, body: PoolByteArray, http: HTTPRequest):
+func received_profile_pic(_result: int, _response_code: int, _headers: PackedStringArray, body: PackedByteArray, http: HTTPRequest):
 	http.queue_free()
 	
 	var data = body.get_string_from_utf8()
-	var message = parse_json(data)
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(data)
+	var message = test_json_conv.get_data()
 	for user in message.data:
 		profile_pics[user.login]["url"] = user.profile_image_url
 		get_profile_image(user.login, user.profile_image_url)
@@ -304,7 +309,7 @@ func received_profile_pic(_result: int, _response_code: int, _headers: PoolStrin
 func get_profile_image(login:String, url:String):
 	var http : HTTPRequest = HTTPRequest.new()
 	add_child(http)
-	if http.connect("request_completed", self, "profile_image_received", [http, login, url]) != OK:
+	if http.connect("request_completed", Callable(self, "profile_image_received").bind(http, login, url)) != OK:
 		print_debug("Signal not connected")
 		
 	var err = http.request(url)
@@ -312,7 +317,7 @@ func get_profile_image(login:String, url:String):
 		print("Error getting profile image " + str(err))
 	
 	
-func profile_image_received(_result: int, _response_code: int, _headers: PoolStringArray, body: PoolByteArray, http: HTTPRequest, login: String, url: String):
+func profile_image_received(_result: int, _response_code: int, _headers: PackedStringArray, body: PackedByteArray, http: HTTPRequest, login: String, url: String):
 	http.queue_free()
 	
 	var image = Image.new()

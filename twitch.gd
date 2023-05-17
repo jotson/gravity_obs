@@ -15,7 +15,7 @@ func _ready():
 
 func join(channel):
 	connect_to_twitch()
-	yield(Twitch, "twitch_connected")
+	await Twitch.twitch_connected
 	
 	var token = Helper.get_saved_token()
 	if token:
@@ -24,7 +24,7 @@ func join(channel):
 	else:
 		# Anonymous login just for reading
 		print("Anonymous! No Oauth token available!")
-		var username = "justinfan" + str(int(rand_range(100000,999999)))
+		var username = "justinfan" + str(int(randf_range(100000,999999)))
 		authenticate_oauth(username, str(randi()))
 	
 	Helper.save_channel(channel)
@@ -35,13 +35,13 @@ func join(channel):
 func update_reward_redemption_status(redemption_id: String, reward_id: String):
 	var http : HTTPRequest = HTTPRequest.new()
 	add_child(http)
-	if http.connect("request_completed", self, "received_channel_info", [http]) != OK:
+	if http.connect("request_completed", Callable(self, "received_channel_info").bind(http)) != OK:
 		print_debug("Signal not connected")
 
-	var err = http.request("https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions?broadcaster_id=%s&id=%s&reward_id=%s&status=FULFILLED" % [str(broadcaster_id), redemption_id, reward_id], ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], false, HTTPClient.METHOD_PATCH)
+	var err = http.request("https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions?broadcaster_id=%s&id=%s&reward_id=%s&status=FULFILLED" % [str(broadcaster_id), redemption_id, reward_id], ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], HTTPClient.METHOD_PATCH)
 	if err != OK:
 		print("Error getting stream info " + str(err))
-	yield(http, "request_completed")
+	await http.request_completed
 	http.queue_free()
 
 
@@ -49,16 +49,16 @@ func get_channel_info():
 	# Get channel_info
 	var http : HTTPRequest = HTTPRequest.new()
 	add_child(http)
-	if http.connect("request_completed", self, "received_channel_info", [http]) != OK:
+	if http.connect("request_completed", Callable(self, "received_channel_info").bind(http)) != OK:
 		print_debug("Signal not connected")
 	
-	var err = http.request("https://api.twitch.tv/helix/channels?broadcaster_id=%s" % str(broadcaster_id), ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], false, HTTPClient.METHOD_GET)
+	var err = http.request("https://api.twitch.tv/helix/channels?broadcaster_id=%s" % str(broadcaster_id), ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], HTTPClient.METHOD_GET)
 	if err != OK:
 		print("Error getting stream info " + str(err))
-	yield(http, "request_completed")
+	await http.request_completed
 
 
-func received_channel_info(result: int, response_code: int, headers: PoolStringArray, body: PoolByteArray, http: HTTPRequest):
+func received_channel_info(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray, http: HTTPRequest):
 	http.queue_free()
 	
 	if response_code != 200:
@@ -69,7 +69,9 @@ func received_channel_info(result: int, response_code: int, headers: PoolStringA
 		return
 		
 	var data = body.get_string_from_utf8()
-	var message = parse_json(data)
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(data)
+	var message = test_json_conv.get_data()
 	broadcaster_id = message.data[0].broadcaster_id
 	broadcaster_login = message.data[0].broadcaster_login
 	broadcaster_name = message.data[0].broadcaster_name

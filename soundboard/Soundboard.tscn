@@ -1,9 +1,9 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://bhvwfbjoqrscn"]
 
-[ext_resource path="res://soundboard/Soundboard.gd" type="Script" id=5]
+[ext_resource type="Script" path="res://soundboard/Soundboard.gd" id="5"]
 
 [node name="Soundboard" type="Node"]
-script = ExtResource( 5 )
+script = ExtResource("5")
 
 [node name="SinglePlayer" type="AudioStreamPlayer" parent="."]
 

@@ -24,16 +24,18 @@ func _ready():
 func load_sound_configuration():
 	sound_map.clear()
 	
-	var f = File.new()
-	if not f.file_exists(SOUNDBOARD_JSON):
+	if not FileAccess.file_exists(SOUNDBOARD_JSON):
 		return
 		
 	# Load soundboard.json
-	if f.open(SOUNDBOARD_JSON, File.READ) != OK:
+	var f = FileAccess.open(SOUNDBOARD_JSON, FileAccess.READ)
+	if f == null:
 		return
 		
 	var json = f.get_as_text()
-	sound_map = parse_json(json)
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(json)
+	sound_map = test_json_conv.get_data()
 	f.close()
 
 
@@ -41,11 +43,10 @@ func get_sound_file(sound: String) -> String:
 	var SOUND_PATH = "user://soundboard"
 	var sound_file = null
 	if sound_map["sounds"].has(sound):
-		sound_file = SOUND_PATH.plus_file(sound_map["sounds"][sound])
+		sound_file = SOUND_PATH.path_join(sound_map["sounds"][sound])
 	else:
-		var f = File.new()
-		var path = SOUND_PATH.plus_file(sound) + ".ogg"
-		if f.file_exists(path):
+		var path = SOUND_PATH.path_join(sound) + ".ogg"
+		if FileAccess.file_exists(path):
 			sound_file = path
 	return sound_file
 		
@@ -62,16 +63,19 @@ func load_sound_file(sound: String) -> AudioStream:
 
 	load_sound_configuration()
 
-	var stream = AudioStreamOGGVorbis.new()
+	var stream = AudioStreamOggVorbis.new()
 	
 	var sound_file = get_sound_file(sound)
 	if sound_file:
-		var f = File.new()
-		var err = f.open(sound_file, File.READ)
-		if err != OK:
+		var f = FileAccess.open(sound_file, FileAccess.READ)
+		if f == null:
 			return stream
-		var bytes = f.get_buffer(f.get_len())
-		stream.data = bytes
+		var bytes = f.get_buffer(f.get_length())
+		var packets = OggPacketSequence.new()
+		# BROKEN in 4.0.3rc2
+		# https://github.com/godotengine/godot/issues/61091
+		packets.packet_data = bytes
+		stream.packet_sequence = packets
 		f.close()
 		
 	return stream
@@ -101,7 +105,7 @@ func play(sound: String, single = false) -> void:
 		# Play overlapping sounds
 		player = AudioStreamPlayer.new()
 		add_child(player)
-		player.connect("finished", player, "queue_free")
+		player.connect("finished", Callable(player, "queue_free"))
 	player.stream = load_sound_file(sound)
 	player.play()
 

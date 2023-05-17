@@ -19,12 +19,12 @@ func _ready():
 		c = Color("#f77622") # special orange
 	
 	material = material.duplicate()
-	material.set_shader_param("color", c)
+	material.set_shader_parameter("color", c)
 	
 	velocity = Vector2.ZERO
 	
 	# warning-ignore:return_value_discarded
-	Battle.connect("changed_state", self, "battle_state")
+	Battle.connect("changed_state", Callable(self, "battle_state"))
 
 
 func battle_state(state):
@@ -54,10 +54,9 @@ func say(message:String):
 func add_head(image:Image = null, login:String = "", first_chatter:bool = false):
 	$head/nametag.text = login
 	if image:
-		var tex = ImageTexture.new()
-		tex.create_from_image(image)
+		var tex = ImageTexture.create_from_image(image)
 		
-		var s = Sprite.new()
+		var s = Sprite2D.new()
 		s.texture = tex
 		s.scale *= 0.1
 		s.show_behind_parent = true
@@ -71,4 +70,4 @@ func _on_Marble_input_event(_viewport, event, _shape_idx):
 		event = event as InputEventMouseButton
 		if event.button_index == 1 and event.is_pressed():
 			var offset = event.global_position - position
-			apply_impulse(offset, -offset.normalized() * 400)
+			apply_impulse(-offset.normalized() * 400, offset)

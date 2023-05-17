@@ -23,9 +23,9 @@ signal changed_state
 func _ready():
 	idle()
 
-	if Twitch.connect("chat_message", self, "twitch_chat") != OK:
+	if Twitch.connect("chat_message", Callable(self, "twitch_chat")) != OK:
 		print_debug("Signal not connected`")
-	if Twitch.connect("twitch_disconnected", self, "twitch_disconnect") != OK:
+	if Twitch.connect("twitch_disconnected", Callable(self, "twitch_disconnect")) != OK:
 		print_debug("Signal not connected")
 
 
@@ -74,27 +74,23 @@ func twitch_disconnect():
 
 
 func twitch_chat(sender_data, command : String, full_message : String):
-	if state == STATE.COOLDOWN or state == STATE.IDLE:
-		return
-		
-	command = command.to_lower()
-	
 	var username = sender_data.user
-	add_ship(username)
-	yield(get_tree(), 'idle_frame')
-	yield(get_tree(), 'idle_frame')
-	yield(get_tree(), 'idle_frame')
-
 	if players.has(username):
+		command = command.to_lower()
 		var ship = players[username].ship
 		if ship != null and ship.get_ref():
 			var message = full_message.split(" ")
-			message.remove(0)
-			message.remove(0)
-			message.remove(0)
-			message = message.join(" ")
+			message.remove_at(0)
+			message.remove_at(0)
+			message.remove_at(0)
+			message = " ".join(message)
 			message = message.substr(1)
 			ship.get_ref().say(message)
+
+	if state == STATE.COOLDOWN or state == STATE.IDLE:
+		return
+		
+	add_ship(username)
 
 
 func idle():
@@ -109,7 +105,7 @@ func add_ship(username):
 	if state == STATE.COOLDOWN or state == STATE.IDLE:
 		return
 		
-	yield(get_tree(), 'idle_frame')
+	await get_tree().process_frame
 	
 	var colors = []
 	colors.append(Color("#ffffff"))
@@ -127,7 +123,7 @@ func add_ship(username):
 	if players.has(username):
 		var ship = players[username].ship
 		if ship == null or ship.get_ref() == null:
-			ship = Ship.instance()
+			ship = Ship.instantiate()
 			ship.position = Helper.random_position()
 			ship.rotation = -PI/2
 			ship.username = username
@@ -137,7 +133,7 @@ func add_ship(username):
 			players[username].ship = weakref(ship)
 			prints("Respawn", username)
 	else:
-		var ship = Ship.instance()
+		var ship = Ship.instantiate()
 		ship.position = Helper.random_position()
 		ship.rotation = -PI/2
 		ship.username = username
@@ -146,7 +142,7 @@ func add_ship(username):
 		add_child(ship)
 		
 		players[username] = {
-			"last_action": OS.get_ticks_msec(),
+			"last_action": Time.get_ticks_msec(),
 			"color": ship.color,
 			"ship": weakref(ship),
 			"kills": 0,
@@ -194,14 +190,17 @@ func _on_cooldownTimer_timeout():
 	idle()
 
 
+@warning_ignore("shadowed_variable_base_class")
 func burst(position):
-	var burst = Burst.instance()
+	@warning_ignore("shadowed_variable")
+	var burst = Burst.instantiate()
 	burst.position = position
 	add_child(burst)
 
 
+@warning_ignore("shadowed_variable_base_class")
 func explode(position, velocity, delay = 0.0, secondary = false):
-	var explosion = Explosion.instance()
+	var explosion = Explosion.instantiate()
 	explosion.position = position
 	explosion.velocity = velocity
 	explosion.delay = delay
@@ -211,8 +210,10 @@ func explode(position, velocity, delay = 0.0, secondary = false):
 	return explosion
 
 
+@warning_ignore("shadowed_variable_base_class")
 func spark(position, velocity):
-	var spark = Spark.instance()
+	@warning_ignore("shadowed_variable")
+	var spark = Spark.instantiate()
 	spark.position = position
 	spark.velocity = -velocity
 	add_child(spark)
@@ -220,8 +221,10 @@ func spark(position, velocity):
 	return spark
 	
 
+@warning_ignore("shadowed_variable_base_class")
 func impactsmoke(position):
-	var impactsmoke = ImpactSmoke.instance()
+	@warning_ignore("shadowed_variable")
+	var impactsmoke = ImpactSmoke.instantiate()
 	impactsmoke.position = position
 	add_child(impactsmoke)
 	

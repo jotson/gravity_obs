@@ -1,47 +1,54 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://cwdv1hdi1o6yo"]
 
-[ext_resource path="res://booms/burst-small.gd" type="Script" id=1]
-[ext_resource path="res://booms/textures/burst-small.png" type="Texture" id=2]
+[ext_resource type="Script" path="res://booms/burst-small.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://bx22bqu0vwd5r" path="res://booms/textures/burst-small.png" id="2"]
 
-[sub_resource type="Animation" id=1]
+[sub_resource type="Animation" id="1"]
 resource_name = "default"
 length = 1.5
 tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [ 0, 11 ]
+"values": [0, 11]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("Sprite:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.5, 1.3 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PackedFloat32Array(0, 0.5, 1.3),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 0, 0.6, 1, 0 ) ]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(0, 0.6, 1, 0)]
 }
 
-[node name="burst-small" type="Node2D" groups=[
-"transient",
-]]
-script = ExtResource( 1 )
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_khmsu"]
+_data = {
+"default": SubResource("1")
+}
 
-[node name="Sprite" type="Sprite" parent="."]
-texture = ExtResource( 2 )
+[node name="burst-small" type="Node2D" groups=["transient"]]
+script = ExtResource("1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0.6, 1, 0)
+texture = ExtResource("2")
 hframes = 12
+frame = 11
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "default"
-playback_speed = 4.0
-anims/default = SubResource( 1 )
+libraries = {
+"": SubResource("AnimationLibrary_khmsu")
+}
+
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

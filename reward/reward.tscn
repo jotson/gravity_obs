@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://common/gui/ui-theme.tres" type="Theme" id=1]
-[ext_resource path="res://reward/textures/reward.png" type="Texture" id=2]
-[ext_resource path="res://common/fonts/big.tres" type="DynamicFont" id=3]
+[ext_resource path="res://reward/textures/reward.png" type="Texture2D" id=2]
+[ext_resource path="res://common/fonts/big.tres" type="FontFile" id=3]
 [ext_resource path="res://reward/sfx/reward.wav" type="AudioStream" id=4]
 [ext_resource path="res://reward/reward.gd" type="Script" id=5]
 
@@ -15,8 +15,8 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array( 0 ),
+"transitions": PackedFloat32Array( 1 ),
 "update": 0,
 "values": [ true ]
 }
@@ -27,8 +27,8 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array( 0 ),
+"transitions": PackedFloat32Array( 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
@@ -43,8 +43,8 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 5 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array( 0, 5 ),
+"transitions": PackedFloat32Array( 1, 1 ),
 "update": 1,
 "values": [ true, false ]
 }
@@ -55,8 +55,8 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 3, 5 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PackedFloat32Array( 0, 3, 5 ),
+"transitions": PackedFloat32Array( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
@@ -67,8 +67,8 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 5 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array( 5 ),
+"transitions": PackedFloat32Array( 1 ),
 "values": [ {
 "args": [  ],
 "method": "queue_free"
@@ -80,10 +80,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -150.0
-margin_top = -76.0
-margin_right = 150.0
-margin_bottom = 76.0
+offset_left = -150.0
+offset_top = -76.0
+offset_right = 150.0
+offset_bottom = 76.0
 theme = ExtResource( 1 )
 texture = ExtResource( 2 )
 script = ExtResource( 5 )
@@ -92,11 +92,11 @@ __meta__ = {
 }
 
 [node name="whoLabel" type="Label" parent="."]
-margin_left = 13.0
-margin_top = 20.0
-margin_right = 218.0
-margin_bottom = 36.0
-custom_fonts/font = ExtResource( 3 )
+offset_left = 13.0
+offset_top = 20.0
+offset_right = 218.0
+offset_bottom = 36.0
+theme_override_fonts/font = ExtResource( 3 )
 text = "USERNAME"
 clip_text = true
 __meta__ = {
@@ -104,13 +104,13 @@ __meta__ = {
 }
 
 [node name="rewardLabel" type="Label" parent="."]
-margin_left = 13.0
-margin_top = 50.0
-margin_right = 234.0
-margin_bottom = 127.0
-custom_colors/font_color = Color( 0, 0.823529, 0.862745, 1 )
-custom_constants/line_spacing = 4
-custom_fonts/font = ExtResource( 3 )
+offset_left = 13.0
+offset_top = 50.0
+offset_right = 234.0
+offset_bottom = 127.0
+theme_override_colors/font_color = Color( 0, 0.823529, 0.862745, 1 )
+theme_override_constants/line_spacing = 4
+theme_override_fonts/font = ExtResource( 3 )
 text = "REWARD"
 autowrap = true
 clip_text = true

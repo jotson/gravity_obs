@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/secondary-explosion.wav-5ae50be26b7a9ac5f65b778bd27635dd.sample"
+type="AudioStreamWAV"
+uid="uid://me2mf41qq78f"
+path="res://.godot/imported/secondary-explosion.wav-5ae50be26b7a9ac5f65b778bd27635dd.sample"
 
 [deps]
 
 source_file="res://booms/sfx/secondary-explosion.wav"
-dest_files=[ "res://.import/secondary-explosion.wav-5ae50be26b7a9ac5f65b778bd27635dd.sample" ]
+dest_files=["res://.godot/imported/secondary-explosion.wav-5ae50be26b7a9ac5f65b778bd27635dd.sample"]
 
 [params]
 
@@ -17,5 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=true
 edit/normalize=false
-edit/loop=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
 compress/mode=0

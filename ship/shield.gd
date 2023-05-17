@@ -1,12 +1,12 @@
 extends RigidBody2D
 
-var STARTING_HEALTH = 1 setget set_starting_health
+var STARTING_HEALTH = 1: set = set_starting_health
 var health = 0
 var uses_fuel = false
 var alive = true
 
 # Store the original collision layer bits
-onready var original_collision_layer = collision_layer
+@onready var original_collision_layer = collision_layer
 
 const ENTITY_TYPE_ID = 'shield'
 
@@ -26,30 +26,30 @@ func _ready():
 # events happen. This way the shield doesn't need to know anything
 # about the SHIELD_ENABLED global property.
 func connect_signals():
-	if not get_parent().is_connected('revived', self, 'revive'):
+	if not get_parent().is_connected('revived', Callable(self, 'revive')):
 		# warning-ignore:return_value_discarded
-		get_parent().connect('revived', self, 'revive')
+		get_parent().connect('revived', Callable(self, 'revive'))
 	
-	if not get_parent().is_connected('destroyed', self, 'die'):
+	if not get_parent().is_connected('destroyed', Callable(self, 'die')):
 		# warning-ignore:return_value_discarded
-		get_parent().connect('destroyed', self, 'die')
+		get_parent().connect('destroyed', Callable(self, 'die'))
 
 	if get_parent().get_script().has_script_signal('fuel_changed'):
 		uses_fuel = true
-		if not get_parent().is_connected('fuel_used', self, 'check_fuel_used'):
+		if not get_parent().is_connected('fuel_used', Callable(self, 'check_fuel_used')):
 			# warning-ignore:return_value_discarded
-			get_parent().connect('fuel_used', self, 'check_fuel_used')
+			get_parent().connect('fuel_used', Callable(self, 'check_fuel_used'))
 			
-		if not get_parent().is_connected('fuel_added', self, 'check_fuel_added'):
+		if not get_parent().is_connected('fuel_added', Callable(self, 'check_fuel_added')):
 			# warning-ignore:return_value_discarded
-			get_parent().connect('fuel_added', self, 'check_fuel_added')
+			get_parent().connect('fuel_added', Callable(self, 'check_fuel_added'))
 
 func disconnect_signals():
-	get_parent().disconnect('revived', self, 'revive')
-	get_parent().disconnect('destroyed', self, 'die')
+	get_parent().disconnect('revived', Callable(self, 'revive'))
+	get_parent().disconnect('destroyed', Callable(self, 'die'))
 	if get_parent().get_script().has_script_signal('fuel_changed'):
-		get_parent().disconnect('fuel_used', self, 'check_fuel_used')
-		get_parent().disconnect('fuel_added', self, 'check_fuel_added')
+		get_parent().disconnect('fuel_used', Callable(self, 'check_fuel_used'))
+		get_parent().disconnect('fuel_added', Callable(self, 'check_fuel_added'))
 		
 
 func set_starting_health(value):
@@ -143,7 +143,7 @@ func die():
 	alive = false
 	
 	disable_collision()
-	$Sprite.hide()
+	$Sprite2D.hide()
 	$rechargeProgress.hide()
 
 	call_deferred('set_linear_velocity', Vector2(0,0))

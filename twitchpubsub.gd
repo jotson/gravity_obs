@@ -1,6 +1,7 @@
 extends Node
 
-var websocket : WebSocketClient = WebSocketClient.new()
+var websocket : WebSocketPeer = WebSocketPeer.new()
+var websocket_state = -1
 
 var heartbeatTimer : Timer = Timer.new()
 
@@ -9,32 +10,51 @@ signal reward_redemption
 
 func _ready():
 	heartbeatTimer.wait_time = 60
-	if heartbeatTimer.connect("timeout", self, "heartbeat") != OK:
+	if heartbeatTimer.connect("timeout", Callable(self, "heartbeat")) != OK:
 		print_debug("Signal not connected")
 	add_child(heartbeatTimer)
 	
-	if websocket.connect("data_received", self, "data_received") != OK:
-		print_debug("Signal not connected")
-	if websocket.connect("connection_established", self, "connection_established") != OK:
-		print_debug("Signal not connected")
-	if websocket.connect("connection_closed", self, "connection_closed") != OK:
-		print_debug("Signal not connected")
-	if websocket.connect("connection_error", self, "connection_error") != OK:
-		print_debug("Signal not connected")
-	#websocket.connect("server_close_request", self, "sever_close_request")
+	#if websocket.connect("data_received", Callable(self, "data_received")) != OK:
+	#	print_debug("Signal not connected")
+	#websocket.peer_connected.connect(connection_established)
+	#websocket.peer_disconnected.connect(connection_closed)
+	#if websocket.connect("connection_error", Callable(self, "connection_error")) != OK:
+	#	print_debug("Signal not connected")
 
 
+func update_socket_state(state):
+#	websocket.connect("data_received", Callable(self, "data_received"))
+#	websocket.connect("connection_established", Callable(self, "connection_established"))
+#	websocket.connect("connection_closed", Callable(self, "connection_closed"))
+#	websocket.connect("connection_error", Callable(self, "connection_error"))
+	if websocket_state != state:
+		websocket_state = state
+		
+		match websocket_state:
+			WebSocketPeer.STATE_CLOSED:
+				connection_closed()
+			WebSocketPeer.STATE_CLOSING:
+				pass
+			WebSocketPeer.STATE_CONNECTING:
+				pass
+			WebSocketPeer.STATE_OPEN:
+				connection_established()
+				
 func _process(_delta : float) -> void:
-	if websocket_connected():
-		websocket.poll()
+	websocket.poll()
+	var state = websocket.get_ready_state()
+	update_socket_state(state)
+	if state == WebSocketPeer.STATE_OPEN:
+		while websocket.get_available_packet_count():
+			data_received()
 
 
 func websocket_connected() -> bool:
-	return websocket.get_connection_status() != NetworkedMultiplayerPeer.CONNECTION_DISCONNECTED
+	return websocket.get_ready_state() == WebSocketPeer.STATE_OPEN
 
 
 func connect_to_twitch():
-	if websocket.get_connection_status() == websocket.CONNECTION_CONNECTED:
+	if websocket_connected():
 		return
 		
 	var err = websocket.connect_to_url("wss://pubsub-edge.twitch.tv")
@@ -43,8 +63,8 @@ func connect_to_twitch():
 		print("Twitch PubSub Error: " + str(err))
 
 
-func connection_established(protocol : String):
-	print("Twitch PubSub connection established " + protocol)
+func connection_established():
+	print("Twitch PubSub connection established")
 	heartbeatTimer.start()
 	heartbeat()
 	listen()
@@ -68,18 +88,16 @@ func heartbeat():
 	send(message)
 
 
-func connection_closed(clean_close : bool):
-	print("Twitch PubSub connection closed " + str(clean_close))
-	
-
-func connection_error():
-	print("Twitch PubSub connection error")
+func connection_closed():
+	print("Twitch PubSub connection closed")
 	
 
 func data_received() -> void:
-	var data : String = websocket.get_peer(1).get_packet().get_string_from_utf8()
+	var data : String = websocket.get_packet().get_string_from_utf8()
 	if data:
-		var response = parse_json(data)
+		var test_json_conv = JSON.new()
+		test_json_conv.parse(data)
+		var response = test_json_conv.get_data()
 		
 		if response.type == "PONG":
 			print("Twitch PubSub PONG")
@@ -87,7 +105,9 @@ func data_received() -> void:
 		# {data:{message:{"type":"reward-redeemed","data":{"timestamp":"2021-11-26T18:34:39.977781034Z","redemption":{"id":"c78c2dc2-cd45-4693-9e9f-02552277298b","user":{"id":"80362534","login":"jotson","display_name":"jotson"},"channel_id":"80362534","redeemed_at":"2021-11-26T18:34:39.977781034Z","reward":{"id":"4bf8a5f1-28ba-4480-a5b5-cac1c59c4715","channel_id":"80362534","title":"Posture Check!","prompt":"I straighten up - thanks!","cost":100,"is_user_input_required":false,"is_sub_only":false,"image":null,"default_image":{"url_1x":"https://static-cdn.jtvnw.net/custom-reward-images/clock-1.png","url_2x":"https://static-cdn.jtvnw.net/custom-reward-images/clock-2.png","url_4x":"https://static-cdn.jtvnw.net/custom-reward-images/clock-4.png"},"background_color":"#BEFF00","is_enabled":true,"is_paused":false,"is_in_stock":true,"max_per_stream":{"is_enabled":false,"max_per_stream":1},"should_redemptions_skip_request_queue":false,"template_id":"template:255258f1-642e-4268-815c-fb282178c424","updated_for_indicator_at":"2020-12-04T05:27:21.280847331Z","max_per_user_per_stream":{"is_enabled":false,"max_per_user_per_stream":1},"global_cooldown":{"is_enabled":false,"global_cooldown_seconds":1},"redemptions_redeemed_current_stream":null,"cooldown_expires_at":null},"status":"UNFULFILLED"}}}, topic:channel-points-channel-v1.80362534}, type:MESSAGE}
 		if response.type == "MESSAGE":
 			# {"type":"reward-redeemed","data":{"timestamp":"2021-11-26T18:36:09.766992406Z","redemption":{"id":"898aef9c-96f1-454a-8d88-b240d069fa85","user":{"id":"80362534","login":"jotson","display_name":"jotson"},"channel_id":"80362534","redeemed_at":"2021-11-26T18:36:09.766992406Z","reward":{"id":"4bf8a5f1-28ba-4480-a5b5-cac1c59c4715","channel_id":"80362534","title":"Posture Check!","prompt":"I straighten up - thanks!","cost":100,"is_user_input_required":false,"is_sub_only":false,"image":null,"default_image":{"url_1x":"https://static-cdn.jtvnw.net/custom-reward-images/clock-1.png","url_2x":"https://static-cdn.jtvnw.net/custom-reward-images/clock-2.png","url_4x":"https://static-cdn.jtvnw.net/custom-reward-images/clock-4.png"},"background_color":"#BEFF00","is_enabled":true,"is_paused":false,"is_in_stock":true,"max_per_stream":{"is_enabled":false,"max_per_stream":1},"should_redemptions_skip_request_queue":false,"template_id":"template:255258f1-642e-4268-815c-fb282178c424","updated_for_indicator_at":"2020-12-04T05:27:21.280847331Z","max_per_user_per_stream":{"is_enabled":false,"max_per_user_per_stream":1},"global_cooldown":{"is_enabled":false,"global_cooldown_seconds":1},"redemptions_redeemed_current_stream":null,"cooldown_expires_at":null},"status":"UNFULFILLED"}}}
-			var message = parse_json(response.data.message)
+			test_json_conv = JSON.new()
+			test_json_conv.parse(response.data.message)
+			var message = test_json_conv.get_data()
 			if message.type == "reward-redeemed":
 				var user = message.data.redemption.user.display_name
 				var reward_title = message.data.redemption.reward.title
@@ -99,10 +119,9 @@ func send(message : Dictionary) -> void:
 		print_debug("Twitch PubSub not connected")
 		return
 		
-	websocket.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
-	var text = JSON.print(message)
+	var text = JSON.stringify(message)
 	print_debug("Twitch PubSub: ", text)
-	var err = websocket.get_peer(1).put_packet(text.to_utf8())
+	var err = websocket.send_text(text)
 	if err != OK:
 		print_debug("Twitch PubSub failed to send message, error: " + str(err))
 	

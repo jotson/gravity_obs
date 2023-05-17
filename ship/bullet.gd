@@ -51,7 +51,7 @@ func die():
 	alive = false
 	
 	# Hide it
-	$Sprite.hide()
+	$Sprite2D.hide()
 	$trail.hide()
 	$particleTrail.emitting = false
 	$trailDeathTimer.start()
@@ -77,7 +77,7 @@ func _on_VisibilityNotifier2D_screen_exited():
 
 func bullet_hit(pos, rot, body = null):
 	# Show bullet hit visual effect
-	var i = Impact.instance()
+	var i = Impact.instantiate()
 	i.position = pos
 	i.rotation = rot + PI
 	Helper.add_child(i)

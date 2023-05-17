@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=2]
 
-[ext_resource path="res://ship/materials/distortion.shader" type="Shader" id=1]
+[ext_resource path="res://ship/materials/distortion.gdshader" type="Shader" id=1]
 
 
 [resource]

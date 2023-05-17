@@ -9,22 +9,21 @@ var small = false
 
 func _ready():
 	if small:
-		$Sprite.frame = round(rand_range(4, 11))
+		$Sprite2D.frame = round(randf_range(4, 11))
 	else:
-		$Sprite.frame = randi() % ($Sprite.vframes * $Sprite.hframes)
+		$Sprite2D.frame = randi() % ($Sprite2D.vframes * $Sprite2D.hframes)
 
-	angular_velocity = rand_range(-PI*6, PI*6)
-	$deathTimer.wait_time += rand_range(-0.5, 0.5)
+	angular_velocity = randf_range(-PI*6, PI*6)
+	$deathTimer.wait_time += randf_range(-0.5, 0.5)
 	if secondary:
-		$deathTimer.wait_time = rand_range(0.1, 1.0)
+		$deathTimer.wait_time = randf_range(0.1, 1.0)
 	$deathTimer.start()
 
-	var t = Tween.new()
-	add_child(t)
-	t.interpolate_property($Sprite, "modulate",
-		Color(1,1,1,1), Color("#000099ff"),
-		$deathTimer.wait_time,
-		Tween.TRANS_QUINT, Tween.EASE_IN)
+	$Sprite2D.modulate = Color(1,1,1,1)
+	var t = create_tween()
+	t.tween_property($Sprite2D, "modulate",
+		Color("#000099ff"),
+		$deathTimer.wait_time).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUINT)
 	t.start()
 
 
@@ -40,7 +39,7 @@ func hurt(_amount):
 func die():
 	if secondary and randf() < 0.12:
 		# Secondary explosion
-		var explosion = Secondary.instance()
+		var explosion = Secondary.instantiate()
 		explosion.position = position
 		Helper.add_child(explosion)
 

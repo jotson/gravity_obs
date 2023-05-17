@@ -25,7 +25,7 @@ func _ready():
 		c = Color("#f77622") # special orange
 	
 	material = material.duplicate()
-	material.set_shader_param("color", c)
+	material.set_shader_parameter("color", c)
 	
 	velocity = Vector2.ZERO
 
@@ -49,12 +49,12 @@ func _physics_process(delta):
 	position += velocity * delta
 
 	# Moon jump
-	if position.y == FLOOR and rand_range(0, 60) < 1:
+	if position.y == FLOOR and randf_range(0, 60) < 1:
 		velocity = Vector2.ZERO
 		if randf() < 0.5:
 			velocity = Vector2(1, -1)
 			if randf() < 0.5: velocity = Vector2(-1, -1)
-		velocity *= rand_range(30, 60)
+		velocity *= randf_range(30, 60)
 
 
 func say(message:String):
@@ -62,13 +62,13 @@ func say(message:String):
 	$speechBubble/AnimationPlayer.play("speak")
 	
 		
+@warning_ignore("shadowed_variable")
 func add_head(image:Image = null, login:String = "", first:bool = false):
 	$head/nametag.text = login
 	if image:
-		var tex = ImageTexture.new()
-		tex.create_from_image(image)
+		var tex = ImageTexture.create_from_image(image)
 		
-		var s = Sprite.new()
+		var s = Sprite2D.new()
 		s.texture = tex
 		s.scale *= 0.1
 		s.position = Vector2(0, -2)

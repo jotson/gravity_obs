@@ -24,11 +24,11 @@ func explode():
 	var debris_amount = 6
 
 	for _i in range(debris_amount):
-		var obj = Debris.instance()
+		var obj = Debris.instantiate()
 		obj.secondary = secondary
 		obj.position = position
 		obj.global_position = position
-		obj.linear_velocity = velocity + Vector2(rand_range(-200,200), rand_range(-200,200))
+		obj.linear_velocity = velocity + Vector2(randf_range(-200,200), randf_range(-200,200))
 		Helper.add_child(obj)
 
 	$explosion.rotation = randf() * 2 * PI

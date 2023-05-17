@@ -5,8 +5,8 @@ var velocity = Vector2()
 
 func _ready():
 	$Timer.start()
-	$Particles2D.rotate(velocity.angle())
-	$Particles2D.emitting = true
+	$GPUParticles2D.rotate(velocity.angle())
+	$GPUParticles2D.emitting = true
 
 
 func _on_Timer_timeout():

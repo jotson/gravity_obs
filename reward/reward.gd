@@ -1,7 +1,7 @@
 extends TextureRect
 
-var who setget set_who
-var reward setget set_reward
+var who : set = set_who
+var reward : set = set_reward
 
 func _ready():
 	$sfxReward.play()

@@ -1,118 +1,126 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=3 uid="uid://bcydm86q3cff0"]
 
-[ext_resource path="res://common/fonts/tiny.tres" type="DynamicFont" id=1]
-[ext_resource path="res://chatter/textures/helmet2.png" type="Texture" id=2]
-[ext_resource path="res://chatter/textures/face.png" type="Texture" id=3]
-[ext_resource path="res://chatter/color.material" type="Material" id=4]
-[ext_resource path="res://chatter/Marble.gd" type="Script" id=5]
+[ext_resource type="FontFile" path="res://common/fonts/tiny.tres" id="1"]
+[ext_resource type="Texture2D" uid="uid://dhcwkupu0300x" path="res://chatter/textures/helmet2.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://bqnhnq6xvubqp" path="res://chatter/textures/face.png" id="3"]
+[ext_resource type="Material" uid="uid://d15kkyrusbpla" path="res://chatter/color.material" id="4"]
+[ext_resource type="Script" path="res://chatter/Marble.gd" id="5"]
 
-[sub_resource type="PhysicsMaterial" id=10]
+[sub_resource type="PhysicsMaterial" id="10"]
 friction = 0.25
 bounce = 0.8
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id="7"]
 length = 0.001
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ true ]
+"values": [true]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath("..:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ Vector2( 1, 1 ) ]
+"values": [Vector2(1, 1)]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id="8"]
 resource_name = "speak"
 length = 3.0
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 3 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ true, false ]
+"values": [true, false]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath("..:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.5, 2.5, 3 ),
-"transitions": PoolRealArray( -2, 1, -2, 1 ),
+"times": PackedFloat32Array(0, 0.5, 2.5, 3),
+"transitions": PackedFloat32Array(-2, 1, -2, 1),
 "update": 0,
-"values": [ Vector2( 1, 1 ), Vector2( 2, 2 ), Vector2( 2, 2 ), Vector2( 1, 1 ) ]
+"values": [Vector2(1, 1), Vector2(2, 2), Vector2(2, 2), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rea4y"]
+_data = {
+"RESET": SubResource("7"),
+"speak": SubResource("8")
 }
 
 [node name="Marble" type="RigidBody2D" groups=["chatter"]]
-material = ExtResource( 4 )
+material = ExtResource("4")
 collision_mask = 7
 input_pickable = true
-physics_material_override = SubResource( 10 )
-script = ExtResource( 5 )
+physics_material_override = SubResource("10")
+script = ExtResource("5")
 
 [node name="head" type="Node2D" parent="."]
-use_parent_material = true
 z_index = -1
+use_parent_material = true
 
 [node name="nametag" type="Label" parent="head"]
-margin_left = -49.0
-margin_top = -25.0
-margin_right = 49.0
-margin_bottom = -16.0
-custom_colors/font_color = Color( 0.541176, 0.541176, 0.541176, 1 )
-custom_fonts/font = ExtResource( 1 )
+offset_left = -49.0
+offset_top = -27.0
+offset_right = 49.0
+offset_bottom = -16.0
+theme_override_colors/font_color = Color(0.541176, 0.541176, 0.541176, 1)
+theme_override_fonts/font = ExtResource("1")
+theme_override_font_sizes/font_size = 8
 text = "NAMETAG"
-align = 1
-valign = 1
+horizontal_alignment = 1
 
-[node name="helmet" type="Sprite" parent="head"]
+[node name="helmet" type="Sprite2D" parent="head"]
 use_parent_material = true
-texture = ExtResource( 2 )
+texture = ExtResource("2")
 
-[node name="Face" type="Sprite" parent="head/helmet"]
-position = Vector2( 0, 2 )
+[node name="Face" type="Sprite2D" parent="head/helmet"]
 z_index = -1
-texture = ExtResource( 3 )
+position = Vector2(0, 2)
+texture = ExtResource("3")
 
 [node name="speechBubble" type="Label" parent="."]
-margin_left = -47.0
-margin_top = -83.0
-margin_right = 47.0
-margin_bottom = -25.0
-rect_clip_content = true
-custom_fonts/font = ExtResource( 1 )
-align = 1
-valign = 2
-autowrap = true
+clip_contents = true
+offset_left = -47.0
+offset_top = -87.0
+offset_right = 47.0
+offset_bottom = -29.0
+theme_override_fonts/font = ExtResource("1")
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 3
 clip_text = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="speechBubble"]
-anims/RESET = SubResource( 7 )
-anims/speak = SubResource( 8 )
+libraries = {
+"": SubResource("AnimationLibrary_rea4y")
+}
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
-polygon = PoolVector2Array( -13, 16, -16, 13, -16, -13, -13, -16, 13, -16, 16, -13, 16, 13, 13, 16 )
+polygon = PackedVector2Array(-13, 16, -16, 13, -16, -13, -13, -16, 13, -16, 16, -13, 16, 13, 13, 16)
 
 [connection signal="input_event" from="." to="." method="_on_Marble_input_event"]

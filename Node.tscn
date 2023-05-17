@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://twitch.gd" type="Script" id=1]
-[ext_resource path="res://addons/gift/icon.png" type="Texture" id=2]
+[ext_resource path="res://addons/gift/icon.png" type="Texture2D" id=2]
 [ext_resource path="res://Button.gd" type="Script" id=3]
 
 
@@ -17,16 +17,16 @@ __meta__ = {
 }
 
 [node name="LineEdit" type="LineEdit" parent="."]
-margin_left = 403.0
-margin_top = 278.0
-margin_right = 531.0
-margin_bottom = 302.0
+offset_left = 403.0
+offset_top = 278.0
+offset_right = 531.0
+offset_bottom = 302.0
 
 [node name="Button" type="Button" parent="."]
-margin_left = 539.0
-margin_top = 278.0
-margin_right = 586.0
-margin_bottom = 302.0
+offset_left = 539.0
+offset_top = 278.0
+offset_right = 586.0
+offset_bottom = 302.0
 text = "Send"
 script = ExtResource( 3 )
 [connection signal="pressed" from="Button" to="Button" method="_on_Button_pressed"]

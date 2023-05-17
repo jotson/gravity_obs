@@ -29,22 +29,24 @@ signal emote_downloaded(emote_id)
 signal badge_downloaded(badge_name)
 
 # Messages starting with one of these symbols are handled. '/' will be ignored, reserved by Twitch.
-export(Array, String) var command_prefixes : Array = ["!"]
+@export var command_prefixes : Array = ["!"] # (Array, String)
 # Time to wait after each sent chat message. Values below ~0.31 might lead to a disconnect after 100 messages.
-export(float) var chat_timeout = 0.32
-export(bool) var get_images : bool = false
+@export var chat_timeout: float = 0.32
+@export var get_images: bool = false
 # If true, caches emotes/badges to disk, so that they don't have to be redownloaded on every restart.
 # This however means that they might not be updated if they change until you clear the cache.
-export(bool) var disk_cache : bool = false
+@export var disk_cache: bool = false
 # Disk Cache has to be enbaled for this to work
-export(String, FILE) var disk_cache_path = "user://gift/cache"
+@export var disk_cache_path = "user://gift/cache" # (String, FILE)
 
-var websocket : WebSocketClient = WebSocketClient.new()
+var websocket : WebSocketPeer = WebSocketPeer.new()
+var websocket_state = -1
+
 var user_regex = RegEx.new()
 var twitch_restarting
 # Twitch disconnects connected clients if too many chat messages are being sent. (At about 100 messages/30s)
 var chat_queue = []
-onready var chat_accu = chat_timeout
+@onready var chat_accu = chat_timeout
 # Mapping of channels to their channel info, like available badges.
 var channels : Dictionary = {}
 var commands : Dictionary = {}
@@ -70,15 +72,10 @@ enum WhereFlag {
 }
 
 func _init():
-	websocket.verify_ssl = true
+	#websocket.verify_ssl = true
 	user_regex.compile("(?<=!)[\\w]*(?=@)")
 
 func _ready() -> void:
-	websocket.connect("data_received", self, "data_received")
-	websocket.connect("connection_established", self, "connection_established")
-	websocket.connect("connection_closed", self, "connection_closed")
-	websocket.connect("server_close_request", self, "sever_close_request")
-	websocket.connect("connection_error", self, "connection_error")
 	if(get_images):
 		image_cache = ImageCache.new(disk_cache, disk_cache_path)
 		add_child(image_cache)
@@ -88,10 +85,29 @@ func connect_to_twitch() -> void:
 		print_debug("Could not connect to Twitch.")
 		emit_signal("twitch_unavailable")
 
+func update_socket_state(state):
+	if websocket_state != state:
+		websocket_state = state
+		
+		match websocket_state:
+			WebSocketPeer.STATE_CLOSED:
+				connection_closed()
+			WebSocketPeer.STATE_CLOSING:
+				pass
+			WebSocketPeer.STATE_CONNECTING:
+				pass
+			WebSocketPeer.STATE_OPEN:
+				connection_established()
+		
 func _process(delta : float) -> void:
-	if(websocket.get_connection_status() != NetworkedMultiplayerPeer.CONNECTION_DISCONNECTED):
-		websocket.poll()
-		if(!chat_queue.empty() && chat_accu >= chat_timeout):
+	websocket.poll()
+	var state = websocket.get_ready_state()
+	update_socket_state(state)
+	if state == WebSocketPeer.STATE_OPEN:
+		while websocket.get_available_packet_count():
+			data_received()
+
+		if(!chat_queue.is_empty() && chat_accu >= chat_timeout):
 			send(chat_queue.pop_front())
 			chat_accu = 0
 		else:
@@ -102,7 +118,6 @@ func _process(delta : float) -> void:
 # https://twitchapps.com/tokengen/
 # to generate a token with custom scopes.
 func authenticate_oauth(nick : String, token : String) -> void:
-	websocket.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
 	send("PASS " + ("" if token.begins_with("oauth:") else "oauth:") + token, true)
 	send("NICK " + nick.to_lower())
 	request_caps()
@@ -112,7 +127,7 @@ func request_caps(caps : String = "twitch.tv/commands twitch.tv/tags twitch.tv/m
 
 # Sends a String to Twitch.
 func send(text : String, token : bool = false) -> void:
-	websocket.get_peer(1).put_packet(text.to_utf8())
+	websocket.send_text(text)
 	if(OS.is_debug_build()):
 		if(!token):
 			print("< " + text.strip_edges(false))
@@ -133,11 +148,11 @@ func whisper(message : String, target : String):
 	chat("/w " + target + " " + message)
 
 func data_received() -> void:
-	var messages : PoolStringArray = websocket.get_peer(1).get_packet().get_string_from_utf8().strip_edges(false).split("\r\n")
+	var messages : PackedStringArray = websocket.get_packet().get_string_from_utf8().strip_edges(false).split("\r\n")
 	var tags = {}
 	for message in messages:
 		if(message.begins_with("@")):
-			var msg : PoolStringArray = message.split(" ", false, 1)
+			var msg : PackedStringArray = message.split(" ", false, 1)
 			message = msg[1]
 			for tag in msg[0].split(";"):
 				var pair = tag.split("=")
@@ -147,11 +162,8 @@ func data_received() -> void:
 		handle_message(message, tags)
 
 # Registers a command on an object with a func to call, similar to connect(signal, instance, func).
-func add_command(cmd_name : String, instance : Object, instance_func : String, max_args : int = 0, min_args : int = 0, permission_level : int = PermissionFlag.EVERYONE, where : int = WhereFlag.CHAT) -> void:
-	var func_ref = FuncRef.new()
-	func_ref.set_instance(instance)
-	func_ref.set_function(instance_func)
-	commands[cmd_name] = CommandData.new(func_ref, permission_level, max_args, min_args, where)
+func add_command(cmd_name : String, callable: Callable, max_args : int = 0, min_args : int = 0, permission_level : int = PermissionFlag.EVERYONE, where : int = WhereFlag.CHAT) -> void:
+	commands[cmd_name] = CommandData.new(callable, permission_level, max_args, min_args, where)
 
 # Removes a single command or alias.
 func remove_command(cmd_name : String) -> void:
@@ -172,7 +184,7 @@ func add_alias(cmd_name : String, alias : String) -> void:
 	if(commands.has(cmd_name)):
 		commands[alias] = commands.get(cmd_name)
 
-func add_aliases(cmd_name : String, aliases : PoolStringArray) -> void:
+func add_aliases(cmd_name : String, aliases : PackedStringArray) -> void:
 	for alias in aliases:
 		add_alias(cmd_name, alias)
 
@@ -185,7 +197,7 @@ func handle_message(message : String, tags : Dictionary) -> void:
 		send("PONG :tmi.twitch.tv")
 		emit_signal("pong")
 		return
-	var msg : PoolStringArray = message.split(" ", true, 4)
+	var msg : PackedStringArray = message.split(" ", true, 4)
 	match msg[1]:
 		"001":
 			print_debug("Authentication successful.")
@@ -210,9 +222,9 @@ func handle_message(message : String, tags : Dictionary) -> void:
 		_:
 			emit_signal("unhandled_message", message, tags)
 
-func handle_command(sender_data : SenderData, msg : PoolStringArray, whisper : bool = false) -> void:
+func handle_command(sender_data : SenderData, msg : PackedStringArray, whisper : bool = false) -> void:
 	if(command_prefixes.has(msg[3].substr(1, 1))):
-		var command : String  = msg[3].right(2)
+		var command : String  = msg[3].substr(2)
 		var cmd_data : CommandData = commands.get(command)
 		if(cmd_data):
 			if(whisper == true && cmd_data.where & WhereFlag.WHISPER != WhereFlag.WHISPER):
@@ -220,7 +232,7 @@ func handle_command(sender_data : SenderData, msg : PoolStringArray, whisper : b
 			elif(whisper == false && cmd_data.where & WhereFlag.CHAT != WhereFlag.CHAT):
 				return 
 			var args = "" if msg.size() < 5 else msg[4]
-			var arg_ary : PoolStringArray = PoolStringArray() if args == "" else args.split(" ")
+			var arg_ary : PackedStringArray = PackedStringArray() if args == "" else args.split(" ")
 			if(arg_ary.size() > cmd_data.max_args && cmd_data.max_args != -1 || arg_ary.size() < cmd_data.min_args):
 				emit_signal("cmd_invalid_argcount", command, sender_data, cmd_data, arg_ary)
 				print_debug("Invalid argcount!")
@@ -232,9 +244,9 @@ func handle_command(sender_data : SenderData, msg : PoolStringArray, whisper : b
 					print_debug("No Permission for command!")
 					return
 			if(arg_ary.size() == 0):
-				cmd_data.func_ref.call_func(CommandInfo.new(sender_data, command, whisper))
+				cmd_data.func_ref.call(CommandInfo.new(sender_data, command, whisper))
 			else:
-				cmd_data.func_ref.call_func(CommandInfo.new(sender_data, command, whisper), arg_ary)
+				cmd_data.func_ref.call(CommandInfo.new(sender_data, command, whisper), arg_ary)
 
 func get_perm_flag_from_tags(tags : Dictionary) -> int:
 	var flag = 0
@@ -265,16 +277,16 @@ func leave_channel(channel : String) -> void:
 	send("PART #" + lower_channel)
 	channels.erase(lower_channel)
 
-func connection_established(protocol : String) -> void:
+func connection_established() -> void:
 	print_debug("Connected to Twitch.")
 	emit_signal("twitch_connected")
 
-func connection_closed(was_clean_close : bool) -> void:
+func connection_closed() -> void:
 	if(twitch_restarting):
 		print_debug("Reconnecting to Twitch")
 		emit_signal("twitch_reconnect")
 		connect_to_twitch()
-		yield(self, "twitch_connected")
+		await self.twitch_connected
 		for channel in channels.keys():
 			join_channel(channel)
 		twitch_restarting = false
@@ -285,6 +297,3 @@ func connection_closed(was_clean_close : bool) -> void:
 func connection_error() -> void:
 	print_debug("Twitch is unavailable.")
 	emit_signal("twitch_unavailable")
-
-func server_close_request(code : int, reason : String) -> void:
-	pass

@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/reward.wav-0868c0fd4b9fb8df0994989347262aae.sample"
+type="AudioStreamWAV"
+uid="uid://b0opmsde7srp8"
+path="res://.godot/imported/reward.wav-0868c0fd4b9fb8df0994989347262aae.sample"
 
 [deps]
 
 source_file="res://reward/sfx/reward.wav"
-dest_files=[ "res://.import/reward.wav-0868c0fd4b9fb8df0994989347262aae.sample" ]
+dest_files=["res://.godot/imported/reward.wav-0868c0fd4b9fb8df0994989347262aae.sample"]
 
 [params]
 
@@ -17,5 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=false
 edit/normalize=false
-edit/loop=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
 compress/mode=0

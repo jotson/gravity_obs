@@ -1,7 +1,7 @@
 extends Node2D
 
 func _ready():
-	$Sprite.frame = randi() % ($Sprite.vframes * $Sprite.hframes)
+	$Sprite2D.frame = randi() % ($Sprite2D.vframes * $Sprite2D.hframes)
 	pass
 
 

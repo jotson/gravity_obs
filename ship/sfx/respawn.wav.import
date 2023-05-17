@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/respawn.wav-f194cee08c7e7f0fc2389fd1a0d36909.sample"
+type="AudioStreamWAV"
+uid="uid://dwb75xe27xh0j"
+path="res://.godot/imported/respawn.wav-f194cee08c7e7f0fc2389fd1a0d36909.sample"
 
 [deps]
 
 source_file="res://ship/sfx/respawn.wav"
-dest_files=[ "res://.import/respawn.wav-f194cee08c7e7f0fc2389fd1a0d36909.sample" ]
+dest_files=["res://.godot/imported/respawn.wav-f194cee08c7e7f0fc2389fd1a0d36909.sample"]
 
 [params]
 
@@ -17,5 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=true
 edit/normalize=false
-edit/loop=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
 compress/mode=0

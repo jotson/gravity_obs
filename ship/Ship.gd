@@ -22,8 +22,6 @@ var tractor_can_toggle = true # Controls when beam input can toggle
 var closest_beamable = null # Keeps track of closest beamable object
 var beam_priority = ['fuel-pod', 'person', 'generator', 'cargo-box']
 
-var _teleport = null
-
 var FUEL_CONSUMPTION_RATE = 20.0 # units/s
 
 var Bullet = preload("res://ship/bullet.tscn")
@@ -36,16 +34,16 @@ var aim_dir = Vector2(0, -1)
 var turret_locked = false
 var is_shooting = false
 
-var username setget set_username
-var color setget set_color
-var kills setget set_kills
+var username : set = set_username
+var color : set = set_color
+var kills : set = set_kills
 
 var shootSfx = []
 
-onready var alive = true
-onready var initial_collision_layer = collision_layer
-onready var initial_collision_mask = collision_mask
-onready var initial_transform = transform
+@onready var alive = true
+@onready var initial_collision_layer = collision_layer
+@onready var initial_collision_mask = collision_mask
+@onready var initial_transform = transform
 
 signal destroyed
 signal revived
@@ -77,7 +75,7 @@ func say(text):
 func update_ui():
 	$ui.global_rotation = 0
 	$ui/username.text = username
-	$Sprite/hull.modulate = color
+	$Sprite2D/hull.modulate = color
 	$trail.modulate = color
 	$trail2.modulate = color
 	$ui/kills.text = "Kills: %d" % [kills]
@@ -118,7 +116,7 @@ func _physics_process(_delta):
 		shoot(_shoot_shots)
 
 	# Change raycast aim
-	$aimRaycast.rotation = sin(OS.get_ticks_msec()/100.0) * 0.1 * PI
+	$aimRaycast.rotation = sin(Time.get_ticks_msec()/100.0) * 0.1 * PI
 	var on_target = $aimRaycast.is_colliding()
 	
 	if randi() % 150 == 0:
@@ -169,12 +167,12 @@ func _integrate_forces(state):
 
 	if _thrust_duration > 0:
 		# Thrust animation
-		if $Sprite/hull.frame != 3 and not $Sprite/hull/AnimationPlayer.is_playing():
-			$Sprite/hull/AnimationPlayer.play('thrust')
+		if $Sprite2D/hull.frame != 3 and not $Sprite2D/hull/AnimationPlayer.is_playing():
+			$Sprite2D/hull/AnimationPlayer.play('thrust')
 	else:
 		# Reverse thrust animation
-		if $Sprite/hull.frame == 3 and not $Sprite/hull/AnimationPlayer.is_playing():
-			$Sprite/hull/AnimationPlayer.play('thrust', -1, -1, true)
+		if $Sprite2D/hull.frame == 3 and not $Sprite2D/hull/AnimationPlayer.is_playing():
+			$Sprite2D/hull/AnimationPlayer.play('thrust', -1, -1, true)
 
 	# Aim turret
 	if turret_locked:
@@ -232,15 +230,15 @@ func shoot(shots = 1):
 		is_shooting = true
 		
 		# Fire bullet
-		var bullet = Bullet.instance()
+		var bullet = Bullet.instantiate()
 		bullet.username = username
 		bullet.position = position + Vector2(32,0).rotated(rotation)
-		bullet.apply_central_impulse(Vector2(1200, 0).rotated($Sprite/turret.rotation + rotation) + linear_velocity)
+		bullet.apply_central_impulse(Vector2(1200, 0).rotated($Sprite2D/turret.rotation + rotation) + linear_velocity)
 		Helper.add_child(bullet)
 
 		# Apply recoil force to ship
 		#apply_impulse(Vector2(0,0), Vector2(-15, 0).rotated($Sprite/turret.rotation + rotation))
-		$flash.rotation = $Sprite/turret.rotation
+		$flash.rotation = $Sprite2D/turret.rotation
 
 		$flash.show()
 		if not $flash/AnimationPlayer.is_playing():
@@ -262,7 +260,7 @@ func emit_exhaust(on):
 		$flame.show()
 		$flame.rotation = PI/2 - angular_velocity * PI/36
 		$flame/flare.global_rotation = 0
-		$flame/flare.scale = Vector2(rand_range(.5,1), 1)
+		$flame/flare.scale = Vector2(randf_range(.5,1), 1)
 	else:
 		$flame.hide()
 
@@ -281,12 +279,12 @@ func hurt(amount):
 
 func revive():
 	# Respawn
-	var r = Respawn.instance()
+	var r = Respawn.instantiate()
 	r.position = position
 	Helper.call_deferred("add_child", r)
 
 	# Wait here until the respawn is complete
-	yield(r, 'done')
+	await r.done
 	
 	$collision.disabled = false
 	
@@ -324,7 +322,7 @@ func die():
 
 func _on_ship_body_entered(body):
 	if body.is_in_group('wall'):
-		var state = Physics2DServer.body_get_direct_state(get_rid())
+		var state = PhysicsServer2D.body_get_direct_state(get_rid())
 		if state.get_contact_count():
 			var normal = state.get_contact_local_normal(0)
 			_transform = Transform2D(normal.angle(), position)

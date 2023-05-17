@@ -20,7 +20,7 @@ func post_announcement():
 	if webhook_url == null:
 		return
 
-	yield(Twitch.get_channel_info(), "completed")
+	await (await Twitch.get_channel_info()).completed
 	
 	var title = "@everyone %s is streaming %s" % [Twitch.broadcaster_name, Twitch.channel_title]
 	title += " [LIVE NOW on Twitch](<https://twitch.tv/%s>)"  % [Twitch.broadcaster_login]
@@ -36,16 +36,16 @@ func post_announcement():
 	var http = HTTPRequest.new()
 	add_child(http)
 
-	if http.connect("request_completed", self, "request_completed", [http]) != OK:
+	if http.connect("request_completed", Callable(self, "request_completed").bind(http)) != OK:
 		print_debug("Signal not connected")
 
-	var data = JSON.print(discord_json)
-	var err = http.request(webhook_url, [ "Content-Type: application/json " ], false, HTTPClient.METHOD_POST, data)
+	var data = JSON.stringify(discord_json)
+	var err = http.request(webhook_url, [ "Content-Type: application/json " ], HTTPClient.METHOD_POST, data)
 	if err != OK:
 		print("Could not make request to Discord: " + str(err))
 
 
-func request_completed(result: int, response_code: int, headers: PoolStringArray, body: PoolByteArray, http: HTTPRequest):
+func request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray, http: HTTPRequest):
 	http.queue_free()
 	
 	if response_code != 200:

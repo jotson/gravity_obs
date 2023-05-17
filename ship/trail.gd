@@ -1,7 +1,7 @@
 extends Node2D
 
-export var MAX_LENGTH = 20
-export var THICKNESS = 3.0
+@export var MAX_LENGTH = 20
+@export var THICKNESS = 3.0
 
 var points = []
 var elapsed = 0
