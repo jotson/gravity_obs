@@ -41,13 +41,7 @@ func _input(_event):
 		
 	if Input.is_action_just_pressed("disconnect"):
 		Twitch.websocket.disconnect_from_host()
-		
-	if Input.is_action_just_pressed("toggle_console"):
-		if $console.visible:
-			$console.hide()
-		else:
-			$console.show()
-		
+
 
 func add_child(object, _default=false):
 	get_tree().current_scene.call_deferred('add_child', object)

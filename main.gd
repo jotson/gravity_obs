@@ -41,6 +41,12 @@ func _ready():
 
 	load_commands()
 
+func _input(_event):
+	if Input.is_action_just_pressed("toggle_console"):
+		if $console.visible:
+			$console.hide()
+		else:
+			$console.show()
 
 func load_commands():
 	commands.clear()
@@ -142,8 +148,8 @@ func _on_joinButton_pressed(_text = ""):
 		Helper.set_transparent(true)
 		Twitch.join($login/channel.text)
 		
-		profile_pics.clear()
-		profile_pic_queue.clear()
+		#profile_pics.clear()
+		#profile_pic_queue.clear()
 		
 		if thisChannel != lastChannel:
 			# Only clear chatters if NOT reconnecting to same channel
@@ -323,3 +329,12 @@ func profile_image_received(_result: int, _response_code: int, _headers: PoolStr
 
 	profile_pics[login]["sprite"].add_head(image, login)
 	profile_pics[login]["ready"] = true
+
+
+func _on_MIDIButton_pressed():
+	if $login/MIDIButton.pressed:
+		print("MIDI ON")
+		OS.open_midi_inputs()
+	else:
+		print("MIDI OFF")
+		OS.close_midi_inputs()

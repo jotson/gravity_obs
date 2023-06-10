@@ -69,9 +69,6 @@ margin_left = 100.0
 margin_top = -34.0
 margin_right = 325.0
 margin_bottom = 34.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="channel" type="LineEdit" parent="login"]
 margin_right = 225.0
@@ -88,6 +85,13 @@ margin_top = 48.0
 margin_right = 225.0
 margin_bottom = 68.0
 text = "Authorize"
+
+[node name="MIDIButton" type="CheckButton" parent="login"]
+margin_top = 72.0
+margin_right = 225.0
+margin_bottom = 114.0
+pressed = true
+text = "MIDI"
 
 [node name="SoundButtonConfig" type="GridContainer" parent="."]
 anchor_left = 1.0
@@ -167,3 +171,4 @@ shape = SubResource( 13 )
 [connection signal="text_entered" from="login/channel" to="." method="_on_channel_text_entered"]
 [connection signal="pressed" from="login/joinButton" to="." method="_on_joinButton_pressed"]
 [connection signal="pressed" from="login/authButton" to="." method="_on_authButton_pressed"]
+[connection signal="pressed" from="login/MIDIButton" to="." method="_on_MIDIButton_pressed"]
