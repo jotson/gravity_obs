@@ -41,6 +41,8 @@ func _input(_event):
 		
 	if Input.is_action_just_pressed("disconnect"):
 		Twitch.websocket.disconnect_from_host()
+		TwitchPS.websocket.disconnect_from_host()
+		OBS.websocket.disconnect_from_host()
 
 
 func add_child(object, _default=false):

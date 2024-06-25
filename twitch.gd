@@ -9,6 +9,7 @@ var channel_title = null
 var channel_game_id = null
 var channel_game_name = null
 
+
 func _ready():
 	pass
 

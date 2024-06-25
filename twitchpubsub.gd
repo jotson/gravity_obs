@@ -68,8 +68,8 @@ func heartbeat():
 	send(message)
 
 
-func connection_closed(clean_close : bool):
-	print("Twitch PubSub connection closed " + str(clean_close))
+func connection_closed(_clean_close : bool):
+	print("Disconnected from Twitch PubSub")
 	
 
 func connection_error():

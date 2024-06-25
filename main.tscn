@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://common/gui/ui-theme.tres" type="Theme" id=1]
 [ext_resource path="res://main.gd" type="Script" id=2]
 [ext_resource path="res://soundboard/SoundButton.tscn" type="PackedScene" id=3]
 [ext_resource path="res://common/fonts/tiny.tres" type="DynamicFont" id=4]
+[ext_resource path="res://gamepad/gamepad.tscn" type="PackedScene" id=5]
 
 [sub_resource type="StyleBoxEmpty" id=6]
 
@@ -31,10 +32,10 @@ VScrollBar/styles/scroll_focus = SubResource( 5 )
 [sub_resource type="StyleBoxEmpty" id=11]
 
 [sub_resource type="RectangleShape2D" id=12]
-extents = Vector2( 64, 540 )
+extents = Vector2( 64, 806 )
 
 [sub_resource type="RectangleShape2D" id=13]
-extents = Vector2( 960, 64 )
+extents = Vector2( 1343, 64 )
 
 [node name="main" type="Control"]
 anchor_right = 1.0
@@ -72,26 +73,36 @@ margin_bottom = 34.0
 
 [node name="channel" type="LineEdit" parent="login"]
 margin_right = 225.0
-margin_bottom = 20.0
+margin_bottom = 42.0
 
 [node name="joinButton" type="Button" parent="login"]
-margin_top = 24.0
+margin_top = 46.0
 margin_right = 225.0
-margin_bottom = 44.0
+margin_bottom = 88.0
 text = "Connect"
 
 [node name="authButton" type="Button" parent="login"]
-margin_top = 48.0
+margin_top = 92.0
 margin_right = 225.0
-margin_bottom = 68.0
+margin_bottom = 134.0
 text = "Authorize"
 
 [node name="MIDIButton" type="CheckButton" parent="login"]
-margin_top = 72.0
+margin_top = 138.0
 margin_right = 225.0
-margin_bottom = 114.0
+margin_bottom = 180.0
 pressed = true
 text = "MIDI"
+
+[node name="AutoLoginLabel" type="Label" parent="login"]
+margin_top = 184.0
+margin_right = 225.0
+margin_bottom = 216.0
+
+[node name="AutoLoginTimer" type="Timer" parent="login"]
+wait_time = 3.0
+one_shot = true
+autostart = true
 
 [node name="SoundButtonConfig" type="GridContainer" parent="."]
 anchor_left = 1.0
@@ -153,22 +164,35 @@ position = Vector2( -60, 281 )
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="walls"]
-position = Vector2( -4, 0 )
+position = Vector2( -4, 261 )
 shape = SubResource( 12 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="walls"]
-position = Vector2( 537, -344 )
+position = Vector2( 920, -344 )
 shape = SubResource( 13 )
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="walls"]
-position = Vector2( 1084, -20 )
+position = Vector2( 2044, 257 )
 shape = SubResource( 12 )
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="walls"]
-position = Vector2( 535, 323 )
+position = Vector2( 920, 863 )
 shape = SubResource( 13 )
+
+[node name="Gamepad" parent="." instance=ExtResource( 5 )]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -454.0
+margin_top = -253.0
+margin_right = -204.0
+margin_bottom = -71.0
+rect_scale = Vector2( 2, 2 )
+mouse_filter = 2
 
 [connection signal="text_entered" from="login/channel" to="." method="_on_channel_text_entered"]
 [connection signal="pressed" from="login/joinButton" to="." method="_on_joinButton_pressed"]
 [connection signal="pressed" from="login/authButton" to="." method="_on_authButton_pressed"]
 [connection signal="pressed" from="login/MIDIButton" to="." method="_on_MIDIButton_pressed"]
+[connection signal="timeout" from="login/AutoLoginTimer" to="." method="_on_AutoLoginTimer_timeout"]

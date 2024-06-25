@@ -63,7 +63,7 @@ func say(message:String):
 	
 		
 func add_head(image:Image = null, login:String = "", first:bool = false):
-	$head/nametag.text = login
+	$head/nametag/nametag.text = login
 	if image:
 		var tex = ImageTexture.new()
 		tex.create_from_image(image)

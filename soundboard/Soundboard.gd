@@ -14,6 +14,8 @@ extends Node
 
 const SOUNDBOARD_JSON = "user://soundboard.json"
 
+signal midi
+
 var sound_map = {}
 
 func _ready():
@@ -101,6 +103,7 @@ func play(sound: String, single = false) -> void:
 		# Play overlapping sounds
 		player = AudioStreamPlayer.new()
 		add_child(player)
+		# warning-ignore:return_value_discarded
 		player.connect("finished", player, "queue_free")
 	player.stream = load_sound_file(sound)
 	player.play()
@@ -119,3 +122,4 @@ func play_midi(pitch: int):
 	var key = "note_%d" % pitch
 	if sound_map["midi"].has(key):
 		play(sound_map["midi"][key], true)
+		emit_signal("midi", pitch)
