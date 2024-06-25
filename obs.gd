@@ -246,7 +246,7 @@ func hello(challenge, salt):
 
 
 func data_received() -> void:
-	var data : String = websocket.get_peer(1).get_packet().get_string_from_utf8()
+	var data : String = websocket.get_packet().get_string_from_utf8()
 	if data:
 		var test_json_conv = JSON.new()
 		test_json_conv.parse(data)
@@ -271,10 +271,9 @@ func send(message : Dictionary) -> void:
 		print_debug("Not connected")
 		return
 		
-	websocket.get_peer(1).set_write_mode(WebSocketPeer.WRITE_MODE_TEXT)
 	var text = JSON.stringify(message)
 	print_debug(text)
-	var err = websocket.get_peer(1).put_packet(text.to_utf8_buffer())
+	var err = websocket.send_text(text)
 	if err != OK:
 		print_debug("Failed to send message, error: " + str(err))
 	
