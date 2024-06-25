@@ -224,7 +224,6 @@ func twitch_reward_redemption(who : String, reward : String):
 
 func twitch_login_attempt(success):
 	if (success):
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MINIMIZED)
 		OBS.connect_to_obs()
 
 
