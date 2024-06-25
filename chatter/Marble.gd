@@ -26,6 +26,8 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	Battle.connect("changed_state", Callable(self, "battle_state"))
 
+	$head/nametag.hide()
+
 
 func battle_state(state):
 	if state == Battle.STATE.WAITING:
@@ -35,6 +37,12 @@ func battle_state(state):
 		call_deferred("set_gravity_scale", 1)
 
 
+func _process(_delta):
+	#$head/nametag.global_position = global_position + Vector2(-49, -25)
+	$head/nametag.global_rotation = 0
+	$speechBubble.global_rotation = 0
+	
+	
 func _physics_process(delta):
 	if position.y > FLOOR:
 		transform = Transform2D(0, Helper.random_position())
@@ -46,21 +54,28 @@ func _physics_process(delta):
 
 
 func say(message:String):
-	$speechBubble.text = message
+	$speechBubble/speechBubble.text = message
 	$speechBubble/AnimationPlayer.play("speak")
 	apply_central_impulse(Vector2(0, -200).rotated(randf() * PI/2 - PI/4))
 	
 		
 func add_head(image:Image = null, login:String = "", first_chatter:bool = false):
-	$head/nametag.text = login
+	$head/nametag/nametag.text = login
 	if image:
-		var tex = ImageTexture.create_from_image(image)
-		
-		var s = Sprite2D.new()
+		image.lock()
+		var c: Color = image.get_pixel(1, 1)
+		image.unlock()
+		c.a = 1.0
+		$head/helmet/Face.hide()
+		$head/helmet/Bg.modulate = c
+		var tex = ImageTexture.new()
+		tex.create_from_image(image)
+		tex.flags = ImageTexture.FLAGS_DEFAULT
+		var s = Sprite.new()
 		s.texture = tex
-		s.scale *= 0.1
+		s.scale *= 0.2
 		s.show_behind_parent = true
-		$head/helmet.add_child(s)	
+		$head/helmet.add_child(s)
 		
 	self.first = first_chatter
 

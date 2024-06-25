@@ -64,7 +64,7 @@ func say(message:String):
 		
 @warning_ignore("shadowed_variable")
 func add_head(image:Image = null, login:String = "", first:bool = false):
-	$head/nametag.text = login
+	$head/nametag/nametag.text = login
 	if image:
 		var tex = ImageTexture.create_from_image(image)
 		

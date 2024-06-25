@@ -41,13 +41,9 @@ func _input(_event):
 		
 	if Input.is_action_just_pressed("disconnect"):
 		Twitch.websocket.disconnect_from_host()
-		
-	if Input.is_action_just_pressed("toggle_console"):
-		if $console.visible:
-			$console.hide()
-		else:
-			$console.show()
-		
+		TwitchPS.websocket.disconnect_from_host()
+		OBS.websocket.disconnect_from_host()
+
 
 func add(object: Node):
 	get_tree().current_scene.call_deferred('add_child', object)

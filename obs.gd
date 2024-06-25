@@ -191,8 +191,8 @@ func connection_established():
 	upgrade_connection()
 
 
-func connection_closed():
-	print("OBS connection closed")
+func connection_closed(_clean_close : bool):
+	print("Disconnected from OBS")
 	
 
 func connection_error():

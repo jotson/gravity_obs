@@ -14,6 +14,8 @@ extends Node
 
 const SOUNDBOARD_JSON = "user://soundboard.json"
 
+signal midi
+
 var sound_map = {}
 
 func _ready():
@@ -123,3 +125,4 @@ func play_midi(pitch: int):
 	var key = "note_%d" % pitch
 	if sound_map["midi"].has(key):
 		play(sound_map["midi"][key], true)
+		emit_signal("midi", pitch)

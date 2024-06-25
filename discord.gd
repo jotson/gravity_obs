@@ -22,7 +22,7 @@ func post_announcement():
 
 	await (await Twitch.get_channel_info()).completed
 	
-	var title = "@everyone %s is streaming %s" % [Twitch.broadcaster_name, Twitch.channel_title]
+	var title = "<@&1243975068611248278> %s is streaming: %s" % [Twitch.broadcaster_name, Twitch.channel_title]
 	title += " [LIVE NOW on Twitch](<https://twitch.tv/%s>)"  % [Twitch.broadcaster_login]
 	var discord_json = {
 		"content": title
