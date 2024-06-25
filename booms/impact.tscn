@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c4jyb7yaqc2e2"]
 
 [ext_resource type="Script" path="res://booms/impact.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://bnj3y3pk7ki3i" path="res://booms/textures/impact.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://8f8shc5d6t5" path="res://booms/textures/impact.png" id="2"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "default"
@@ -36,9 +36,9 @@ hframes = 4
 frame = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "default"
 libraries = {
 "": SubResource("AnimationLibrary_a5cng")
 }
+autoplay = "default"
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

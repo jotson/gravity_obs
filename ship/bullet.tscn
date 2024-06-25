@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://dcmvodte43pjv"]
 
 [ext_resource type="Script" path="res://ship/bullet.gd" id="1"]
-[ext_resource type="PackedScene" path="res://ship/trail.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://bcw1ixx0bjxbn" path="res://ship/textures/bullet.png" id="3"]
+[ext_resource type="PackedScene" uid="uid://cka0v55jglhey" path="res://ship/trail.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://c7t7wabilmjdp" path="res://ship/textures/bullet.png" id="3"]
 [ext_resource type="AudioStream" uid="uid://ca0ymowjk2y1o" path="res://ship/sfx/bullet-hit-2.wav" id="5"]
 [ext_resource type="AudioStream" uid="uid://rujtrq6gyysq" path="res://ship/sfx/bullet-hit-enemy-1.wav" id="6"]
 
@@ -31,9 +31,9 @@ color_ramp = SubResource("4")
 collision_mask = 3
 mass = 0.1
 physics_material_override = SubResource("1")
+can_sleep = false
 max_contacts_reported = 1
 contact_monitor = true
-can_sleep = false
 script = ExtResource("1")
 
 [node name="collision" type="CollisionShape2D" parent="."]

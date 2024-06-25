@@ -62,16 +62,12 @@ func say(message:String):
 func add_head(image:Image = null, login:String = "", first_chatter:bool = false):
 	$head/nametag/nametag.text = login
 	if image:
-		image.lock()
 		var c: Color = image.get_pixel(1, 1)
-		image.unlock()
 		c.a = 1.0
 		$head/helmet/Face.hide()
 		$head/helmet/Bg.modulate = c
-		var tex = ImageTexture.new()
-		tex.create_from_image(image)
-		tex.flags = ImageTexture.FLAGS_DEFAULT
-		var s = Sprite.new()
+		var tex = ImageTexture.create_from_image(image)
+		var s = Sprite2D.new()
 		s.texture = tex
 		s.scale *= 0.2
 		s.show_behind_parent = true

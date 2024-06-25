@@ -65,20 +65,11 @@ func load_sound_file(sound: String) -> AudioStream:
 
 	load_sound_configuration()
 
-	var stream = AudioStreamOggVorbis.new()
+	var stream: AudioStream
 	
 	var sound_file = get_sound_file(sound)
 	if sound_file:
-		var f = FileAccess.open(sound_file, FileAccess.READ)
-		if f == null:
-			return stream
-		var bytes = f.get_buffer(f.get_length())
-		var packets = OggPacketSequence.new()
-		# BROKEN in 4.0.3rc2
-		# https://github.com/godotengine/godot/issues/61091
-		packets.packet_data = bytes
-		stream.packet_sequence = packets
-		f.close()
+		stream = AudioStreamOggVorbis.load_from_file(sound_file)
 		
 	return stream
 

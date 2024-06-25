@@ -1,15 +1,14 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://cka0v55jglhey"]
 
-[ext_resource path="res://ship/trail.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://ship/trail.gd" id="1"]
 
-[sub_resource type="Gradient" id=1]
-colors = PackedColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
+[sub_resource type="Gradient" id="1"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [node name="trail" type="Node2D"]
 show_behind_parent = true
-script = ExtResource( 1 )
+script = ExtResource("1")
 MAX_LENGTH = 25
 
 [node name="Line2D" type="Line2D" parent="."]
-default_color = Color( 1, 1, 1, 1 )
-gradient = SubResource( 1 )
+gradient = SubResource("1")

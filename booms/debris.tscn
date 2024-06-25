@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://ba0t5ullgqgsm"]
 
 [ext_resource type="Script" path="res://booms/debris.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://cmsmaltsoc25x" path="res://booms/textures/debris.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://dhcpp5bs2l5x2" path="res://booms/textures/debris.png" id="2"]
 
 [sub_resource type="CircleShape2D" id="1"]
 

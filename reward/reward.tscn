@@ -1,81 +1,88 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=3 uid="uid://dah7cmbfbkc52"]
 
-[ext_resource path="res://common/gui/ui-theme.tres" type="Theme" id=1]
-[ext_resource path="res://reward/textures/reward.png" type="Texture2D" id=2]
-[ext_resource path="res://common/fonts/big.tres" type="FontFile" id=3]
-[ext_resource path="res://reward/sfx/reward.wav" type="AudioStream" id=4]
-[ext_resource path="res://reward/reward.gd" type="Script" id=5]
+[ext_resource type="Theme" uid="uid://bjeweqbaitpr4" path="res://common/gui/ui-theme.tres" id="1"]
+[ext_resource type="Texture2D" uid="uid://b2nktrlx6dmu4" path="res://reward/textures/reward.png" id="2"]
+[ext_resource type="FontFile" path="res://common/fonts/big.tres" id="3"]
+[ext_resource type="AudioStream" uid="uid://b0opmsde7srp8" path="res://reward/sfx/reward.wav" id="4"]
+[ext_resource type="Script" path="res://reward/reward.gd" id="5"]
 
-[sub_resource type="Animation" id=1]
+[sub_resource type="Animation" id="1"]
 length = 0.001
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0 ),
-"transitions": PackedFloat32Array( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ true ]
+"values": [true]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath(".:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PackedFloat32Array( 0 ),
-"transitions": PackedFloat32Array( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
+"values": [Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id="2"]
 resource_name = "default"
 length = 5.0
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0, 5 ),
-"transitions": PackedFloat32Array( 1, 1 ),
+"times": PackedFloat32Array(0, 5),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ true, false ]
+"values": [true, false]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath(".:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PackedFloat32Array( 0, 3, 5 ),
-"transitions": PackedFloat32Array( 1, 1, 1 ),
+"times": PackedFloat32Array(0, 3, 5),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
 tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
 tracks/2/keys = {
-"times": PackedFloat32Array( 5 ),
-"transitions": PackedFloat32Array( 1 ),
-"values": [ {
-"args": [  ],
-"method": "queue_free"
-} ]
+"times": PackedFloat32Array(5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8eu6t"]
+_data = {
+"RESET": SubResource("1"),
+"default": SubResource("2")
 }
 
 [node name="reward" type="TextureRect"]
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -84,44 +91,37 @@ offset_left = -150.0
 offset_top = -76.0
 offset_right = 150.0
 offset_bottom = 76.0
-theme = ExtResource( 1 )
-texture = ExtResource( 2 )
-script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+theme = ExtResource("1")
+texture = ExtResource("2")
+script = ExtResource("5")
 
 [node name="whoLabel" type="Label" parent="."]
+layout_mode = 0
 offset_left = 13.0
 offset_top = 20.0
 offset_right = 218.0
 offset_bottom = 36.0
-theme_override_fonts/font = ExtResource( 3 )
+theme_override_fonts/font = ExtResource("3")
 text = "USERNAME"
 clip_text = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="rewardLabel" type="Label" parent="."]
+layout_mode = 0
 offset_left = 13.0
 offset_top = 50.0
 offset_right = 234.0
 offset_bottom = 127.0
-theme_override_colors/font_color = Color( 0, 0.823529, 0.862745, 1 )
+theme_override_colors/font_color = Color(0, 0.823529, 0.862745, 1)
 theme_override_constants/line_spacing = 4
-theme_override_fonts/font = ExtResource( 3 )
+theme_override_fonts/font = ExtResource("3")
 text = "REWARD"
-autowrap = true
 clip_text = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="sfxReward" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 4 )
+stream = ExtResource("4")
 volume_db = -6.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/RESET = SubResource( 1 )
-anims/default = SubResource( 2 )
+libraries = {
+"": SubResource("AnimationLibrary_8eu6t")
+}

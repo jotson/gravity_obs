@@ -109,7 +109,7 @@ func load_commands():
 			Twitch.add_command(c.command, cmd_addtocredits, 0, 0, perm)
 			
 		if c.has("action") and c.action == "greeting":
-			Twitch.add_command(c.command, self, "cmd_greeting", 0, 0, perm)
+			Twitch.add_command(c.command, cmd_greeting, 0, 0, perm)
 			
 		if c.has("aliases"):
 			for alias in c.aliases:
@@ -224,7 +224,7 @@ func twitch_reward_redemption(who : String, reward : String):
 
 func twitch_login_attempt(success):
 	if (success):
-		OS.window_minimized = true
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MINIMIZED)
 		OBS.connect_to_obs()
 
 
@@ -296,7 +296,7 @@ func add_head(username, message):
 		
 		profile_pic_queue.append(username)
 	
-	if profile_pic_queue.size() and OS.get_ticks_msec() > last_api_request + 500:
+	if profile_pic_queue.size() and Time.get_ticks_msec() > last_api_request + 500:
 		get_profile_pic(profile_pic_queue)
 		
 	if profile_pics.has(username):
@@ -309,7 +309,7 @@ func unhandled_message(message : String, tags : Dictionary) -> void:
 	if config.load("user://ignore.ini") == OK:
 		ignore = config.get_value("ignore", "ignore", [])
 
-	var msg : PoolStringArray = message.split(" ", true, 4)
+	var msg : PackedStringArray = message.split(" ", true, 4)
 	match msg[1]:
 		"JOIN":
 			var sender_data : SenderData = SenderData.new(Twitch.user_regex.search(msg[0]).get_string(), msg[2], tags)

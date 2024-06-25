@@ -4,12 +4,12 @@
 [ext_resource type="FontFile" path="res://common/fonts/small.tres" id="2"]
 [ext_resource type="Texture2D" uid="uid://cdwqqfbjaw7ov" path="res://ship/textures/crown.png" id="3"]
 [ext_resource type="FontFile" path="res://common/fonts/tiny.tres" id="4"]
-[ext_resource type="Texture2D" uid="uid://0we7ggorp2tp" path="res://ship/textures/flame.png" id="10"]
-[ext_resource type="Texture2D" uid="uid://b88f8y7u4xll5" path="res://ship/textures/ship.png" id="14"]
-[ext_resource type="Texture2D" uid="uid://4kjrkob0db43" path="res://ship/textures/turret.png" id="15"]
-[ext_resource type="Texture2D" uid="uid://dk2i1w8xdlmsq" path="res://ship/textures/muzzle-flash.png" id="16"]
-[ext_resource type="PackedScene" path="res://ship/trail.tscn" id="17"]
-[ext_resource type="Texture2D" uid="uid://bsrsfp1u14tro" path="res://ship/textures/flare.png" id="29"]
+[ext_resource type="Texture2D" uid="uid://1517lqpsteri" path="res://ship/textures/flame.png" id="10"]
+[ext_resource type="Texture2D" uid="uid://c0dfd157hi04" path="res://ship/textures/ship.png" id="14"]
+[ext_resource type="Texture2D" uid="uid://cajbxmek7vbt1" path="res://ship/textures/turret.png" id="15"]
+[ext_resource type="Texture2D" uid="uid://cyi6voeya7je0" path="res://ship/textures/muzzle-flash.png" id="16"]
+[ext_resource type="PackedScene" uid="uid://cka0v55jglhey" path="res://ship/trail.tscn" id="17"]
+[ext_resource type="Texture2D" uid="uid://dhibfqm3olsme" path="res://ship/textures/flare.png" id="29"]
 
 [sub_resource type="PhysicsMaterial" id="1"]
 friction = 0.8
@@ -209,9 +209,9 @@ collision_mask = 3
 mass = 2.0
 physics_material_override = SubResource("1")
 gravity_scale = 0.0
+can_sleep = false
 max_contacts_reported = 5
 contact_monitor = true
-can_sleep = false
 linear_damp = 1.0
 angular_damp = 1.0
 script = ExtResource("1")
@@ -227,10 +227,10 @@ offset = Vector2(0, 16)
 hframes = 4
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="flame"]
-autoplay = "default"
 libraries = {
 "": SubResource("AnimationLibrary_rm7i2")
 }
+autoplay = "default"
 
 [node name="flare" type="Sprite2D" parent="flame"]
 z_index = 1
@@ -247,10 +247,10 @@ hframes = 4
 frame = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="flameStarboard"]
-autoplay = "default"
 libraries = {
 "": SubResource("AnimationLibrary_05hdd")
 }
+autoplay = "default"
 
 [node name="flamePort" type="Sprite2D" parent="."]
 position = Vector2(7, -11)
@@ -260,10 +260,10 @@ texture = ExtResource("10")
 hframes = 4
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="flamePort"]
-autoplay = "default"
 libraries = {
 "": SubResource("AnimationLibrary_cef1o")
 }
+autoplay = "default"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 
@@ -284,6 +284,8 @@ _import_path = NodePath("")
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
 editor_description = ""
 script = null
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://b5o3bcisou8ar"]
 
 [ext_resource type="Script" path="res://booms/explosion.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://d2fd66w6qqf2x" path="res://booms/textures/explosion.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://b2nwgsdf4wi7w" path="res://booms/textures/explosion.png" id="3"]
 [ext_resource type="AudioStream" uid="uid://dyv3fs1uqr80b" path="res://booms/sfx/explosion.wav" id="4"]
 
 [sub_resource type="Animation" id="1"]

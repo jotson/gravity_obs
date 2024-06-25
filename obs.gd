@@ -154,7 +154,7 @@ func update_socket_state(state):
 		
 		match websocket_state:
 			WebSocketPeer.STATE_CLOSED:
-				connection_closed()
+				connection_closed(false)
 			WebSocketPeer.STATE_CLOSING:
 				pass
 			WebSocketPeer.STATE_CONNECTING:

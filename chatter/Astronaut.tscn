@@ -74,8 +74,7 @@ func say(message:String):
 func add_head(image:Image = null, login:String = \"\", first_chatter:bool = false):
 	$head/nametag.text = login
 	if image:
-		var tex = ImageTexture.new()
-		tex.create_from_image(image)
+		var tex = ImageTexture.create_from_image(image)
 		
 		var s = Sprite2D.new()
 		s.texture = tex
@@ -263,10 +262,10 @@ z_index = -1
 texture = ExtResource("4")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="head"]
-autoplay = "default"
 libraries = {
 "": SubResource("AnimationLibrary_t6kgn")
 }
+autoplay = "default"
 
 [node name="speechBubble" type="Label" parent="."]
 clip_contents = true

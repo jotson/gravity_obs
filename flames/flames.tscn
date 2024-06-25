@@ -1,137 +1,65 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=10 format=3 uid="uid://bd3wl3tucg7cr"]
 
-[ext_resource path="res://flames/textures/flame.png" type="Texture2D" id=1]
-[ext_resource path="res://flames/flames.gd" type="Script" id=2]
-[ext_resource path="res://flames/textures/smoke.png" type="Texture2D" id=3]
+[ext_resource type="Script" path="res://flames/flames.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dduqwkibn1t2y" path="res://flames/textures/smoke.png" id="3"]
 
-[sub_resource type="Gradient" id=1]
-offsets = PackedFloat32Array( 0, 0.871795 )
-colors = PackedColorArray( 1, 1, 1, 1, 0.155273, 0.155273, 0.155273, 1 )
+[sub_resource type="Gradient" id="Gradient_50gko"]
+offsets = PackedFloat32Array(0, 0.127358, 0.292453, 0.514151, 0.773585, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 0.947897, 0, 1, 1, 0.0111682, 0, 1, 0, 0, 0, 1, 0.0655738, 0.0655738, 0.0655738, 1, 0.0666667, 0.0666667, 0.0666667, 1)
 
-[sub_resource type="GradientTexture2D" id=2]
-gradient = SubResource( 1 )
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bjf7o"]
+gradient = SubResource("Gradient_50gko")
 
-[sub_resource type="Curve" id=4]
-_data = [ Vector2( 0, 0 ), 0.0, 2.98318, 0, 0, Vector2( 0.601351, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.0409091 ), 0.0, 0.0, 0, 0 ]
+[sub_resource type="Curve" id="4"]
+_data = [Vector2(0, 0.17319), 0.0, 4.69299, 0, 0, Vector2(0.47449, 0.580235), 0.0, 0.0, 0, 0, Vector2(1, 0.0409091), 0.0, 0.0, 0, 0]
+point_count = 3
 
-[sub_resource type="CurveTexture" id=5]
-curve = SubResource( 4 )
+[sub_resource type="CurveTexture" id="5"]
+curve = SubResource("4")
 
-[sub_resource type="ParticleProcessMaterial" id=3]
-lifetime_randomness = 0.29
-emission_shape = 1
-emission_sphere_radius = 26.11
-flag_disable_z = true
-gravity = Vector3( 0, -80, 0 )
-angular_velocity = 100.25
-angular_velocity_random = 1.0
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-damping = 10.76
-angle = 720.0
-angle_random = 1.0
-scale = 0.1
-scale_random = 0.34
-scale_curve = SubResource( 5 )
-color_ramp = SubResource( 2 )
+[sub_resource type="Curve" id="Curve_ji1h1"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.497525, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
 
-[sub_resource type="Gradient" id=6]
-offsets = PackedFloat32Array( 0, 0.417582 )
-colors = PackedColorArray( 1, 0.528082, 0, 1, 1, 0, 0, 1 )
+[sub_resource type="CurveTexture" id="CurveTexture_l5708"]
+curve = SubResource("Curve_ji1h1")
 
-[sub_resource type="GradientTexture2D" id=7]
-gradient = SubResource( 6 )
-
-[sub_resource type="Curve" id=8]
-max_value = 5.0
-_data = [ Vector2( 0, 1.60227 ), 0.0, 25.0744, 0, 0, Vector2( 0.260135, 5 ), 0.0, 0.0, 0, 0, Vector2( 0.804054, 0.556818 ), -3.87674, -3.87674, 0, 0, Vector2( 1, 0 ), -1.43133, 0.0, 0, 0 ]
-
-[sub_resource type="CurveTexture" id=9]
-curve = SubResource( 8 )
-
-[sub_resource type="ParticleProcessMaterial" id=10]
-lifetime_randomness = 0.33
-emission_shape = 2
-emission_box_extents = Vector3( 0, 20, 1 )
-flag_disable_z = true
-spread = 0.0
-gravity = Vector3( 0, 0, 0 )
-initial_velocity = 218.94
-initial_velocity_random = 0.57
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-damping = 150.0
-damping_random = 0.52
-scale = 0.02
-scale_random = 0.03
-scale_curve = SubResource( 9 )
-color_ramp = SubResource( 7 )
+[sub_resource type="ParticleProcessMaterial" id="3"]
+lifetime_randomness = 0.4
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(1000, 1, 1)
+angle_min = -720.0
+angle_max = 720.0
+direction = Vector3(0, -1, 0)
+spread = 20.0
+initial_velocity_min = 20.0
+initial_velocity_max = 100.0
+angular_velocity_min = -102.86
+angular_velocity_max = 96.0
+radial_velocity_min = -133.34
+gravity = Vector3(0, -20, 0)
+scale_min = 0.3
+scale_curve = SubResource("5")
+color_ramp = SubResource("GradientTexture1D_bjf7o")
+turbulence_enabled = true
+turbulence_noise_speed = Vector3(5, 0, 0)
+turbulence_influence_min = 0.0
+turbulence_influence_over_life = SubResource("CurveTexture_l5708")
 
 [node name="flames" type="Node2D"]
-script = ExtResource( 2 )
+script = ExtResource("2")
 
-[node name="smoke1" type="GPUParticles2D" parent="."]
-position = Vector2( 22, 460 )
-amount = 200
+[node name="fire" type="GPUParticles2D" parent="."]
+position = Vector2(960, 1080)
+amount = 1000
+process_material = SubResource("3")
+texture = ExtResource("3")
 lifetime = 4.0
-process_material = SubResource( 3 )
-texture = ExtResource( 3 )
-
-[node name="fire1" type="GPUParticles2D" parent="."]
-position = Vector2( 22, 540 )
-rotation = -1.57079
-amount = 200
-process_material = SubResource( 10 )
-texture = ExtResource( 1 )
-
-[node name="smoke2" type="GPUParticles2D" parent="."]
-position = Vector2( 931, 460 )
-amount = 200
-lifetime = 4.0
-process_material = SubResource( 3 )
-texture = ExtResource( 3 )
-
-[node name="fire2" type="GPUParticles2D" parent="."]
-position = Vector2( 935, 538 )
-rotation = -1.57079
-amount = 200
-process_material = SubResource( 10 )
-texture = ExtResource( 1 )
-
-[node name="smoke3" type="GPUParticles2D" parent="."]
-position = Vector2( 850, 495 )
-scale = Vector2( 0.5, 0.5 )
-amount = 200
-lifetime = 4.0
-process_material = SubResource( 3 )
-texture = ExtResource( 3 )
-
-[node name="fire3" type="GPUParticles2D" parent="."]
-position = Vector2( 852, 539 )
-rotation = -1.57079
-scale = Vector2( 0.7, 0.7 )
-amount = 200
-process_material = SubResource( 10 )
-texture = ExtResource( 1 )
-
-[node name="smoke4" type="GPUParticles2D" parent="."]
-position = Vector2( 281, 508 )
-scale = Vector2( 0.5, 0.5 )
-amount = 200
-lifetime = 4.0
-process_material = SubResource( 3 )
-texture = ExtResource( 3 )
-
-[node name="fire4" type="GPUParticles2D" parent="."]
-position = Vector2( 280, 541 )
-rotation = -1.57079
-scale = Vector2( 0.5, 0.5 )
-amount = 200
-process_material = SubResource( 10 )
-texture = ExtResource( 1 )
+randomness = 1.0
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 60.0
+wait_time = 45.0
 one_shot = true
 autostart = true
 

@@ -1,190 +1,201 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=3 uid="uid://vvflg026we3l"]
 
-[ext_resource path="res://fonts/speech-bubble-font.tres" type="DynamicFont" id=1]
-[ext_resource path="res://chatter/textures/helmet.png" type="Texture" id=2]
-[ext_resource path="res://chatter/textures/face.png" type="Texture" id=3]
-[ext_resource path="res://chatter/color.material" type="Material" id=4]
-[ext_resource path="res://chatter/Marble.gd" type="Script" id=5]
-[ext_resource path="res://chatter/textures/helmet-bg.png" type="Texture" id=6]
+[ext_resource type="Texture2D" uid="uid://c8afxwam0vsus" path="res://chatter/textures/helmet.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://bqnhnq6xvubqp" path="res://chatter/textures/face.png" id="3"]
+[ext_resource type="FontFile" uid="uid://3x0u103yunxi" path="res://fonts/LondrinaSolid-Black.ttf" id="3_x13fy"]
+[ext_resource type="Material" uid="uid://d15kkyrusbpla" path="res://chatter/color.material" id="4"]
+[ext_resource type="Script" path="res://chatter/Marble.gd" id="5"]
+[ext_resource type="Texture2D" uid="uid://dotati4xu1a2y" path="res://chatter/textures/helmet-bg.png" id="6"]
+[ext_resource type="FontFile" uid="uid://bnddlf88msab3" path="res://fonts/IBMPlexSansCondensed-Regular.ttf" id="7_7m6cb"]
 
-[sub_resource type="PhysicsMaterial" id=10]
+[sub_resource type="PhysicsMaterial" id="10"]
 friction = 0.25
 bounce = 0.8
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id="7"]
 length = 0.001
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ true ]
+"values": [true]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath("..:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ Vector2( 1, 1 ) ]
+"values": [Vector2(1, 1)]
 }
 tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
 tracks/2/path = NodePath(".:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ Color( 1, 1, 1, 0 ) ]
+"values": [Color(1, 1, 1, 0)]
 }
 tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
 tracks/3/path = NodePath("../../head/nametag:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ false ]
+"values": [false]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id="8"]
 resource_name = "speak"
 length = 5.0
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 4.94973 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 4.94973),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ true, false ]
+"values": [true, false]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath("..:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.5, 4.44973, 4.94973 ),
-"transitions": PoolRealArray( -2, 1, -2, 1 ),
+"times": PackedFloat32Array(0, 0.5, 4.44973, 4.94973),
+"transitions": PackedFloat32Array(-2, 1, -2, 1),
 "update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( 1, 1 ), Vector2( 1, 1 ), Vector2( 0, 0 ) ]
+"values": [Vector2(0, 0), Vector2(1, 1), Vector2(1, 1), Vector2(0, 0)]
 }
 tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
 tracks/2/path = NodePath(".:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0.2, 0.5, 4.44973, 4.74973 ),
-"transitions": PoolRealArray( 1, -2, -4.75683, 1 ),
+"times": PackedFloat32Array(0.2, 0.5, 4.44973, 4.74973),
+"transitions": PackedFloat32Array(1, -2, -4.75683, 1),
 "update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
 tracks/3/path = NodePath("../../head/nametag:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0, 0.2, 4.44973 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PackedFloat32Array(0, 0.2, 4.44973),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [ false, true, false ]
+"values": [false, true, false]
 }
 
-[sub_resource type="CircleShape2D" id=11]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jvd6i"]
+_data = {
+"RESET": SubResource("7"),
+"speak": SubResource("8")
+}
+
+[sub_resource type="CircleShape2D" id="11"]
 radius = 48.0
 
 [node name="Marble" type="RigidBody2D" groups=["chatter"]]
-material = ExtResource( 4 )
+material = ExtResource("4")
 collision_mask = 7
 input_pickable = true
-physics_material_override = SubResource( 10 )
-script = ExtResource( 5 )
+physics_material_override = SubResource("10")
+script = ExtResource("5")
 
 [node name="head" type="Node2D" parent="."]
-use_parent_material = true
 z_index = -1
+use_parent_material = true
 
 [node name="nametag" type="Node2D" parent="head"]
 visible = false
 
 [node name="nametag" type="Label" parent="head/nametag"]
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -84.0
-margin_top = -97.0
-margin_right = 85.0
-margin_bottom = -83.0
-custom_colors/font_color = Color( 1, 1, 1, 1 )
+offset_left = -48.0
+offset_top = -144.0
+offset_right = 48.0
+offset_bottom = -107.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_x13fy")
+theme_override_font_sizes/font_size = 30
 text = "NAMETAG"
-align = 1
-valign = 1
+horizontal_alignment = 1
+vertical_alignment = 2
 
-[node name="helmet" type="Sprite" parent="head"]
+[node name="helmet" type="Sprite2D" parent="head"]
 use_parent_material = true
-texture = ExtResource( 2 )
+texture = ExtResource("2")
 
-[node name="Face" type="Sprite" parent="head/helmet"]
+[node name="Face" type="Sprite2D" parent="head/helmet"]
 z_index = -1
-texture = ExtResource( 3 )
+texture = ExtResource("3")
 
-[node name="Bg" type="Sprite" parent="head/helmet"]
+[node name="Bg" type="Sprite2D" parent="head/helmet"]
 z_index = -2
-texture = ExtResource( 6 )
+texture = ExtResource("6")
 
 [node name="speechBubble" type="Node2D" parent="."]
 
 [node name="speechBubble" type="Label" parent="speechBubble"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = -162.0
-margin_top = -183.0
-margin_right = 161.0
-margin_bottom = -104.0
-rect_clip_content = true
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_fonts/font = ExtResource( 1 )
-text = "testa sklasj laksj laskj lksaj laskjlaksj laksj alskja sljsaasasdsa dkalsjhdl kasjdh lkajshd lkjahsdasqw"
-align = 1
-valign = 2
-autowrap = true
+modulate = Color(1, 1, 1, 0)
+offset_left = -120.0
+offset_top = -104.0
+offset_right = 120.0
+offset_bottom = -48.0
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("7_7m6cb")
+theme_override_font_sizes/font_size = 20
+text = "This is some multi-line sample text to say"
+horizontal_alignment = 1
+autowrap_mode = 2
 clip_text = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="speechBubble"]
 root_node = NodePath("../speechBubble")
-anims/RESET = SubResource( 7 )
-anims/speak = SubResource( 8 )
+libraries = {
+"": SubResource("AnimationLibrary_jvd6i")
+}
 
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
 visible = false
-polygon = PoolVector2Array( -13, 16, -16, 13, -16, -13, -13, -16, 13, -16, 16, -13, 16, 13, 13, 16 )
+polygon = PackedVector2Array(-13, 16, -16, 13, -16, -13, -13, -16, 13, -16, 16, -13, 16, 13, 13, 16)
 disabled = true
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
-shape = SubResource( 11 )
+shape = SubResource("11")
 
 [connection signal="input_event" from="." to="." method="_on_Marble_input_event"]

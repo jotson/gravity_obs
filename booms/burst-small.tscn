@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cwdv1hdi1o6yo"]
 
 [ext_resource type="Script" path="res://booms/burst-small.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://bx22bqu0vwd5r" path="res://booms/textures/burst-small.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://bntab4hc5kccs" path="res://booms/textures/burst-small.png" id="2"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "default"
@@ -46,9 +46,9 @@ hframes = 12
 frame = 11
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "default"
 libraries = {
 "": SubResource("AnimationLibrary_khmsu")
 }
+autoplay = "default"
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

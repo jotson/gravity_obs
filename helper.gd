@@ -36,13 +36,10 @@ func save_channel(channel):
 
 	
 func _input(_event):
-	if Input.is_action_just_pressed("fullscreen"):
-		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (!((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN))) else Window.MODE_WINDOWED
-		
 	if Input.is_action_just_pressed("disconnect"):
-		Twitch.websocket.disconnect_from_host()
-		TwitchPS.websocket.disconnect_from_host()
-		OBS.websocket.disconnect_from_host()
+		Twitch.websocket.close()
+		TwitchPS.websocket.close()
+		OBS.websocket.close()
 
 
 func add(object: Node):
