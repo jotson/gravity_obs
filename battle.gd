@@ -23,9 +23,9 @@ signal changed_state
 func _ready():
 	idle()
 
-	if Twitch.connect("chat_message", Callable(self, "twitch_chat")) != OK:
+	if Twitch.chat_message.connect(twitch_chat) != OK:
 		print_debug("Signal not connected`")
-	if Twitch.connect("twitch_disconnected", Callable(self, "twitch_disconnect")) != OK:
+	if Twitch.twitch_disconnected.connect(twitch_disconnect) != OK:
 		print_debug("Signal not connected")
 
 

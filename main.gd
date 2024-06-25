@@ -28,20 +28,20 @@ func _ready():
 	if channel:
 		$login/channel.text = channel
 		
-	if Soundboard.connect("midi", self.midi) != OK:
+	if Soundboard.midi.connect(self.midi) != OK:
 		print_debug("Signal not connected")
-	if Twitch.connect("chat_message", Callable(self, "twitch_chat")) != OK:
+	if Twitch.chat_message.connect(twitch_chat) != OK:
 		print_debug("Signal not connected")
-	if Twitch.connect("unhandled_message", self.unhandled_message) != OK:
+	if Twitch.unhandled_message.connect(unhandled_message) != OK:
 		print_debug("Signal not connected")
-	if Twitch.connect("twitch_disconnected", Callable(self, "twitch_disconnect")) != OK:
+	if Twitch.twitch_disconnected.connect(twitch_disconnect) != OK:
 		print_debug("Signal not connected")
-	if Twitch.connect("login_attempt", Callable(self, "twitch_login_attempt")) != OK:
+	if Twitch.login_attempt.connect(twitch_login_attempt) != OK:
 		print_debug("Signal not connected")
-	if Twitch.connect("got_channel_info", Callable(self, "twitch_got_channel_info")) != OK:
+	if Twitch.got_channel_info.connect(twitch_got_channel_info) != OK:
 		print_debug("Signal not connected")
 
-	if TwitchPS.connect("reward_redemption", Callable(self, "twitch_reward_redemption")) != OK:
+	if TwitchPS.reward_redemption.connect(twitch_reward_redemption) != OK:
 		print_debug("Signal not connected")
 		
 	load_commands()
@@ -347,7 +347,7 @@ func get_profile_pic(login:Array):
 	
 	var http : HTTPRequest = HTTPRequest.new()
 	add_child(http)
-	if http.connect("request_completed", Callable(self, "received_profile_pic").bind(http)) != OK:
+	if http.request_completed.connect(received_profile_pic.bind(http)) != OK:
 		print_debug("Signal not connected")
 	
 	var url = "https://api.twitch.tv/helix/users?"
@@ -373,7 +373,7 @@ func received_profile_pic(_result: int, _response_code: int, _headers: PackedStr
 func get_profile_image(login:String, url:String):
 	var http : HTTPRequest = HTTPRequest.new()
 	add_child(http)
-	if http.connect("request_completed", Callable(self, "profile_image_received").bind(http, login, url)) != OK:
+	if http.request_completed.connect(profile_image_received.bind(http, login, url)) != OK:
 		print_debug("Signal not connected")
 		
 	var err = http.request(url)

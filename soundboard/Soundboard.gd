@@ -116,4 +116,4 @@ func play_midi(pitch: int):
 	var key = "note_%d" % pitch
 	if sound_map["midi"].has(key):
 		play(sound_map["midi"][key], true)
-		emit_signal("midi", pitch)
+		midi.emit(pitch)

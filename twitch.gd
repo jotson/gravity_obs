@@ -36,7 +36,7 @@ func join(channel):
 func update_reward_redemption_status(redemption_id: String, reward_id: String):
 	var http : HTTPRequest = HTTPRequest.new()
 	add_child(http)
-	if http.connect("request_completed", Callable(self, "received_channel_info").bind(http)) != OK:
+	if http.request_completed.connect(received_channel_info.bind(http)) != OK:
 		print_debug("Signal not connected")
 
 	var err = http.request("https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions?broadcaster_id=%s&id=%s&reward_id=%s&status=FULFILLED" % [str(broadcaster_id), redemption_id, reward_id], ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], HTTPClient.METHOD_PATCH)
@@ -50,7 +50,7 @@ func get_channel_info():
 	# Get channel_info
 	var http : HTTPRequest = HTTPRequest.new()
 	add_child(http)
-	if http.connect("request_completed", Callable(self, "received_channel_info").bind(http)) != OK:
+	if http.request_completed.connect(received_channel_info.bind(http)) != OK:
 		print_debug("Signal not connected")
 	
 	var err = http.request("https://api.twitch.tv/helix/channels?broadcaster_id=%s" % str(broadcaster_id), ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], HTTPClient.METHOD_GET)

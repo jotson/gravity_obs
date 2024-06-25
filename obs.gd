@@ -205,7 +205,7 @@ func upgrade_connection():
 
 	var http : HTTPRequest = HTTPRequest.new()
 	add_child(http)
-	if http.connect("request_completed", Callable(self, "upgrade_request_completed").bind(http)) != OK:
+	if http.request_completed.connect(upgrade_request_completed.bind(http)) != OK:
 		print_debug("Signal not connected")
 	
 	var headers = [ "Sec-WebSocket-Protocol: obswebsocket.json" ]
