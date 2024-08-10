@@ -1,6 +1,5 @@
-[gd_scene load_steps=18 format=3 uid="uid://bjt7axh3xs8d5"]
+[gd_scene load_steps=17 format=3 uid="uid://bjt7axh3xs8d5"]
 
-[ext_resource type="FontFile" path="res://common/fonts/tiny.tres" id="1"]
 [ext_resource type="Texture2D" uid="uid://k5hohc4ttuhh" path="res://chatter/textures/astronaut.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://c8afxwam0vsus" path="res://chatter/textures/helmet.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://bqnhnq6xvubqp" path="res://chatter/textures/face.png" id="4"]
@@ -248,7 +247,6 @@ offset_top = -65.0
 offset_right = 49.0
 offset_bottom = -56.0
 theme_override_colors/font_color = Color(0.541176, 0.541176, 0.541176, 1)
-theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 8
 text = "NAMETAG"
 
@@ -273,7 +271,6 @@ offset_left = -47.0
 offset_top = -127.0
 offset_right = 47.0
 offset_bottom = -69.0
-theme_override_fonts/font = ExtResource("1")
 theme_override_font_sizes/font_size = 8
 clip_text = true
 

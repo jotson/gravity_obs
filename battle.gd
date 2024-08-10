@@ -4,7 +4,7 @@ const Explosion = preload("res://booms/explosion.tscn")
 const Spark = preload("res://booms/spark.tscn")
 const ImpactSmoke = preload("res://booms/impactsmoke.tscn")
 const Burst = preload("res://booms/burst-small.tscn")
-const Ship = preload("res://ship/Ship.tscn")
+#const Ship = preload("res://ship/Ship.tscn")
 
 var players = {}
 
@@ -43,7 +43,7 @@ func _physics_process(_delta):
 
 func change_state(new_state):
 	state = new_state
-	emit_signal("changed_state", state)
+	changed_state.emit(state)
 	
 	if state == STATE.IDLE:
 		$roundCountdown.text = ""

@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgcc1exjlifim"]
+
+[ext_resource type="Script" path="res://spectrum/spectrum.gd" id="1_e8sfh"]
+
+[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_r0ihi"]
+
+[node name="Spectrum" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 666.0
+offset_right = 454.0
+offset_bottom = 1079.0
+script = ExtResource("1_e8sfh")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamMicrophone_r0ihi")
+autoplay = true
+bus = &"Record"

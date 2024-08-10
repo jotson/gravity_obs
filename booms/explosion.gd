@@ -16,11 +16,6 @@ func _ready():
 
 
 func explode():
-	Battle.burst(position)
-	Battle.spark(position, Vector2.ZERO)
-
-	#$explosionSfx.play()
-
 	var debris_amount = 6
 
 	for _i in range(debris_amount):

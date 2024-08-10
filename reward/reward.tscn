@@ -1,8 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://dah7cmbfbkc52"]
+[gd_scene load_steps=8 format=3 uid="uid://dah7cmbfbkc52"]
 
 [ext_resource type="Theme" uid="uid://bjeweqbaitpr4" path="res://common/gui/ui-theme.tres" id="1"]
 [ext_resource type="Texture2D" uid="uid://b2nktrlx6dmu4" path="res://reward/textures/reward.png" id="2"]
-[ext_resource type="FontFile" path="res://common/fonts/big.tres" id="3"]
 [ext_resource type="AudioStream" uid="uid://b0opmsde7srp8" path="res://reward/sfx/reward.wav" id="4"]
 [ext_resource type="Script" path="res://reward/reward.gd" id="5"]
 
@@ -101,7 +100,6 @@ offset_left = 13.0
 offset_top = 20.0
 offset_right = 218.0
 offset_bottom = 36.0
-theme_override_fonts/font = ExtResource("3")
 text = "USERNAME"
 clip_text = true
 
@@ -113,7 +111,6 @@ offset_right = 234.0
 offset_bottom = 127.0
 theme_override_colors/font_color = Color(0, 0.823529, 0.862745, 1)
 theme_override_constants/line_spacing = 4
-theme_override_fonts/font = ExtResource("3")
 text = "REWARD"
 clip_text = true
 

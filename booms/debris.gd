@@ -24,7 +24,6 @@ func _ready():
 	t.tween_property($Sprite2D, "modulate",
 		Color("#000099ff"),
 		$deathTimer.wait_time).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUINT)
-	t.start()
 
 
 func _on_deathTimer_timeout():

@@ -90,9 +90,6 @@ func load_commands():
 		if c.has("streamer") and c.streamer:
 			perm = Twitch.PermissionFlag.STREAMER
 			
-		if c.has("action") and c.action == "battle":
-			Twitch.add_command(c.command, cmd_battle, 0, 0, perm)
-	
 		if c.has("action") and c.action == "reload_commands":
 			Twitch.add_command(c.command, cmd_reload_commands, 0, 0, perm)
 	
@@ -142,11 +139,6 @@ func cmd_reload_commands(_cmd : CommandInfo):
 	load_commands()
 	
 
-func cmd_battle(_cmd : CommandInfo):
-	load_commands()
-	Battle.start_round()
-	
-	
 func cmd_chat(_cmd : CommandInfo):
 	load_commands()
 	var chat = ""
@@ -175,7 +167,7 @@ func cmd_addtocredits(_cmd : CommandInfo):
 		f.seek_end()
 		f.store_line(_cmd.sender_data.user)
 	f.close()
-	
+
 
 func _on_joinButton_pressed(_text = ""):
 	$login/AutoLoginTimer.stop()
@@ -246,8 +238,8 @@ func twitch_chat(sender_data, command : String, full_message : String):
 	message = message.substr(1)
 	
 	var hearts = Helper.get_count(full_message, "<3")
-	if hearts >= 0:
-		for _n in range(hearts):
+	if hearts > 0:
+		for _n in range(10):
 			var o = load("res://heart/heart.tscn").instantiate()
 			o.position = Helper.random_position()
 			Helper.add_child(o)
@@ -255,10 +247,8 @@ func twitch_chat(sender_data, command : String, full_message : String):
 	var smiles = Helper.get_count(full_message, ":-)")
 	smiles += Helper.get_count(full_message, ":)")
 	smiles += Helper.get_count(full_message, ":D")
-	if smiles > 3:
-		smiles = 3
-	if smiles >= 0:
-		for _n in range(smiles):
+	if smiles > 0:
+		for _n in range(10):
 			var o = load("res://smiley/smiley.tscn").instantiate()
 			o.position = Helper.random_position()
 			Helper.add_child(o)
@@ -275,20 +265,20 @@ func add_head(username, message):
 				var key = keys[i]
 				var c = profile_pics[key]
 				if c["ready"]:
-					c["sprite"].queue_free()
+					c["node"].queue_free()
 					profile_pics.erase(key)
 					print("killed %s" % key)
 			
 		profile_pics[username] = {
 			"url": null,
-			"sprite": null,
+			"node": null,
 			"ready": false
 		}
 		var first = false
 		if profile_pics.size() == 1:
 			first = true
 		var chatter = Chatter.instantiate()
-		profile_pics[username]["sprite"] = chatter
+		profile_pics[username]["node"] = chatter
 		chatter.add_head(null, username, first)
 		ChatterContainer.add_child(chatter)
 		chatter.say(message)
@@ -299,7 +289,7 @@ func add_head(username, message):
 		get_profile_pic(profile_pic_queue)
 		
 	if profile_pics.has(username):
-		profile_pics[username]["sprite"].say(message)
+		profile_pics[username]["node"].say(message)
 
 
 func unhandled_message(message : String, tags : Dictionary) -> void:
@@ -389,7 +379,7 @@ func profile_image_received(_result: int, _response_code: int, _headers: PackedS
 	else:
 		image.load_jpg_from_buffer(body)
 
-	profile_pics[login]["sprite"].add_head(image, login)
+	profile_pics[login]["node"].add_head(image, login)
 	profile_pics[login]["ready"] = true
 	profile_pic_queue.erase(login)
 
@@ -402,6 +392,7 @@ func _on_MIDIButton_pressed():
 		print("MIDI OFF")
 		OS.close_midi_inputs()
 
+
 func midi(_pitch):
 	var chatters = get_tree().get_nodes_in_group("chatter")
 
@@ -410,10 +401,8 @@ func midi(_pitch):
 		
 	chatters.shuffle()
 	for c in chatters:
-		if c.linear_velocity.length() > 100:
-			continue
-		c.apply_central_impulse(Vector2(0, -200).rotated(randf() * PI/2 - PI/4))
-		var explosion = preload("res://booms/explosion.tscn").instance()
+		c.apply_central_impulse(Vector2(0, -1000).rotated(randf() * TAU))
+		var explosion = preload("res://booms/explosion.tscn").instantiate()
 		explosion.position = c.position
 		add_child(explosion)
 

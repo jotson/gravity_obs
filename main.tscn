@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://d2bq3pp2a8fgd"]
+[gd_scene load_steps=16 format=3 uid="uid://d2bq3pp2a8fgd"]
 
 [ext_resource type="Theme" uid="uid://bjeweqbaitpr4" path="res://common/gui/ui-theme.tres" id="1"]
 [ext_resource type="Script" path="res://main.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://crgn53xfjst6w" path="res://soundboard/SoundButton.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://ddt7qmrivrg05" path="res://gamepad/gamepad.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://dgcc1exjlifim" path="res://spectrum/spectrum.tscn" id="5_weumf"]
 
 [sub_resource type="StyleBoxEmpty" id="6"]
 
@@ -26,11 +27,19 @@ VScrollBar/styles/grabber_pressed = SubResource("8")
 VScrollBar/styles/scroll = SubResource("4")
 VScrollBar/styles/scroll_focus = SubResource("5")
 
-[sub_resource type="RectangleShape2D" id="12"]
-size = Vector2(128, 1612)
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_kiact"]
+normal = Vector2(1, 0)
+distance = 64.0
 
-[sub_resource type="RectangleShape2D" id="13"]
-size = Vector2(2686, 128)
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_sspeq"]
+normal = Vector2(0, 1)
+distance = 63.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o5pq5"]
+normal = Vector2(-1, 0)
+distance = 63.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_aubm8"]
 
 [node name="main" type="Control"]
 layout_mode = 3
@@ -135,23 +144,22 @@ note = 39
 
 [node name="walls" type="StaticBody2D" parent="." groups=["wall"]]
 position = Vector2(-60, 281)
-collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="walls"]
 position = Vector2(-4, 261)
-shape = SubResource("12")
+shape = SubResource("WorldBoundaryShape2D_kiact")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="walls"]
 position = Vector2(920, -344)
-shape = SubResource("13")
+shape = SubResource("WorldBoundaryShape2D_sspeq")
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="walls"]
 position = Vector2(2044, 257)
-shape = SubResource("12")
+shape = SubResource("WorldBoundaryShape2D_o5pq5")
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="walls"]
-position = Vector2(920, 863)
-shape = SubResource("13")
+position = Vector2(920, 799)
+shape = SubResource("WorldBoundaryShape2D_aubm8")
 
 [node name="Gamepad" parent="." instance=ExtResource("5")]
 layout_mode = 0
@@ -160,6 +168,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
+
+[node name="Spectrum" parent="." instance=ExtResource("5_weumf")]
+visible = false
 
 [connection signal="pressed" from="login/joinButton" to="." method="_on_joinButton_pressed"]
 [connection signal="pressed" from="login/authButton" to="." method="_on_authButton_pressed"]

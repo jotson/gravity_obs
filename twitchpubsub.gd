@@ -115,7 +115,7 @@ func data_received() -> void:
 			if message.type == "reward-redeemed":
 				var user = message.data.redemption.user.display_name
 				var reward_title = message.data.redemption.reward.title
-				emit_signal("reward_redemption", user, reward_title)
+				reward_redemption.emit(user, reward_title)
 
 
 func send(message : Dictionary) -> void:

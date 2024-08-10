@@ -80,4 +80,4 @@ func received_channel_info(result: int, response_code: int, headers: PackedStrin
 	channel_game_id = message.data[0].game_id
 	channel_game_name = message.data[0].game_name
 	
-	emit_signal("got_channel_info")
+	got_channel_info.emit()

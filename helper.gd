@@ -59,4 +59,3 @@ func get_count(message, needle):
 		count += 1
 		n = message.findn(needle, n+1)
 	return count
-
