@@ -284,12 +284,11 @@ func add_head(username, message):
 		chatter.say(message)
 		
 		profile_pic_queue.append(username)
-	
+	elif profile_pics.has(username):
+			profile_pics[username]["node"].say(message)
+
 	if profile_pic_queue.size() and Time.get_ticks_msec() > last_api_request + 500:
 		get_profile_pic(profile_pic_queue)
-		
-	if profile_pics.has(username):
-		profile_pics[username]["node"].say(message)
 
 
 func unhandled_message(message : String, tags : Dictionary) -> void:
@@ -401,7 +400,7 @@ func midi(_pitch):
 		
 	chatters.shuffle()
 	for c in chatters:
-		c.apply_central_impulse(Vector2(0, -1000).rotated(randf() * TAU))
+		c.apply_central_impulse(Vector2(0, -3000).rotated(randf() * TAU))
 		var explosion = preload("res://booms/explosion.tscn").instantiate()
 		explosion.position = c.position
 		add_child(explosion)

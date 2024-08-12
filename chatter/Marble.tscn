@@ -121,11 +121,11 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="11"]
+resource_local_to_scene = true
 radius = 48.0
 
 [node name="Marble" type="RigidBody2D" groups=["chatter"]]
 material = ExtResource("4")
-collision_layer = 0
 input_pickable = true
 physics_material_override = SubResource("10")
 script = ExtResource("5")
@@ -186,12 +186,8 @@ libraries = {
 "": SubResource("AnimationLibrary_jvd6i")
 }
 
-[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
-visible = false
-polygon = PackedVector2Array(-13, 16, -16, 13, -16, -13, -13, -16, 13, -16, 16, -13, 16, 13, 13, 16)
-disabled = true
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("11")
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
