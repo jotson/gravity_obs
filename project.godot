@@ -46,6 +46,7 @@ enabled=PackedStringArray()
 [global_group]
 
 removable="Objects that can be deleted by right clicking"
+freezable=""
 
 [importer_defaults]
 

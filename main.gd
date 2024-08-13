@@ -93,6 +93,8 @@ func _input(event):
 		var obj = preload("res://chatter/pin.tscn").instantiate()
 		obj.global_position = get_global_mouse_position()
 		add_child(obj)
+		if obj.is_in_group("freezable"):
+			obj.freeze = true
 		var collider = get_object_under_cursor([obj.get_rid()])
 		if collider:
 			obj.pin(collider)
@@ -102,6 +104,8 @@ func _input(event):
 		if event.button_index == 1 and event.is_pressed():
 			var collider = get_object_under_cursor()
 			if collider:
+				if collider.is_in_group("freezable"):
+					collider.freeze = false
 				$MouseBody.pin(collider)
 				dragged = collider
 		if event.button_index == 1 and not event.is_pressed():
@@ -138,7 +142,9 @@ func _process(_delta):
 func throw() -> void:
 	var vel = Input.get_last_mouse_velocity()
 	$MouseBody.unpin()
-	if is_instance_valid(dragged):
+	if is_instance_valid(dragged) and dragged.has_method("apply_central_impulse"):
+		if dragged.is_in_group("freezable"):
+			dragged.freeze = true
 		dragged.apply_central_impulse(vel)
 	dragged = null
 
