@@ -7,6 +7,7 @@ const GRAVITY = 50.0
 var t = 6.0
 var last_say: float = 0.0
 
+
 func _ready():
 	position = Helper.random_position()
 	
@@ -33,16 +34,7 @@ func _process(_delta):
 	$speechBubble.global_rotation = 0
 	
 	
-func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
-	if dragged:
-		global_position = get_global_mouse_position()
-		linear_velocity = Vector2.ZERO
-
-
 func _physics_process(delta):
-	if dragged:
-		return
-		
 	if position.y > FLOOR:
 		transform = Transform2D(0, Helper.random_position())
 	
@@ -88,27 +80,3 @@ func add_head(image:Image = null, login:String = "", first_chatter:bool = false)
 		$head/helmet.add_child(s)
 		
 	self.first = first_chatter
-
-
-var dragged: bool = false
-func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if event is InputEventMouseButton:
-		event = event as InputEventMouseButton
-		if event.button_index == 1 and event.is_pressed():
-			var offset = event.global_position - position
-			dragged = true
-		if event.button_index == 1 and not event.is_pressed():
-			dragged = false
-			throw()
-
-
-func _on_mouse_exited() -> void:
-	if dragged:
-		throw()
-	dragged = false
-	
-	
-func throw() -> void:
-	var vel = Input.get_last_mouse_velocity()
-	apply_central_impulse(vel * 3)
-	

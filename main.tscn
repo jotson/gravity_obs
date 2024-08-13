@@ -1,10 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://d2bq3pp2a8fgd"]
+[gd_scene load_steps=17 format=3 uid="uid://d2bq3pp2a8fgd"]
 
 [ext_resource type="Theme" uid="uid://bjeweqbaitpr4" path="res://common/gui/ui-theme.tres" id="1"]
 [ext_resource type="Script" path="res://main.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://crgn53xfjst6w" path="res://soundboard/SoundButton.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://ddt7qmrivrg05" path="res://gamepad/gamepad.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://dgcc1exjlifim" path="res://spectrum/spectrum.tscn" id="5_weumf"]
+[ext_resource type="PackedScene" uid="uid://c5qoh2by2ppym" path="res://common/mouse_body.tscn" id="6_rmcon"]
 
 [sub_resource type="StyleBoxEmpty" id="6"]
 
@@ -171,6 +172,8 @@ mouse_filter = 2
 
 [node name="Spectrum" parent="." instance=ExtResource("5_weumf")]
 visible = false
+
+[node name="MouseBody" parent="." instance=ExtResource("6_rmcon")]
 
 [connection signal="pressed" from="login/joinButton" to="." method="_on_joinButton_pressed"]
 [connection signal="pressed" from="login/authButton" to="." method="_on_authButton_pressed"]

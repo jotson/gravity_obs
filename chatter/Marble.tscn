@@ -188,6 +188,3 @@ libraries = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("11")
-
-[connection signal="input_event" from="." to="." method="_on_input_event"]
-[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

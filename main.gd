@@ -7,6 +7,7 @@ var profile_pics = {}
 var profile_pic_queue = []
 var MAX_CHATTERS = 50
 var lastChannel = ""
+var dragged = null
 
 const AstronautChatter = preload("res://chatter/Astronaut.tscn")
 const AstronautContainer = preload("res://chatter/AstronautContainer.tscn")
@@ -47,14 +48,14 @@ func _ready():
 	load_commands()
 
 
-func _input(_event):
-	if Input.is_action_just_pressed("toggle_console"):
+func _input(event):
+	if event.is_action_pressed("toggle_console"):
 		if $console.visible:
 			$console.hide()
 		else:
 			$console.show()
 			
-	if Input.is_action_just_pressed("toggle_gamepad"):
+	if event.is_action_pressed("toggle_gamepad"):
 		if $Gamepad.visible:
 			$Gamepad.hide()
 			$console.text = "Gamepad off\n"
@@ -62,7 +63,7 @@ func _input(_event):
 			$Gamepad.show()
 			$console.text = "Gamepad on\n"
 			
-	if Input.is_action_just_pressed("toggle_heads"):
+	if event.is_action_pressed("toggle_heads"):
 		if ChatterContainer.visible:
 			ChatterContainer.hide()
 			$console.text = "Heads off\n"
@@ -70,6 +71,64 @@ func _input(_event):
 			ChatterContainer.show()
 			$console.text = "Heads on\n"
 			
+	if event.is_action_pressed("add_box"):
+		var obj = preload("res://chatter/box.tscn").instantiate()
+		obj.global_position = get_global_mouse_position()
+		add_child(obj)
+		
+	if event.is_action_pressed("add_weight"):
+		var obj = preload("res://chatter/weight.tscn").instantiate()
+		obj.global_position = get_global_mouse_position()
+		add_child(obj)
+
+	if event.is_action_pressed("add_jail"):
+		var obj = preload("res://chatter/jail.tscn").instantiate()
+		obj.global_position = get_global_mouse_position()
+		add_child(obj)
+
+	if event is InputEventMouseButton:
+		event = event as InputEventMouseButton
+		if event.button_index == 1 and event.is_pressed():
+			var collider = get_object_under_cursor()
+			if collider:
+				$MouseBody.pin(collider)
+				dragged = collider
+		if event.button_index == 1 and not event.is_pressed():
+			throw()
+		if event.button_index == 2 and event.is_pressed():
+			var collider = get_object_under_cursor()
+			if collider and collider.is_in_group("removable"):
+				collider.queue_free()
+				
+
+func get_object_under_cursor() -> Node2D:
+	var state = get_world_2d().direct_space_state
+	var query = PhysicsPointQueryParameters2D.new()
+	query.position = get_global_mouse_position()
+	query.collide_with_areas = true
+	var collisions = state.intersect_point(query)
+	if collisions.size():
+		var collider = collisions[0].collider
+		for n in range(3):
+			if not (collider is RigidBody2D):
+				collider = collider.get_parent()
+				break
+		return collider
+	return null
+
+
+func _process(_delta):
+	if not $login/AutoLoginTimer.is_stopped():
+		$login/AutoLoginLabel.text = "Automatic login in %d..." % [ceil($login/AutoLoginTimer.time_left)]
+
+
+func throw() -> void:
+	var vel = Input.get_last_mouse_velocity()
+	$MouseBody.unpin()
+	if is_instance_valid(dragged):
+		dragged.apply_central_impulse(vel)
+	dragged = null
+
 
 func load_commands():
 	commands.clear()
@@ -411,9 +470,3 @@ func midi(_pitch):
 func _on_AutoLoginTimer_timeout():
 	_on_joinButton_pressed()
 	$login/AutoLoginLabel.hide()
-
-
-func _process(_delta):
-	if not $login/AutoLoginTimer.is_stopped():
-		$login/AutoLoginLabel.text = "Automatic login in %d..." % [ceil($login/AutoLoginTimer.time_left)]
-		

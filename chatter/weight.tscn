@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://w2vbdv7ugqr3"]
+
+[ext_resource type="Texture2D" uid="uid://dadan2igan5qq" path="res://chatter/textures/weight.png" id="1_wsv6p"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3rakw"]
+bounce = 0.25
+
+[node name="Weight" type="RigidBody2D" groups=["removable"]]
+input_pickable = true
+mass = 5.0
+physics_material_override = SubResource("PhysicsMaterial_3rakw")
+can_sleep = false
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_wsv6p")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-33, 30, -28, 35, 29, 35, 33, 30, 24, -21, 19, -25, 6.63126, -25, 7, -30, 3, -35, -3, -35, -7, -30, -6, -25, -19, -25, -23, -21)
