@@ -49,6 +49,9 @@ func _ready():
 
 
 func _input(event):
+	if $login.visible:
+		return
+		
 	if event.is_action_pressed("toggle_console"):
 		if $console.visible:
 			$console.hide()
@@ -86,6 +89,14 @@ func _input(event):
 		obj.global_position = get_global_mouse_position()
 		add_child(obj)
 
+	if event.is_action_pressed("pin"):
+		var obj = preload("res://chatter/pin.tscn").instantiate()
+		obj.global_position = get_global_mouse_position()
+		add_child(obj)
+		var collider = get_object_under_cursor([obj.get_rid()])
+		if collider:
+			obj.pin(collider)
+
 	if event is InputEventMouseButton:
 		event = event as InputEventMouseButton
 		if event.button_index == 1 and event.is_pressed():
@@ -101,16 +112,18 @@ func _input(event):
 				collider.queue_free()
 				
 
-func get_object_under_cursor() -> Node2D:
+func get_object_under_cursor(exclude = null) -> Node2D:
 	var state = get_world_2d().direct_space_state
 	var query = PhysicsPointQueryParameters2D.new()
 	query.position = get_global_mouse_position()
 	query.collide_with_areas = true
+	if exclude:
+		query.exclude = exclude
 	var collisions = state.intersect_point(query)
 	if collisions.size():
 		var collider = collisions[0].collider
 		for n in range(3):
-			if not (collider is RigidBody2D):
+			if not (collider is RigidBody2D or collider is StaticBody2D):
 				collider = collider.get_parent()
 				break
 		return collider

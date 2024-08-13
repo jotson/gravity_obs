@@ -15,4 +15,4 @@ can_sleep = false
 texture = ExtResource("1_wsv6p")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(-33, 30, -28, 35, 29, 35, 33, 30, 24, -21, 19, -25, 6.63126, -25, 7, -30, 3, -35, -3, -35, -7, -30, -6, -25, -19, -25, -23, -21)
+polygon = PackedVector2Array(-33, 30, -28, 35, 29, 35, 33, 30, 24, -21, 19, -25, -19, -25, -23, -21)
