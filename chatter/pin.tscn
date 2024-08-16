@@ -10,7 +10,9 @@ radius = 16.0312
 radius = 6.0
 
 [node name="Pin" type="RigidBody2D" groups=["freezable", "removable"]]
-z_index = 2
+z_index = 1
+collision_layer = 4
+collision_mask = 3
 gravity_scale = 0.0
 script = ExtResource("1_m7hu8")
 

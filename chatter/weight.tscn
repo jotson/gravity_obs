@@ -6,6 +6,8 @@
 bounce = 0.25
 
 [node name="Weight" type="RigidBody2D" groups=["removable"]]
+collision_layer = 4
+collision_mask = 7
 input_pickable = true
 mass = 5.0
 physics_material_override = SubResource("PhysicsMaterial_3rakw")

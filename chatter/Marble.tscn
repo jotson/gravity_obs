@@ -126,8 +126,11 @@ radius = 48.0
 
 [node name="Marble" type="RigidBody2D" groups=["chatter"]]
 material = ExtResource("4")
+collision_layer = 2
+collision_mask = 7
 input_pickable = true
 physics_material_override = SubResource("10")
+can_sleep = false
 script = ExtResource("5")
 
 [node name="head" type="Node2D" parent="."]

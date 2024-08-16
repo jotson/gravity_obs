@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=3 uid="uid://cslc1c4f6sgam"]
+
+[ext_resource type="Script" path="res://chatter/note.gd" id="1_202ty"]
+[ext_resource type="Texture2D" uid="uid://ndwv32a5ct3v" path="res://chatter/textures/note.png" id="1_voi5a"]
+[ext_resource type="FontFile" uid="uid://bxitwn4c54mjp" path="res://fonts/LondrinaSolid-Regular.ttf" id="3_bv565"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3rakw"]
+bounce = 0.1
+absorbent = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cc5t6"]
+size = Vector2(256, 256)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jjqno"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_br850"]
+
+[node name="Note" type="RigidBody2D" groups=["removable"]]
+collision_layer = 4
+collision_mask = 2
+input_pickable = true
+physics_material_override = SubResource("PhysicsMaterial_3rakw")
+can_sleep = false
+script = ExtResource("1_202ty")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_voi5a")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_cc5t6")
+
+[node name="FocusGrabber" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -127.0
+offset_top = -127.0
+offset_right = 129.0
+offset_bottom = 127.0
+focus_mode = 1
+
+[node name="TextEdit" type="TextEdit" parent="."]
+offset_left = -110.0
+offset_top = -83.0
+offset_right = 111.0
+offset_bottom = 105.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/caret_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_bv565")
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxEmpty_jjqno")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_br850")
+context_menu_enabled = false
+shortcut_keys_enabled = false
+wrap_mode = 1
+caret_blink = true
+caret_blink_interval = 0.3
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

@@ -79,6 +79,11 @@ func _input(event):
 		obj.global_position = get_global_mouse_position()
 		add_child(obj)
 		
+	if event.is_action_pressed("note"):
+		var obj = preload("res://chatter/note.tscn").instantiate()
+		obj.global_position = get_global_mouse_position()
+		add_child(obj)
+		
 	if event.is_action_pressed("add_weight"):
 		var obj = preload("res://chatter/weight.tscn").instantiate()
 		obj.global_position = get_global_mouse_position()

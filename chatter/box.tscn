@@ -17,6 +17,8 @@ size = Vector2(229, 164)
 
 [node name="Box" type="RigidBody2D" groups=["removable"]]
 z_index = 1
+collision_layer = 4
+collision_mask = 7
 input_pickable = true
 physics_material_override = SubResource("PhysicsMaterial_3rakw")
 can_sleep = false
