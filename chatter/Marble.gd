@@ -57,7 +57,7 @@ func resize(sz: Vector2) -> void:
 	
 
 func say(message:String):
-	$speechBubble/speechBubble.text = message
+	$speechBubble/speechBubble.text = "[center]%s[/center]" % message
 	$speechBubble/AnimationPlayer.play("speak")
 	if last_say > 1000:
 		apply_central_impulse(Vector2(0, -3000).rotated(randf() * PI/2 - PI/4))

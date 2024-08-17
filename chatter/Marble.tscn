@@ -177,6 +177,8 @@ offset_right = 120.0
 offset_bottom = -48.0
 bbcode_enabled = true
 text = "This is some multi-line sample text to say"
+fit_content = true
+scroll_active = false
 autowrap_mode = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="speechBubble"]

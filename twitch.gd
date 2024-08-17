@@ -8,11 +8,33 @@ var broadcaster_name = null
 var channel_title = null
 var channel_game_id = null
 var channel_game_name = null
-
+var emotes: Dictionary
 
 func _ready():
 	pass
 
+
+func register_emote(id, image: Image = null) -> ImageTexture:
+	if emotes.has(id):
+		return emotes[id]
+	
+	var path = "user://emotes/%s.png" % id
+	
+	if image == null:
+		if FileAccess.file_exists(path):
+			image = Image.load_from_file(path)
+	else:
+		image.save_png(path)
+		prints("Register emote", image.resource_path)
+	
+	if image:
+		var texture = ImageTexture.create_from_image(image)
+		texture.take_over_path(path)
+		emotes[id] = texture
+		return texture
+		
+	return null
+	
 
 func join(channel):
 	connect_to_twitch()

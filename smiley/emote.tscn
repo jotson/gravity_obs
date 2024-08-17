@@ -8,5 +8,3 @@ scale = Vector2(2, 2)
 script = ExtResource("1_cfvyw")
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
-
-[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]

@@ -344,18 +344,47 @@ func twitch_chat(sender_data, command : String, full_message : String):
 	# Emotes image https://static-cdn.jtvnw.net/emoticons/v1/<ID>/2.0
 	var tags: Dictionary = sender_data.tags
 	var emotes = tags.emotes.split("/")
-	emotes.resize(min(3, emotes.size()))
+	emotes.reverse()
 	var emote_ids: Dictionary
 	for emote in emotes:
 		var emote_data = emote.split(":")
 		var id = emote_data[0]
-		emote_ids[id] = id
+		if id:
+			emote_ids[id] = id
 	for id in emote_ids.keys():
 		var image_url = "https://static-cdn.jtvnw.net/emoticons/v1/%s/2.0" % id
 		var o = load("res://smiley/emote.tscn").instantiate()
 		Helper.add_child(o)
-		o.url = image_url
-		
+		await o.fetch(id, image_url)
+	
+	# Render message in bbcode
+	var new_message: String = ""
+	var i = 0
+	while i < len(message):
+		var c = message.substr(i, 1)
+		var bbimg = ""
+		for emote in emotes:
+			var emote_data = emote.split(":")
+			var id = emote_data[0]
+			if not id:
+				continue
+			var pos = emote_data[1].split(",")
+			for p in pos:
+				var start_end = str(p).split("-")
+				var start = int(start_end[0])
+				var end = int(start_end[1])
+				if start == i:
+					bbimg = "[img=16]%s[/img]" % Twitch.emotes[id].resource_path
+					new_message += bbimg
+					i = end + 1
+					break
+			if bbimg:
+				break
+		if bbimg == "":
+			new_message += c
+			i += 1
+	message = new_message
+	
 	var hearts = Helper.get_count(full_message, "<3")
 	if hearts > 0:
 		for _n in range(10):
