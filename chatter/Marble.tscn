@@ -125,6 +125,7 @@ resource_local_to_scene = true
 radius = 48.0
 
 [node name="Marble" type="RigidBody2D" groups=["chatter"]]
+z_index = -1
 material = ExtResource("4")
 collision_layer = 2
 collision_mask = 7

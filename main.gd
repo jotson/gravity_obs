@@ -48,7 +48,7 @@ func _ready():
 	load_commands()
 
 
-func _input(event):
+func _unhandled_input(event):
 	if $login.visible:
 		return
 		
@@ -77,12 +77,14 @@ func _input(event):
 	if event.is_action_pressed("add_box"):
 		var obj = preload("res://chatter/box.tscn").instantiate()
 		obj.global_position = get_global_mouse_position()
+		obj.rotation = PI
 		add_child(obj)
 		
 	if event.is_action_pressed("note"):
 		var obj = preload("res://chatter/note.tscn").instantiate()
-		obj.global_position = get_global_mouse_position()
+		obj.global_position = get_global_mouse_position() + Vector2(randf_range(-100, -50), 90)
 		add_child(obj)
+		var pin = pin()
 		
 	if event.is_action_pressed("add_weight"):
 		var obj = preload("res://chatter/weight.tscn").instantiate()
@@ -95,15 +97,18 @@ func _input(event):
 		add_child(obj)
 
 	if event.is_action_pressed("pin"):
-		var obj = preload("res://chatter/pin.tscn").instantiate()
-		obj.global_position = get_global_mouse_position()
-		add_child(obj)
-		if obj.is_in_group("freezable"):
-			obj.freeze = true
-		var collider = get_object_under_cursor([obj.get_rid()])
-		if collider:
-			obj.pin(collider)
-
+		pin()
+	
+	if event.is_action_pressed("move_to_front"):
+		if dragged and dragged.find_child("PinJoint2D"):
+			get_node(dragged.find_child("PinJoint2D").node_b).move_to_front()
+		if dragged:
+			dragged.move_to_front()
+			for node in get_tree().get_nodes_in_group("freezable"):
+				if node.find_child("PinJoint2D"):
+					if node.find_child("PinJoint2D").node_b == dragged.get_path():
+						node.move_to_front()
+			
 	if event is InputEventMouseButton:
 		event = event as InputEventMouseButton
 		if event.button_index == 1 and event.is_pressed():
@@ -119,7 +124,19 @@ func _input(event):
 			var collider = get_object_under_cursor()
 			if collider and collider.is_in_group("removable"):
 				collider.queue_free()
-				
+
+
+func pin():
+	var obj = preload("res://chatter/pin.tscn").instantiate()
+	obj.global_position = get_global_mouse_position()
+	add_child(obj)
+	if obj.is_in_group("freezable"):
+		obj.freeze = true
+	var collider = get_object_under_cursor([obj.get_rid()])
+	if collider:
+		obj.pin(collider)
+	return obj
+
 
 func get_object_under_cursor(exclude = null) -> Node2D:
 	var state = get_world_2d().direct_space_state
@@ -129,6 +146,9 @@ func get_object_under_cursor(exclude = null) -> Node2D:
 	if exclude:
 		query.exclude = exclude
 	var collisions = state.intersect_point(query)
+	collisions.sort_custom(
+		func(a, b): return a.collider.get_index() > b.collider.get_index()
+	)
 	if collisions.size():
 		var collider = collisions[0].collider
 		for n in range(3):

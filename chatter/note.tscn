@@ -29,6 +29,10 @@ texture = ExtResource("1_voi5a")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_cc5t6")
 
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(0.500008, -0.500004)
+scale = Vector2(12.95, 13.05)
+
 [node name="FocusGrabber" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -55,6 +59,6 @@ wrap_mode = 1
 caret_blink = true
 caret_blink_interval = 0.3
 
-[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
-
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="gui_input" from="FocusGrabber" to="." method="_on_focus_grabber_gui_input"]
+[connection signal="gui_input" from="TextEdit" to="." method="_on_text_edit_gui_input"]

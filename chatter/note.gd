@@ -11,3 +11,13 @@ func _ready() -> void:
 
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 	queue_free()
+
+
+func _on_text_edit_gui_input(event: InputEvent) -> void:
+	if not event is InputEventKey:
+		get_viewport().push_unhandled_input(event)
+
+
+func _on_focus_grabber_gui_input(event: InputEvent) -> void:
+	if not event is InputEventKey:
+		get_viewport().push_unhandled_input(event)
