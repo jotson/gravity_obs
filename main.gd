@@ -502,7 +502,8 @@ func received_profile_pic(_result: int, _response_code: int, _headers: PackedStr
 	test_json_conv.parse(data)
 	var message = test_json_conv.get_data()
 	for user in message.data:
-		profile_pics[user.login]["url"] = user.profile_image_url
+		if profile_pics.has(user.login):
+			profile_pics[user.login]["url"] = user.profile_image_url
 		get_profile_image(user.login, user.profile_image_url)
 
 
@@ -525,9 +526,10 @@ func profile_image_received(_result: int, _response_code: int, _headers: PackedS
 		image.load_png_from_buffer(body)
 	else:
 		image.load_jpg_from_buffer(body)
-
-	profile_pics[login]["node"].add_head(image, login)
-	profile_pics[login]["ready"] = true
+	
+	if profile_pics.has(login):
+		profile_pics[login]["node"].add_head(image, login)
+		profile_pics[login]["ready"] = true
 	profile_pic_queue.erase(login)
 
 
