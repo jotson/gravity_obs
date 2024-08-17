@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://de1i7w28qbkvj"]
+
+[ext_resource type="Script" path="res://smiley/emote.gd" id="1_cfvyw"]
+
+[node name="emote" type="Node2D"]
+position = Vector2(513, 126)
+scale = Vector2(2, 2)
+script = ExtResource("1_cfvyw")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]

@@ -84,7 +84,6 @@ func _unhandled_input(event):
 		var obj = preload("res://chatter/note.tscn").instantiate()
 		obj.global_position = get_global_mouse_position() + Vector2(randf_range(-100, -50), 90)
 		add_child(obj)
-		var pin = pin()
 		
 	if event.is_action_pressed("add_weight"):
 		var obj = preload("res://chatter/weight.tscn").instantiate()
@@ -340,6 +339,23 @@ func twitch_chat(sender_data, command : String, full_message : String):
 	message = " ".join(message)
 	message = message.substr(1)
 	
+	# Get emotes from sender_data.tags.emotes 443:5-6/555555629:17-19
+	# Format is <ID>:<POSITION>/<ID>:<POSITION>/...
+	# Emotes image https://static-cdn.jtvnw.net/emoticons/v1/<ID>/2.0
+	var tags: Dictionary = sender_data.tags
+	var emotes = tags.emotes.split("/")
+	emotes.resize(min(3, emotes.size()))
+	var emote_ids: Dictionary
+	for emote in emotes:
+		var emote_data = emote.split(":")
+		var id = emote_data[0]
+		emote_ids[id] = id
+	for id in emote_ids.keys():
+		var image_url = "https://static-cdn.jtvnw.net/emoticons/v1/%s/2.0" % id
+		var o = load("res://smiley/emote.tscn").instantiate()
+		Helper.add_child(o)
+		o.url = image_url
+		
 	var hearts = Helper.get_count(full_message, "<3")
 	if hearts > 0:
 		for _n in range(10):

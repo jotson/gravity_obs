@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://vvflg026we3l"]
+[gd_scene load_steps=12 format=3 uid="uid://vvflg026we3l"]
 
 [ext_resource type="Texture2D" uid="uid://c8afxwam0vsus" path="res://chatter/textures/helmet.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://bqnhnq6xvubqp" path="res://chatter/textures/face.png" id="3"]
@@ -6,7 +6,6 @@
 [ext_resource type="Material" uid="uid://d15kkyrusbpla" path="res://chatter/color.material" id="4"]
 [ext_resource type="Script" path="res://chatter/Marble.gd" id="5"]
 [ext_resource type="Texture2D" uid="uid://dotati4xu1a2y" path="res://chatter/textures/helmet-bg.png" id="6"]
-[ext_resource type="FontFile" uid="uid://bnddlf88msab3" path="res://fonts/IBMPlexSansCondensed-Regular.ttf" id="7_7m6cb"]
 
 [sub_resource type="PhysicsMaterial" id="10"]
 bounce = 0.5
@@ -170,19 +169,15 @@ texture = ExtResource("3")
 
 [node name="speechBubble" type="Node2D" parent="."]
 
-[node name="speechBubble" type="Label" parent="speechBubble"]
+[node name="speechBubble" type="RichTextLabel" parent="speechBubble"]
 modulate = Color(1, 1, 1, 0)
 offset_left = -120.0
 offset_top = -104.0
 offset_right = 120.0
 offset_bottom = -48.0
-theme_override_constants/line_spacing = 0
-theme_override_fonts/font = ExtResource("7_7m6cb")
-theme_override_font_sizes/font_size = 20
+bbcode_enabled = true
 text = "This is some multi-line sample text to say"
-horizontal_alignment = 1
 autowrap_mode = 2
-clip_text = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="speechBubble"]
 root_node = NodePath("../speechBubble")

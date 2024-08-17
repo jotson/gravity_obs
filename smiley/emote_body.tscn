@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://b8p71pek5mgm"]
+
+[ext_resource type="Script" path="res://smiley/emote_body.gd" id="1_tw267"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3rakw"]
+bounce = 0.5
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_35r4x"]
+size = Vector2(32, 32)
+
+[node name="EmoteBody" type="RigidBody2D" groups=["removable"]]
+collision_layer = 4
+collision_mask = 7
+input_pickable = true
+physics_material_override = SubResource("PhysicsMaterial_3rakw")
+can_sleep = false
+script = ExtResource("1_tw267")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_35r4x")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+
+[connection signal="timeout" from="Timer" to="." method="queue_free"]
