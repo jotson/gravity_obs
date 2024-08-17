@@ -84,6 +84,7 @@ func _unhandled_input(event):
 		var obj = preload("res://chatter/note.tscn").instantiate()
 		obj.global_position = get_global_mouse_position() + Vector2(randf_range(-100, -50), 90)
 		add_child(obj)
+		pin()
 		
 	if event.is_action_pressed("add_weight"):
 		var obj = preload("res://chatter/weight.tscn").instantiate()

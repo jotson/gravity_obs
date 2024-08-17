@@ -92,7 +92,7 @@ text = "MIDI"
 layout_mode = 2
 
 [node name="AutoLoginTimer" type="Timer" parent="login"]
-wait_time = 3.0
+wait_time = 5.0
 one_shot = true
 autostart = true
 
