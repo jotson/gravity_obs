@@ -426,6 +426,14 @@ func twitch_chat(sender_data, command : String, full_message : String):
 	
 	
 func add_head(username, message):
+	var ignore = []
+	var config = ConfigFile.new()
+	if config.load("user://ignore.ini") == OK:
+		ignore = config.get_value("ignore", "ignore", [])
+
+	if ignore.has(username):
+		return
+		
 	if not profile_pics.has(username) and not profile_pic_queue.has(username):
 		if profile_pics.size() > MAX_CHATTERS:
 			for _j in range(profile_pics.size() - MAX_CHATTERS):
@@ -474,7 +482,6 @@ func unhandled_message(message : String, tags : Dictionary) -> void:
 				prints(sender_data.user, "joined channel! [IGNORED]")
 			else:
 				prints(sender_data.user, "joined channel!")
-				#add_head(sender_data.user, "")
 
 
 func twitch_disconnect():
