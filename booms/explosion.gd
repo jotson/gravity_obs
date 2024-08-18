@@ -24,7 +24,7 @@ func explode():
 		obj.position = position
 		obj.global_position = position
 		obj.linear_velocity = velocity + Vector2(randf_range(-200,200), randf_range(-200,200))
-		Helper.add_child(obj)
+		Helper.add(obj)
 
 	$explosion.rotation = randf() * 2 * PI
 	$AnimationPlayer.play('default')

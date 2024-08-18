@@ -1,0 +1,57 @@
+[gd_scene load_steps=5 format=3 uid="uid://bft3g870tq7oa"]
+
+[ext_resource type="Script" path="res://chatter/quote.gd" id="1_4lcju"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3rakw"]
+bounce = 0.1
+absorbent = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cx74c"]
+size = Vector2(240, 100)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4lh7b"]
+bg_color = Color(0, 0, 0, 0.541176)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Quote" type="RigidBody2D" groups=["removable"]]
+collision_layer = 4
+collision_mask = 2
+input_pickable = true
+physics_material_override = SubResource("PhysicsMaterial_3rakw")
+can_sleep = false
+script = ExtResource("1_4lcju")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_cx74c")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(0.499988, 0.500004)
+scale = Vector2(12.05, 4.95)
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(240, 100)
+offset_left = -120.0
+offset_top = -50.0
+offset_right = 120.0
+offset_bottom = 50.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4lh7b")
+
+[node name="Label" type="RichTextLabel" parent="."]
+custom_minimum_size = Vector2(220, 72)
+offset_left = -110.0
+offset_top = -36.0
+offset_right = 110.0
+offset_bottom = 36.0
+mouse_filter = 2
+theme_override_font_sizes/bold_italics_font_size = 12
+theme_override_font_sizes/italics_font_size = 12
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 12
+bbcode_enabled = true
+scroll_active = false
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="queue_free"]

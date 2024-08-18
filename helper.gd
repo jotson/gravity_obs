@@ -43,7 +43,7 @@ func _input(_event):
 
 
 func add(object: Node):
-	get_tree().current_scene.call_deferred('add_child', object)
+	get_tree().current_scene.add_child(object)
 
 
 func random_position():

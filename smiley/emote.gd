@@ -35,5 +35,5 @@ func generate_props():
 	for i in range(3):
 		var obj = preload("res://smiley/emote_body.tscn").instantiate()
 		obj.global_position = Helper.random_position()
-		Helper.add_child(obj)
+		Helper.add(obj)
 		obj.texture = Twitch.emotes[emote_id]

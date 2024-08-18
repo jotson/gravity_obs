@@ -40,6 +40,6 @@ func die():
 		# Secondary explosion
 		var explosion = Secondary.instantiate()
 		explosion.position = position
-		Helper.add_child(explosion)
+		Helper.add(explosion)
 
 	queue_free()

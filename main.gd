@@ -23,7 +23,7 @@ func _ready():
 	$Gamepad.hide()
 	$login/channel.grab_focus()
 
-	add_child(ChatterContainer)
+	Helper.add(ChatterContainer)
 	
 	var channel = Helper.get_saved_channel()
 	if channel:
@@ -78,26 +78,26 @@ func _unhandled_input(event):
 		var obj = preload("res://chatter/box.tscn").instantiate()
 		obj.global_position = get_global_mouse_position()
 		obj.rotation = PI
-		add_child(obj)
+		Helper.add(obj)
 		
 	if event.is_action_pressed("note"):
 		var obj = preload("res://chatter/note.tscn").instantiate()
 		obj.global_position = get_global_mouse_position() + Vector2(randf_range(-100, -50), 90)
-		add_child(obj)
-		pin()
+		Helper.add(obj)
+		create_pin()
 		
 	if event.is_action_pressed("add_weight"):
 		var obj = preload("res://chatter/weight.tscn").instantiate()
 		obj.global_position = get_global_mouse_position()
-		add_child(obj)
+		Helper.add(obj)
 
 	if event.is_action_pressed("add_jail"):
 		var obj = preload("res://chatter/jail.tscn").instantiate()
 		obj.global_position = get_global_mouse_position()
-		add_child(obj)
+		Helper.add(obj)
 
 	if event.is_action_pressed("pin"):
-		pin()
+		create_pin()
 	
 	if event.is_action_pressed("move_to_front"):
 		if dragged and dragged.find_child("PinJoint2D"):
@@ -126,22 +126,28 @@ func _unhandled_input(event):
 				collider.queue_free()
 
 
-func pin():
+func create_pin(pos: Vector2 = Vector2(-1,-1)):
 	var obj = preload("res://chatter/pin.tscn").instantiate()
-	obj.global_position = get_global_mouse_position()
-	add_child(obj)
+	if pos.x == -1:
+		obj.global_position = get_global_mouse_position()
+	else:
+		obj.global_position = pos
+	Helper.add(obj)
 	if obj.is_in_group("freezable"):
 		obj.freeze = true
-	var collider = get_object_under_cursor([obj.get_rid()])
+	var collider = get_object_under_cursor(pos, [obj.get_rid()])
 	if collider:
 		obj.pin(collider)
 	return obj
 
 
-func get_object_under_cursor(exclude = null) -> Node2D:
+func get_object_under_cursor(pos: Vector2 = Vector2(-1,-1), exclude = null) -> Node2D:
 	var state = get_world_2d().direct_space_state
 	var query = PhysicsPointQueryParameters2D.new()
-	query.position = get_global_mouse_position()
+	if pos.x == -1:
+		query.position = get_global_mouse_position()
+	else:
+		query.position = pos
 	query.collide_with_areas = true
 	if exclude:
 		query.exclude = exclude
@@ -302,7 +308,7 @@ func twitch_reward_redemption(who : String, reward : String):
 	print("%s redeemed %s" % [who, reward])
 	if reward.to_lower() == "this is fine":
 		var fire = preload("res://flames/flames.tscn").instantiate()
-		Helper.add_child(fire)
+		Helper.add(fire)
 		
 	if reward.begins_with("Play sound: "):
 		notify = false
@@ -314,7 +320,7 @@ func twitch_reward_redemption(who : String, reward : String):
 		var notification = preload("res://reward/reward.tscn").instantiate()
 		notification.who = who
 		notification.reward = reward
-		Helper.add_child(notification)
+		Helper.add(notification)
 	
 
 func twitch_login_attempt(success):
@@ -333,11 +339,11 @@ func twitch_chat(sender_data, command : String, full_message : String):
 	
 	command = command.to_lower()
 	
-	var message = full_message.split(" ")
-	message.remove_at(0)
-	message.remove_at(0)
-	message.remove_at(0)
-	message = " ".join(message)
+	var message_array: PackedStringArray = full_message.split(" ")
+	message_array.remove_at(0)
+	message_array.remove_at(0)
+	message_array.remove_at(0)
+	var message: String = " ".join(message_array)
 	message = message.substr(1)
 	
 	# Get emotes from sender_data.tags.emotes 443:5-6/555555629:17-19
@@ -355,7 +361,7 @@ func twitch_chat(sender_data, command : String, full_message : String):
 	for id in emote_ids.keys():
 		var image_url = "https://static-cdn.jtvnw.net/emoticons/v1/%s/2.0" % id
 		var o = load("res://smiley/emote.tscn").instantiate()
-		Helper.add_child(o)
+		Helper.add(o)
 		await o.fetch(id, image_url)
 	
 	# Render message in bbcode
@@ -386,12 +392,20 @@ func twitch_chat(sender_data, command : String, full_message : String):
 			i += 1
 	message = new_message
 	
+	if message.contains("?"):
+		var o = load("res://chatter/quote.tscn").instantiate()
+		var p = Helper.random_position()
+		o.position = p + Vector2(randi_range(-60, 60), 30)
+		Helper.add(o)
+		o.set_message("[center][i][wave amp=20.0 freq=10.0 connected=1][b]%s:[/b] %s[/wave][/i][/center]" % [username, message])
+		create_pin(p)
+		
 	var hearts = Helper.get_count(full_message, "<3")
 	if hearts > 0:
 		for _n in range(10):
 			var o = load("res://heart/heart.tscn").instantiate()
 			o.position = Helper.random_position()
-			Helper.add_child(o)
+			Helper.add(o)
 		
 	var smiles = Helper.get_count(full_message, ":-)")
 	smiles += Helper.get_count(full_message, ":)")
@@ -400,7 +414,7 @@ func twitch_chat(sender_data, command : String, full_message : String):
 		for _n in range(10):
 			var o = load("res://smiley/smiley.tscn").instantiate()
 			o.position = Helper.random_position()
-			Helper.add_child(o)
+			Helper.add(o)
 
 	add_head(username, message)
 	
@@ -554,7 +568,7 @@ func midi(_pitch):
 		c.apply_central_impulse(Vector2(0, -3000).rotated(randf() * TAU))
 		var explosion = preload("res://booms/explosion.tscn").instantiate()
 		explosion.position = c.position
-		add_child(explosion)
+		Helper.add(explosion)
 
 		return explosion
 
