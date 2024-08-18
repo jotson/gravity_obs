@@ -1,12 +1,37 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhvwfbjoqrscn"]
+[gd_scene load_steps=3 format=3 uid="uid://bhvwfbjoqrscn"]
 
+[ext_resource type="Theme" uid="uid://bjeweqbaitpr4" path="res://common/gui/ui-theme.tres" id="1_glmhb"]
 [ext_resource type="Script" path="res://soundboard/Soundboard.gd" id="5"]
 
-[node name="Soundboard" type="Node"]
+[node name="Soundboard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_glmhb")
 script = ExtResource("5")
 
 [node name="SinglePlayer" type="AudioStreamPlayer" parent="."]
 
 [node name="QueuedPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Buttons" type="HFlowContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 208.0
+offset_top = 236.0
+offset_right = -192.0
+offset_bottom = -308.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+alignment = 1
 
 [connection signal="finished" from="QueuedPlayer" to="." method="play_queue"]

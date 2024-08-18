@@ -51,6 +51,12 @@ func _ready():
 func _unhandled_input(event):
 	if $login.visible:
 		return
+	
+	if event.is_action_pressed("show_soundboard"):
+		if Soundboard.visible:
+			Soundboard.hide()
+		else:
+			Soundboard.show()
 		
 	if event.is_action_pressed("toggle_console"):
 		if $console.visible:

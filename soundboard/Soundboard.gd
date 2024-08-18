@@ -1,4 +1,4 @@
-extends Node
+extends Control
 
 # soundboard.json:
 #
@@ -13,6 +13,7 @@ extends Node
 # }
 
 const SOUNDBOARD_JSON = "user://soundboard.json"
+const SOUNDBOARD_PATH = "user://soundboard"
 
 signal midi
 
@@ -24,12 +25,33 @@ func _ready():
 
 
 func load_sound_configuration():
+	Soundboard.hide()
+	
 	sound_map.clear()
+	sound_map["midi"] = {}
 	
 	if not FileAccess.file_exists(SOUNDBOARD_JSON):
 		return
 		
-	# Load soundboard.json
+	for b in %Buttons.get_children():
+		b.queue_free()
+
+	# Load all sounds starting at MIDI note 60
+	var note = 60
+	var files = DirAccess.get_files_at(SOUNDBOARD_PATH)
+	files.sort()
+	for f in files:
+		var sound = f.replace(".ogg", "")
+		sound_map["midi"]["note_%d" % note] = sound
+		note += 1
+		
+		var b = Button.new()
+		b.text = sound
+		b.pressed.connect(play.bind(sound, true))
+		b.add_theme_font_size_override("font_size", 24)
+		%Buttons.add_child(b)
+	
+	# Load soundboard.json overriding the defaults above
 	var f = FileAccess.open(SOUNDBOARD_JSON, FileAccess.READ)
 	if f == null:
 		return
@@ -37,19 +59,16 @@ func load_sound_configuration():
 	var json = f.get_as_text()
 	var test_json_conv = JSON.new()
 	test_json_conv.parse(json)
-	sound_map = test_json_conv.get_data()
+	var midi_data = test_json_conv.get_data()
+	sound_map.midi.merge(midi_data)
 	f.close()
 
 
 func get_sound_file(sound: String) -> String:
-	var SOUND_PATH = "user://soundboard"
-	var sound_file = null
-	if sound_map["sounds"].has(sound):
-		sound_file = SOUND_PATH.path_join(sound_map["sounds"][sound])
-	else:
-		var path = SOUND_PATH.path_join(sound) + ".ogg"
-		if FileAccess.file_exists(path):
-			sound_file = path
+	var sound_file = ""
+	var path = SOUNDBOARD_PATH.path_join(sound) + ".ogg"
+	if FileAccess.file_exists(path):
+		sound_file = path
 	return sound_file
 		
 
@@ -63,14 +82,12 @@ func load_sound_file(sound: String) -> AudioStream:
 	sound = sound.replace(".", "")
 	sound = sound.to_lower()
 
-	load_sound_configuration()
-
 	var stream: AudioStream
 	
 	var sound_file = get_sound_file(sound)
 	if sound_file:
 		stream = AudioStreamOggVorbis.load_from_file(sound_file)
-		
+	
 	return stream
 
 
@@ -90,6 +107,8 @@ func play_queue(sound = null) -> void:
 	
 		
 func play(sound: String, single = false) -> void:
+	load_sound_configuration()
+
 	var player: AudioStreamPlayer
 	if single:
 		# Play non-overlapping
@@ -112,8 +131,11 @@ func _input(event):
 
 
 func play_midi(pitch: int):
+	load_sound_configuration()
+
 	#prints("Ctr:", event.controller_number, "Val:", event.controller_value, "Not:", event.pitch, "Vel:", event.velocity)
 	var key = "note_%d" % pitch
 	if sound_map["midi"].has(key):
 		play(sound_map["midi"][key], true)
 		midi.emit(pitch)
+		prints("Play midi", pitch)
