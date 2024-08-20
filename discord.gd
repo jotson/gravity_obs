@@ -20,7 +20,7 @@ func post_announcement():
 	if webhook_url == null:
 		return
 
-	await (await Twitch.get_channel_info()).completed
+	await Twitch.get_channel_info()
 	
 	var title = "<@&1243975068611248278> %s is streaming: %s" % [Twitch.broadcaster_name, Twitch.channel_title]
 	title += " [LIVE NOW on Twitch](<https://twitch.tv/%s>)"  % [Twitch.broadcaster_login]
