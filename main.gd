@@ -18,10 +18,12 @@ const MarbleContainer = preload("res://chatter/MarbleContainer.tscn")
 
 
 func _ready():
-	Helper.set_transparent(false)
+	configure_window()
+	
 	$console.hide()
 	$Gamepad.hide()
 	$login/channel.grab_focus()
+	%Chat.hide()
 
 	Helper.add(ChatterContainer)
 	
@@ -46,6 +48,34 @@ func _ready():
 		print_debug("Signal not connected")
 		
 	load_commands()
+
+
+func configure_window():
+	Helper.set_transparent(false)
+	#get_window().always_on_top = true
+	#get_window().mouse_passthrough = false
+	#get_window().mouse_passthrough_polygon = PackedVector2Array([])
+
+
+func toggle_mouse_passthrough():
+	get_window().mouse_passthrough = true
+	var t = create_tween()
+	t.tween_property(get_window(), "mouse_passthrough", false, 5)
+	t.tween_callback(get_window().grab_focus)
+
+
+func set_mouse_passthrough():
+	var polygon = []
+	for i in %MouseCapture/Polygon2D.polygon:
+		polygon.append(%MouseCapture/Polygon2D.to_global(i))
+	get_window().mouse_passthrough_polygon = PackedVector2Array(polygon)
+
+
+func _on_mouse_capture_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		get_window().mouse_passthrough_polygon = PackedVector2Array([])
+	else:
+		set_mouse_passthrough()
 
 
 func _unhandled_input(event):
@@ -79,7 +109,15 @@ func _unhandled_input(event):
 		else:
 			ChatterContainer.show()
 			$console.text = "Heads on\n"
-			
+	
+	if event.is_action_pressed("chat"):
+		%Chat.show()
+		%Chat.text = ""
+		%Chat.grab_focus()
+		
+	if event.is_action_pressed("toggle_mousepassthru"):
+		toggle_mouse_passthrough()
+		
 	if event.is_action_pressed("add_box"):
 		var obj = preload("res://chatter/box.tscn").instantiate()
 		obj.global_position = get_global_mouse_position()
@@ -404,7 +442,6 @@ func twitch_chat(sender_data, command : String, full_message : String):
 		o.position = p + Vector2(randi_range(-60, 60), 30)
 		Helper.add(o)
 		o.set_message("[center][i][wave amp=20.0 freq=10.0 connected=1][b]%s:[/b] %s[/wave][/i][/center]" % [username, message])
-		create_pin(p)
 		
 	var hearts = Helper.get_count(full_message, "<3")
 	if hearts > 0:
@@ -589,3 +626,10 @@ func midi(_pitch):
 func _on_AutoLoginTimer_timeout():
 	_on_joinButton_pressed()
 	$login/AutoLoginLabel.hide()
+
+
+func _on_chat_text_submitted(new_text: String) -> void:
+	if len(new_text) > 0:
+		Twitch.chat(new_text)
+		
+	%Chat.hide()

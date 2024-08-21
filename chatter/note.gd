@@ -11,9 +11,9 @@ func _ready() -> void:
 
 func _on_text_edit_gui_input(event: InputEvent) -> void:
 	if not event is InputEventKey:
-		get_viewport().push_unhandled_input(event)
+		get_viewport().push_input(event)
 
 
 func _on_focus_grabber_gui_input(event: InputEvent) -> void:
 	if not event is InputEventKey:
-		get_viewport().push_unhandled_input(event)
+		get_viewport().push_input(event)

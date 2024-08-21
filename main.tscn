@@ -1,10 +1,12 @@
-[gd_scene load_steps=16 format=3 uid="uid://d2bq3pp2a8fgd"]
+[gd_scene load_steps=18 format=3 uid="uid://d2bq3pp2a8fgd"]
 
 [ext_resource type="Theme" uid="uid://bjeweqbaitpr4" path="res://common/gui/ui-theme.tres" id="1"]
 [ext_resource type="Script" path="res://main.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://crgn53xfjst6w" path="res://soundboard/SoundButton.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://ddt7qmrivrg05" path="res://gamepad/gamepad.tscn" id="5"]
+[ext_resource type="Texture2D" uid="uid://dx5dnk34q47ay" path="res://common/textures/circle.png" id="6_owe65"]
 [ext_resource type="PackedScene" uid="uid://c5qoh2by2ppym" path="res://common/mouse_body.tscn" id="6_rmcon"]
+[ext_resource type="Texture2D" uid="uid://bq081ovf6114y" path="res://common/textures/red-circle.png" id="7_0cnbe"]
 
 [sub_resource type="StyleBoxEmpty" id="6"]
 
@@ -163,6 +165,7 @@ position = Vector2(920, 799)
 shape = SubResource("WorldBoundaryShape2D_aubm8")
 
 [node name="Gamepad" parent="." instance=ExtResource("5")]
+visible = false
 layout_mode = 0
 anchor_left = 1.0
 anchor_top = 1.0
@@ -172,7 +175,44 @@ mouse_filter = 2
 
 [node name="MouseBody" parent="." instance=ExtResource("6_rmcon")]
 
+[node name="Chat" type="LineEdit" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -541.5
+offset_top = -15.0
+offset_right = 541.5
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MouseCapture" type="TextureButton" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -34.0
+offset_top = 24.0
+offset_right = -2.0
+offset_bottom = 56.0
+grow_horizontal = 0
+toggle_mode = true
+texture_normal = ExtResource("6_owe65")
+texture_pressed = ExtResource("7_0cnbe")
+
+[node name="Polygon2D" type="Polygon2D" parent="MouseCapture"]
+visible = false
+polygon = PackedVector2Array(13, 26, 6, 19, 6, 13, 13, 6, 19, 6, 26, 13, 26, 19, 19, 26)
+
 [connection signal="pressed" from="login/joinButton" to="." method="_on_joinButton_pressed"]
 [connection signal="pressed" from="login/authButton" to="." method="_on_authButton_pressed"]
 [connection signal="pressed" from="login/MIDIButton" to="." method="_on_MIDIButton_pressed"]
 [connection signal="timeout" from="login/AutoLoginTimer" to="." method="_on_AutoLoginTimer_timeout"]
+[connection signal="text_submitted" from="Chat" to="." method="_on_chat_text_submitted"]
+[connection signal="toggled" from="MouseCapture" to="." method="_on_mouse_capture_toggled"]
