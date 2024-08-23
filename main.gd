@@ -292,14 +292,14 @@ func cmd_reload_commands(_cmd : CommandInfo):
 	load_commands()
 	
 
-func cmd_chat(_cmd : CommandInfo):
+func cmd_chat(cmd : CommandInfo):
 	load_commands()
 	var chat = ""
 	
-	if commands[_cmd.command].has("text"):
-		chat = commands[_cmd.command].text
-	if commands[_cmd.command].has("alias"):
-		var alias = commands[_cmd.command].alias
+	if commands[cmd.command].has("text"):
+		chat = commands[cmd.command].text
+	if commands[cmd.command].has("alias"):
+		var alias = commands[cmd.command].alias
 		chat = commands[alias].text
 		
 	Twitch.chat(chat)
@@ -379,7 +379,7 @@ func twitch_got_channel_info():
 func twitch_chat(sender_data, command : String, full_message : String):
 	var username = sender_data.user
 	
-	Soundboard.play("chat")
+	#Soundboard.play("chat")
 	
 	command = command.to_lower()
 	
@@ -633,3 +633,21 @@ func _on_chat_text_submitted(new_text: String) -> void:
 		Twitch.chat(new_text)
 		
 	%Chat.hide()
+
+
+func _on_auto_command_timer_timeout() -> void:
+	var auto: Array = []
+	for i in commands:
+		var command = commands[i]
+		if command.has("auto") and command.auto:
+			auto.append(command)
+	
+	if auto.size() == 0:
+		return
+		
+	var auto_command = auto.pick_random()
+	
+	if auto_command.action == "chat":
+		var cmd: CommandInfo = CommandInfo.new(null, auto_command.command, false)
+		Twitch.chat("!%s" % auto_command.command)
+		cmd_chat(cmd)
