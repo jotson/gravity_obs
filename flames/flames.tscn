@@ -59,7 +59,7 @@ lifetime = 4.0
 randomness = 1.0
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 45.0
+wait_time = 10.0
 one_shot = true
 autostart = true
 

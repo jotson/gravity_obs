@@ -9,6 +9,9 @@ var MAX_CHATTERS = 50
 var lastChannel = ""
 var dragged = null
 
+const COMMANDS_JSON = "user://commands.json"
+const EVENTS_JSON = "user://events.json"
+
 const AstronautChatter = preload("res://chatter/Astronaut.tscn")
 const AstronautContainer = preload("res://chatter/AstronautContainer.tscn")
 const MarbleChatter = preload("res://chatter/Marble.tscn")
@@ -228,7 +231,7 @@ func load_commands():
 	commands.clear()
 	Twitch.commands.clear()
 	
-	var f = FileAccess.open("user://commands.json", FileAccess.READ)
+	var f = FileAccess.open(COMMANDS_JSON, FileAccess.READ)
 	if f == null:
 		return
 	var test_json_conv = JSON.new()
@@ -260,6 +263,9 @@ func load_commands():
 			
 		if c.has("action") and c.action == "greeting":
 			Twitch.add_command(c.command, cmd_greeting, 0, 0, perm)
+		
+		if c.has("action") and c.action == "thisisfine":
+			Twitch.add_command(c.command, cmd_thisisfine, 0, 0, perm)
 			
 		if c.has("aliases"):
 			for alias in c.aliases:
@@ -305,6 +311,11 @@ func cmd_chat(cmd : CommandInfo):
 	Twitch.chat(chat)
 
 
+func cmd_thisisfine(_cmd: CommandInfo):
+	var fire = preload("res://flames/flames.tscn").instantiate()
+	Helper.add(fire)
+
+
 func cmd_greeting(_cmd : CommandInfo):
 	load_commands()
 	var username = _cmd.sender_data.user
@@ -347,25 +358,34 @@ func _on_channel_text_entered(new_text):
 
 
 func twitch_reward_redemption(who : String, reward : String):
-	var notify = true
-	
 	print("%s redeemed %s" % [who, reward])
-	if reward.to_lower() == "this is fine":
-		var fire = preload("res://flames/flames.tscn").instantiate()
-		Helper.add(fire)
+
+	# Load EVENTS_JSON
+	var f = FileAccess.open(EVENTS_JSON, FileAccess.READ)
+	if f == null:
+		return
 		
-	if reward.begins_with("Play sound: "):
-		notify = false
-		var sound = reward.trim_prefix("Play sound: ")
-		Soundboard.play_queue(sound)
+	var json = f.get_as_text()
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(json)
+	var events = test_json_conv.get_data()
+	f.close()
 	
-	if notify:
-		@warning_ignore("shadowed_variable_base_class")
-		var notification = preload("res://reward/reward.tscn").instantiate()
-		notification.who = who
-		notification.reward = reward
-		Helper.add(notification)
-	
+	for e in events:
+		if e.event != "reward":
+			continue
+			
+		if e.has("pattern") and reward.to_lower().begins_with(e.pattern.to_lower()):
+			if e.has("sound"):
+				Soundboard.play(e.sound)
+			if e.has("action"):
+				var action = e.action
+				match action:
+					"playsound":
+						var sound = reward.trim_prefix(e.pattern)
+						Soundboard.play_queue(sound)
+			
+
 
 func twitch_login_attempt(success):
 	if (success):
@@ -379,7 +399,7 @@ func twitch_got_channel_info():
 func twitch_chat(sender_data, command : String, full_message : String):
 	var username = sender_data.user
 	
-	#Soundboard.play("chat")
+	Soundboard.play("chat")
 	
 	command = command.to_lower()
 	
