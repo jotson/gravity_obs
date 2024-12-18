@@ -457,7 +457,7 @@ func twitch_chat(sender_data, command : String, full_message : String):
 			i += 1
 	message = new_message
 	
-	if message.contains("?"):
+	if true:
 		var o = load("res://chatter/quote.tscn").instantiate()
 		var p = Helper.random_position()
 		o.position = p + Vector2(randi_range(-60, 60), 30)
