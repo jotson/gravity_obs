@@ -339,6 +339,7 @@ func _on_joinButton_pressed(_text = ""):
 	if thisChannel:
 		$login.hide()
 		$SoundButtonConfig.hide()
+		Helper.user_exit = false
 		Helper.set_transparent(true)
 		Twitch.join($login/channel.text)
 		
@@ -542,9 +543,13 @@ func unhandled_message(message : String, tags : Dictionary) -> void:
 
 
 func twitch_disconnect():
-	$login.show()
-	$SoundButtonConfig.show()
-	Helper.set_transparent(false)
+	if Helper.user_exit:
+		$login.show()
+		$SoundButtonConfig.show()
+		Helper.set_transparent(false)
+	else:
+		%AutoLoginTimer.wait_time = 1.0
+		%AutoLoginTimer.start()
 
 
 func _on_authButton_pressed():

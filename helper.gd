@@ -5,6 +5,8 @@ var WINDOW_H = ProjectSettings.get("display/window/size/viewport_height")
 
 const SETTINGS_FILE = "user://twitch.ini"
 
+var user_exit := true
+
 func set_transparent(value : bool):
 	get_tree().get_root().set_transparent_background(value)
 	
@@ -37,6 +39,7 @@ func save_channel(channel):
 	
 func _input(_event):
 	if Input.is_action_just_pressed("disconnect"):
+		user_exit = true
 		Twitch.websocket.close()
 		TwitchPS.websocket.close()
 		OBS.websocket.close()
