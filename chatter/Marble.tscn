@@ -134,9 +134,11 @@ can_sleep = false
 script = ExtResource("5")
 
 [node name="head" type="Node2D" parent="."]
+unique_name_in_owner = true
 use_parent_material = true
 
 [node name="nametag" type="Node2D" parent="head"]
+unique_name_in_owner = true
 visible = false
 
 [node name="nametag" type="Label" parent="head/nametag"]
@@ -168,6 +170,7 @@ texture = ExtResource("2")
 texture = ExtResource("3")
 
 [node name="speechBubble" type="Node2D" parent="."]
+unique_name_in_owner = true
 
 [node name="speechBubble" type="RichTextLabel" parent="speechBubble"]
 modulate = Color(1, 1, 1, 0)
@@ -189,3 +192,6 @@ libraries = {
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("11")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

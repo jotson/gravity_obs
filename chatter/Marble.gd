@@ -25,12 +25,11 @@ func _ready():
 	
 	velocity = Vector2.ZERO
 
-	$head/nametag.hide()
+	%nametag.hide()
 
 
 func _process(_delta):
-	#$head/nametag.global_position = global_position + Vector2(-49, -25)
-	$head/nametag.global_rotation = 0
+	%nametag.global_rotation = 0
 	$speechBubble.global_rotation = 0
 	
 	
@@ -51,14 +50,14 @@ func _physics_process(delta):
 
 func resize(sz: Vector2) -> void:
 	mass = 3.0 * sz.x
-	$head.scale = sz
-	$speechBubble.scale = sz
+	%head.scale = sz
+	%speechBubble.scale = sz
 	$CollisionShape2D.shape.radius = 48 * sz.x
 	
 
 func say(message:String):
-	$speechBubble/speechBubble.text = "[center]%s[/center]" % message
-	$speechBubble/AnimationPlayer.play("speak")
+	%speechBubble/speechBubble.text = "[center]%s[/center]" % message
+	%speechBubble/AnimationPlayer.play("speak")
 	if last_say > 1000:
 		apply_central_impulse(Vector2(0, -3000).rotated(randf() * PI/2 - PI/4))
 	resize.call_deferred(Vector2.ONE)
@@ -66,17 +65,25 @@ func say(message:String):
 	
 		
 func add_head(image:Image = null, login:String = "", first_chatter:bool = false):
-	$head/nametag/nametag.text = login
+	%nametag/nametag.text = login
 	if image:
 		var c: Color = image.get_pixel(1, 1)
-		$head/helmet/Face.hide()
-		$head/Bg.modulate = c
-		$head/Bg.modulate.a = 1.0
+		%head/helmet/Face.hide()
+		%head/Bg.modulate = c
+		%head/Bg.modulate.a = 1.0
 		var tex = ImageTexture.create_from_image(image)
 		var s = Sprite2D.new()
 		s.texture = tex
 		s.scale *= 0.2
 		s.show_behind_parent = true
-		$head/helmet.add_child(s)
+		%head/helmet.add_child(s)
 		
 	self.first = first_chatter
+
+
+func _on_mouse_entered() -> void:
+	%nametag.show()
+
+
+func _on_mouse_exited() -> void:
+	%nametag.hide()
