@@ -1,7 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://d2bq3pp2a8fgd"]
 
 [ext_resource type="Theme" uid="uid://bjeweqbaitpr4" path="res://common/gui/ui-theme.tres" id="1"]
-[ext_resource type="Script" path="res://main.gd" id="2"]
+[ext_resource type="Script" uid="uid://bfo8dqe4vs3j5" path="res://main.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://crgn53xfjst6w" path="res://soundboard/SoundButton.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://ddt7qmrivrg05" path="res://gamepad/gamepad.tscn" id="5"]
 [ext_resource type="Texture2D" uid="uid://dx5dnk34q47ay" path="res://common/textures/circle.png" id="6_owe65"]

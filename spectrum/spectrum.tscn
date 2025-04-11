@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dgcc1exjlifim"]
 
-[ext_resource type="Script" path="res://spectrum/spectrum.gd" id="1_e8sfh"]
+[ext_resource type="Script" uid="uid://bo6c541pxev0o" path="res://spectrum/spectrum.gd" id="1_e8sfh"]
 
 [sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_r0ihi"]
 

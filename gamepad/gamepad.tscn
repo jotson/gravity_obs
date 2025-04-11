@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://ca6fm6ih2fb2g" path="res://gamepad/smallbutton-active.png" id="10"]
 [ext_resource type="Texture2D" uid="uid://cubkqxl0deewn" path="res://gamepad/smallbutton.png" id="11"]
 [ext_resource type="Texture2D" uid="uid://dpi5dhihrkgni" path="res://gamepad/dpad-down.png" id="12"]
-[ext_resource type="Script" path="res://gamepad/gamepad.gd" id="13"]
+[ext_resource type="Script" uid="uid://cslqbcyugyfsa" path="res://gamepad/gamepad.gd" id="13"]
 [ext_resource type="Texture2D" uid="uid://cafwn74j06kdh" path="res://gamepad/lb-active.png" id="14"]
 [ext_resource type="Texture2D" uid="uid://84sh551rllf3" path="res://gamepad/rb-active.png" id="15"]
 [ext_resource type="Texture2D" uid="uid://dlt42omm3mn8a" path="res://gamepad/rt-active.png" id="16"]

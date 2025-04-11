@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://dqjpwyhihckcc"]
 
-[ext_resource type="Script" path="res://booms/explosion-secondary.gd" id="1"]
+[ext_resource type="Script" uid="uid://rwl1u6efqvv0" path="res://booms/explosion-secondary.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://b2nwgsdf4wi7w" path="res://booms/textures/explosion.png" id="3"]
 [ext_resource type="AudioStream" uid="uid://me2mf41qq78f" path="res://booms/sfx/secondary-explosion.wav" id="4"]
 
@@ -35,7 +35,7 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_bfcs4"]
 _data = {
-"default": SubResource("1")
+&"default": SubResource("1")
 }
 
 [node name="explosion" type="Node2D" groups=["transient"]]

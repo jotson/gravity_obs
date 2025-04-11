@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Gravity OBS"
 run/main_scene="res://main.tscn"
-config/features=PackedStringArray("4.3")
+config/features=PackedStringArray("4.4")
 run/max_fps=30
 run/low_processor_mode=true
 config/icon="res://icon.png"
@@ -35,8 +35,10 @@ Soundboard="*res://soundboard/Soundboard.tscn"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/mode=3
-window/size/initial_position_type=2
+window/size/initial_position_type=3
 window/size/initial_screen=1
+window/size/borderless=true
+window/size/always_on_top=true
 window/per_pixel_transparency/allowed=true
 
 [editor_plugins]

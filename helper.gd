@@ -9,8 +9,17 @@ var user_exit := true
 
 func set_transparent(value : bool):
 	get_tree().get_root().set_transparent_background(value)
-	
-	
+	enable_mouse_passthrough()
+
+
+func enable_mouse_passthrough():
+	DisplayServer.window_set_mouse_passthrough(PackedVector2Array([Vector2(0,0), Vector2(1,0), Vector2(1, 1), Vector2(0, 1), Vector2(0,0)]))
+
+
+func disable_mouse_passthrough():
+	DisplayServer.window_set_mouse_passthrough([])
+
+
 func get_saved_channel():
 	var channel = null
 	var config = ConfigFile.new()

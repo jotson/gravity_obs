@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cwdv1hdi1o6yo"]
 
-[ext_resource type="Script" path="res://booms/burst-small.gd" id="1"]
+[ext_resource type="Script" uid="uid://gi821ddwgois" path="res://booms/burst-small.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://bntab4hc5kccs" path="res://booms/textures/burst-small.png" id="2"]
 
 [sub_resource type="Animation" id="1"]
@@ -33,7 +33,7 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_khmsu"]
 _data = {
-"default": SubResource("1")
+&"default": SubResource("1")
 }
 
 [node name="burst-small" type="Node2D" groups=["transient"]]

@@ -88,6 +88,7 @@ func _unhandled_input(event):
 	if event.is_action_pressed("show_soundboard"):
 		if Soundboard.visible:
 			Soundboard.hide()
+			Helper.enable_mouse_passthrough()
 		else:
 			Soundboard.show()
 		
@@ -213,6 +214,22 @@ func get_object_under_cursor(pos: Vector2 = Vector2(-1,-1), exclude = null) -> N
 
 
 func _process(_delta):
+	prints($login.visible, Soundboard.visible)
+	if $login.visible or Soundboard.visible:
+		Helper.disable_mouse_passthrough()
+	else:
+		var mp = get_global_mouse_position()
+		var state = get_world_2d().direct_space_state
+		var param = PhysicsRayQueryParameters2D.new()
+		param.collide_with_areas = true
+		param.collide_with_bodies = true
+		param.hit_from_inside = true
+		param.from = mp + Vector2(-10, 0)
+		param.to = mp + Vector2(10, 0)
+		var hits = state.intersect_ray(param)
+		if hits.has("collider"):
+			DisplayServer.window_set_mouse_passthrough(PackedVector2Array([mp + Vector2(-10,-10), mp + Vector2(10,-10), mp + Vector2(10, 10), mp + Vector2(-10, 10)]))
+		
 	if not $login/AutoLoginTimer.is_stopped():
 		$login/AutoLoginLabel.text = "Automatic login in %d..." % [ceil($login/AutoLoginTimer.time_left)]
 
@@ -257,6 +274,9 @@ func load_commands():
 	
 		if c.has("action") and c.action == "chat":
 			Twitch.add_command(c.command, cmd_chat, 0, 0, perm)
+
+		if c.has("action") and c.action == "play":
+			Twitch.add_command(c.command, cmd_play, 0, 0, perm)
 
 		if c.has("action") and c.action == "addtocredits":
 			Twitch.add_command(c.command, cmd_addtocredits, 0, 0, perm)
@@ -309,6 +329,19 @@ func cmd_chat(cmd : CommandInfo):
 		chat = commands[alias].text
 		
 	Twitch.chat(chat)
+
+
+func cmd_play(cmd : CommandInfo):
+	load_commands()
+	var sound = ""
+	
+	if commands[cmd.command].has("text"):
+		sound = commands[cmd.command].text
+	if commands[cmd.command].has("alias"):
+		var alias = commands[cmd.command].alias
+		sound = commands[alias].text
+		
+	Soundboard.play_queue(sound)
 
 
 func cmd_thisisfine(_cmd: CommandInfo):

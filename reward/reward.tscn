@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://bjeweqbaitpr4" path="res://common/gui/ui-theme.tres" id="1"]
 [ext_resource type="Texture2D" uid="uid://b2nktrlx6dmu4" path="res://reward/textures/reward.png" id="2"]
 [ext_resource type="AudioStream" uid="uid://b0opmsde7srp8" path="res://reward/sfx/reward.wav" id="4"]
-[ext_resource type="Script" path="res://reward/reward.gd" id="5"]
+[ext_resource type="Script" uid="uid://boke21plqtxgt" path="res://reward/reward.gd" id="5"]
 
 [sub_resource type="Animation" id="1"]
 length = 0.001
@@ -76,8 +76,8 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8eu6t"]
 _data = {
-"RESET": SubResource("1"),
-"default": SubResource("2")
+&"RESET": SubResource("1"),
+&"default": SubResource("2")
 }
 
 [node name="reward" type="TextureRect"]

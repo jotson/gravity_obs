@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bekjepmcuacm1"]
 
 [ext_resource type="Texture2D" uid="uid://bhjnycfoio3ko" path="res://booms/textures/smoke.png" id="1"]
-[ext_resource type="Script" path="res://booms/impactsmoke.gd" id="2"]
+[ext_resource type="Script" uid="uid://pbfueqa68vga" path="res://booms/impactsmoke.gd" id="2"]
 
 [sub_resource type="Curve" id="1"]
 _data = [Vector2(0, 0.327273), 0.0, 0.0810209, 0, 0, Vector2(1, 0), -0.0334209, 0.0, 0, 0]

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bqnhnq6xvubqp" path="res://chatter/textures/face.png" id="3"]
 [ext_resource type="FontFile" uid="uid://3x0u103yunxi" path="res://fonts/LondrinaSolid-Black.ttf" id="3_x13fy"]
 [ext_resource type="Material" uid="uid://d15kkyrusbpla" path="res://chatter/color.material" id="4"]
-[ext_resource type="Script" path="res://chatter/Marble.gd" id="5"]
+[ext_resource type="Script" uid="uid://c1m8t4w0qmkso" path="res://chatter/Marble.gd" id="5"]
 [ext_resource type="Texture2D" uid="uid://dotati4xu1a2y" path="res://chatter/textures/helmet-bg.png" id="6"]
 
 [sub_resource type="PhysicsMaterial" id="10"]
@@ -115,8 +115,8 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jvd6i"]
 _data = {
-"RESET": SubResource("7"),
-"speak": SubResource("8")
+&"RESET": SubResource("7"),
+&"speak": SubResource("8")
 }
 
 [sub_resource type="CircleShape2D" id="11"]

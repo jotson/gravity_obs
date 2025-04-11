@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://cslc1c4f6sgam"]
 
-[ext_resource type="Script" path="res://chatter/note.gd" id="1_202ty"]
+[ext_resource type="Script" uid="uid://cc7p3ny3akru4" path="res://chatter/note.gd" id="1_202ty"]
 [ext_resource type="Texture2D" uid="uid://ndwv32a5ct3v" path="res://chatter/textures/note.png" id="1_voi5a"]
 [ext_resource type="FontFile" uid="uid://bxitwn4c54mjp" path="res://fonts/LondrinaSolid-Regular.ttf" id="3_bv565"]
 

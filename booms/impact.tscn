@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://c4jyb7yaqc2e2"]
 
-[ext_resource type="Script" path="res://booms/impact.gd" id="1"]
+[ext_resource type="Script" uid="uid://ccbl18h7fxabx" path="res://booms/impact.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://8f8shc5d6t5" path="res://booms/textures/impact.png" id="2"]
 
 [sub_resource type="Animation" id="1"]
@@ -21,7 +21,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_a5cng"]
 _data = {
-"default": SubResource("1")
+&"default": SubResource("1")
 }
 
 [node name="impact" type="Node2D" groups=["transient"]]

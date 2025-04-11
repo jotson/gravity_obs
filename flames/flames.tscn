@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://bd3wl3tucg7cr"]
 
-[ext_resource type="Script" path="res://flames/flames.gd" id="2"]
+[ext_resource type="Script" uid="uid://kiarpkeejiiw" path="res://flames/flames.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://dduqwkibn1t2y" path="res://flames/textures/smoke.png" id="3"]
 
 [sub_resource type="Gradient" id="Gradient_50gko"]

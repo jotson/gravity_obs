@@ -116,10 +116,10 @@ resource_name = "wave2"
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ra7ws"]
 _data = {
-"RESET": SubResource("1"),
-"idle": SubResource("2"),
-"wave1": SubResource("3"),
-"wave2": SubResource("4")
+&"RESET": SubResource("1"),
+&"idle": SubResource("2"),
+&"wave1": SubResource("3"),
+&"wave2": SubResource("4")
 }
 
 [sub_resource type="Animation" id="5"]
@@ -155,8 +155,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_t6kgn"]
 _data = {
-"RESET": SubResource("5"),
-"default": SubResource("6")
+&"RESET": SubResource("5"),
+&"default": SubResource("6")
 }
 
 [sub_resource type="Animation" id="7"]
@@ -216,8 +216,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nuonn"]
 _data = {
-"RESET": SubResource("7"),
-"speak": SubResource("8")
+&"RESET": SubResource("7"),
+&"speak": SubResource("8")
 }
 
 [node name="Chatter" type="Node2D" groups=["chatter"]]

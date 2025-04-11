@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://b8p71pek5mgm"]
 
-[ext_resource type="Script" path="res://smiley/emote_body.gd" id="1_tw267"]
+[ext_resource type="Script" uid="uid://b8jdw5t25uplk" path="res://smiley/emote_body.gd" id="1_tw267"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3rakw"]
 bounce = 0.5

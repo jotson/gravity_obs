@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://de1i7w28qbkvj"]
 
-[ext_resource type="Script" path="res://smiley/emote.gd" id="1_cfvyw"]
+[ext_resource type="Script" uid="uid://uixhsikujxu3" path="res://smiley/emote.gd" id="1_cfvyw"]
 
 [node name="emote" type="Node2D"]
 position = Vector2(513, 126)

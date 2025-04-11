@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://i0nvxve7pdf7"]
 
-[ext_resource type="Script" path="res://heart/heart.gd" id="1"]
+[ext_resource type="Script" uid="uid://c1tqprfm1iynp" path="res://heart/heart.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://cgkc8ryby5i7q" path="res://heart/hearts.png" id="2"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nkrc1"]

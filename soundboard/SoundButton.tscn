@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://b5sfuvqarp67b" path="res://soundboard/textures/soundbutton_pressed.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://iaggk5vj5uxh" path="res://soundboard/textures/soundbutton_normal.png" id="2"]
-[ext_resource type="Script" path="res://soundboard/SoundButton.gd" id="3"]
+[ext_resource type="Script" uid="uid://bpmvi25ubyqj0" path="res://soundboard/SoundButton.gd" id="3"]
 
 [node name="SoundButton" type="TextureButton"]
 offset_right = 64.0

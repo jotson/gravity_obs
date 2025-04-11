@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bgo4t2r8t1gys"]
 
-[ext_resource type="Script" path="res://booms/spark.gd" id="1"]
+[ext_resource type="Script" uid="uid://daejnt6wk4gj2" path="res://booms/spark.gd" id="1"]
 
 [sub_resource type="Gradient" id="1"]
 offsets = PackedFloat32Array(0, 0.666667, 1)

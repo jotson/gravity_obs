@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://dvv45t02un75b"]
 
-[ext_resource type="Script" path="res://smiley/smiley.gd" id="1"]
+[ext_resource type="Script" uid="uid://kmm0e1pid740" path="res://smiley/smiley.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://dgxby6xegdur5" path="res://smiley/smiley.png" id="2"]
 
 [sub_resource type="SpriteFrames" id="1"]
@@ -82,7 +82,7 @@ tracks/4/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rvjlj"]
 _data = {
-"default": SubResource("2")
+&"default": SubResource("2")
 }
 
 [node name="smiley" type="Node2D"]

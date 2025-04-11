@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bhvwfbjoqrscn"]
 
 [ext_resource type="Theme" uid="uid://bjeweqbaitpr4" path="res://common/gui/ui-theme.tres" id="1_glmhb"]
-[ext_resource type="Script" path="res://soundboard/Soundboard.gd" id="5"]
+[ext_resource type="Script" uid="uid://ckifcp3lvbn7g" path="res://soundboard/Soundboard.gd" id="5"]
 
 [node name="Soundboard" type="Control"]
 layout_mode = 3

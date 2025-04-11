@@ -47,7 +47,11 @@ func load_sound_configuration():
 		
 		var b = Button.new()
 		b.text = sound
-		b.pressed.connect(play.bind(sound, true))
+		b.pressed.connect(
+			func():
+				play(sound, true)
+				Helper.enable_mouse_passthrough()
+		)
 		b.add_theme_font_size_override("font_size", 24)
 		%Buttons.add_child(b)
 	

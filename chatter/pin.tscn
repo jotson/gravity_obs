@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bgi3vde8141qr"]
 
-[ext_resource type="Script" path="res://chatter/pin.gd" id="1_m7hu8"]
+[ext_resource type="Script" uid="uid://bludiob4pt7x" path="res://chatter/pin.gd" id="1_m7hu8"]
 [ext_resource type="Texture2D" uid="uid://bfhcp4a5t0bm1" path="res://chatter/textures/pin.png" id="1_n5hex"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_10ule"]
