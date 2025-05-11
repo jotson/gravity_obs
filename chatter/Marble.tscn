@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://vvflg026we3l"]
+[gd_scene load_steps=13 format=3 uid="uid://vvflg026we3l"]
 
 [ext_resource type="Texture2D" uid="uid://c8afxwam0vsus" path="res://chatter/textures/helmet.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://bqnhnq6xvubqp" path="res://chatter/textures/face.png" id="3"]
@@ -6,6 +6,7 @@
 [ext_resource type="Material" uid="uid://d15kkyrusbpla" path="res://chatter/color.material" id="4"]
 [ext_resource type="Script" uid="uid://c1m8t4w0qmkso" path="res://chatter/Marble.gd" id="5"]
 [ext_resource type="Texture2D" uid="uid://dotati4xu1a2y" path="res://chatter/textures/helmet-bg.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://ctrno6tmmgprh" path="res://chatter/textures/team-flag.png" id="7_5vmsy"]
 
 [sub_resource type="PhysicsMaterial" id="10"]
 bounce = 0.5
@@ -187,11 +188,17 @@ autowrap_mode = 2
 [node name="AnimationPlayer" type="AnimationPlayer" parent="speechBubble"]
 root_node = NodePath("../speechBubble")
 libraries = {
-"": SubResource("AnimationLibrary_jvd6i")
+&"": SubResource("AnimationLibrary_jvd6i")
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("11")
+
+[node name="TeamFlag" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -44)
+texture = ExtResource("7_5vmsy")
+offset = Vector2(0, -42)
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

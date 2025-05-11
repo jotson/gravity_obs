@@ -6,6 +6,8 @@ var WINDOW_H = ProjectSettings.get("display/window/size/viewport_height")
 const SETTINGS_FILE = "user://twitch.ini"
 
 var user_exit := true
+var bball_in_progress : bool = false
+
 
 func set_transparent(value : bool):
 	get_tree().get_root().set_transparent_background(value)

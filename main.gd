@@ -12,8 +12,6 @@ var dragged = null
 const COMMANDS_JSON = "user://commands.json"
 const EVENTS_JSON = "user://events.json"
 
-const AstronautChatter = preload("res://chatter/Astronaut.tscn")
-const AstronautContainer = preload("res://chatter/AstronautContainer.tscn")
 const MarbleChatter = preload("res://chatter/Marble.tscn")
 const MarbleContainer = preload("res://chatter/MarbleContainer.tscn")
 @onready var Chatter = MarbleChatter
@@ -214,7 +212,6 @@ func get_object_under_cursor(pos: Vector2 = Vector2(-1,-1), exclude = null) -> N
 
 
 func _process(_delta):
-	prints($login.visible, Soundboard.visible)
 	if $login.visible or Soundboard.visible:
 		Helper.disable_mouse_passthrough()
 	else:
@@ -270,7 +267,7 @@ func load_commands():
 			Twitch.add_command(c.command, cmd_commands, 0, 0, perm)
 
 		if c.has("action") and c.action == "shoutout":
-			Twitch.add_command(c.command, cmd_shoutout, 1, 0, perm)
+			Twitch.add_command(c.command, cmd_shoutout, 1, 1, perm)
 	
 		if c.has("action") and c.action == "chat":
 			Twitch.add_command(c.command, cmd_chat, 0, 0, perm)
@@ -286,6 +283,12 @@ func load_commands():
 		
 		if c.has("action") and c.action == "thisisfine":
 			Twitch.add_command(c.command, cmd_thisisfine, 0, 0, perm)
+		
+		if c.has("action") and c.action == "bball":
+			Twitch.add_command(c.command, cmd_bball, 0, 0, perm)
+			
+		if c.has("action") and c.action == "bball_shoot":
+			Twitch.add_command(c.command, cmd_bball_shoot, 1, 1, perm)
 			
 		if c.has("aliases"):
 			for alias in c.aliases:
@@ -295,9 +298,44 @@ func load_commands():
 				}
 
 
-func cmd_shoutout(_cmd : CommandInfo, username):
+func cmd_bball(_cmd : CommandInfo):
+	if Helper.bball_in_progress:
+		return
+	Helper.bball_in_progress = true
+	Twitch.chat("Bball game started!");
+	var bball = preload("res://bball/bball.tscn").instantiate()
+	add_child(bball)
+	bball.tree_exited.connect(end_bball)
+	
+	for username in profile_pics:
+		var node = profile_pics[username]["node"]
+		node.show_team()
+
+
+func end_bball():
+	Helper.bball_in_progress = false
+	for username in profile_pics:
+		var node = profile_pics[username]["node"]
+		node.hide_team()
+	
+
+func cmd_bball_shoot(cmd : CommandInfo, args):
+	if not Helper.bball_in_progress:
+		Twitch.chat("No game in progress")
+		return
+	var username = cmd.sender_data.user
+	var angle = int(args[0])
+	if profile_pics.has(username):
+		var chatter = profile_pics[username]["node"]
+		var f = Vector2(0, -1).rotated(deg_to_rad(angle)) * 5000
+		(chatter as RigidBody2D).apply_central_impulse(f)
+		Twitch.chat("%s shoots!" % cmd.sender_data.user)
+	
+
+func cmd_shoutout(_cmd : CommandInfo, args):
 	load_commands()
-	Twitch.chat("Go check out https://twitch.tv/%s because they are awesome!" % username[0])
+	var username = args[0]
+	Twitch.chat("Go check out https://twitch.tv/%s because they are awesome!" % username)
 
 
 func cmd_commands(_cmd : CommandInfo):
@@ -550,11 +588,13 @@ func add_head(username, message):
 		chatter.add_head(null, username, first)
 		ChatterContainer.add_child(chatter)
 		chatter.say(message)
-		
 		profile_pic_queue.append(username)
 	elif profile_pics.has(username):
-			profile_pics[username]["node"].say(message)
-
+		profile_pics[username]["node"].say(message)
+		
+	if Helper.bball_in_progress:
+		profile_pics[username]["node"].show_team()
+		
 	if profile_pic_queue.size() and Time.get_ticks_msec() > last_api_request + 500:
 		get_profile_pic(profile_pic_queue)
 
