@@ -9,6 +9,8 @@ var MAX_CHATTERS = 50
 var lastChannel = ""
 var dragged = null
 
+var game
+
 const COMMANDS_JSON = "user://commands.json"
 const EVENTS_JSON = "user://events.json"
 
@@ -299,37 +301,46 @@ func load_commands():
 
 
 func cmd_bball(_cmd : CommandInfo):
-	if Helper.bball_in_progress:
+	if game:
 		return
-	Helper.bball_in_progress = true
-	Twitch.chat("Bball game started!");
-	var bball = preload("res://bball/bball.tscn").instantiate()
-	add_child(bball)
-	bball.tree_exited.connect(end_bball)
 	
-	for username in profile_pics:
+	Twitch.chat("Bball game started!");
+	game = preload("res://bball/bball.tscn").instantiate()
+	add_child(game)
+	game.tree_exited.connect(end_bball)
+	
+	# Randomize teams
+	var i = 0
+	var players = profile_pics.keys()
+	players.shuffle()
+	for username in players:
 		var node = profile_pics[username]["node"]
+		if i < players.size() / 2:
+			node.team = "red"
+		else:
+			node.team = "blue"
 		node.show_team()
+		i += 1
 
 
 func end_bball():
-	Helper.bball_in_progress = false
 	for username in profile_pics:
 		var node = profile_pics[username]["node"]
 		node.hide_team()
+	game = null
 	
 
 func cmd_bball_shoot(cmd : CommandInfo, args):
-	if not Helper.bball_in_progress:
+	if game == null:
 		Twitch.chat("No game in progress")
 		return
 	var username = cmd.sender_data.user
 	var angle = int(args[0])
 	if profile_pics.has(username):
 		var chatter = profile_pics[username]["node"]
+		game.shoot(username)
 		var f = Vector2(0, -1).rotated(deg_to_rad(angle)) * 5000
 		(chatter as RigidBody2D).apply_central_impulse(f)
-		Twitch.chat("%s shoots!" % cmd.sender_data.user)
 	
 
 func cmd_shoutout(_cmd : CommandInfo, args):
@@ -528,7 +539,7 @@ func twitch_chat(sender_data, command : String, full_message : String):
 			i += 1
 	message = new_message
 	
-	if true:
+	if false:
 		var o = load("res://chatter/quote.tscn").instantiate()
 		var p = Helper.random_position()
 		o.position = p + Vector2(randi_range(-60, 60), 30)
@@ -592,7 +603,7 @@ func add_head(username, message):
 	elif profile_pics.has(username):
 		profile_pics[username]["node"].say(message)
 		
-	if Helper.bball_in_progress:
+	if game:
 		profile_pics[username]["node"].show_team()
 		
 	if profile_pic_queue.size() and Time.get_ticks_msec() > last_api_request + 500:

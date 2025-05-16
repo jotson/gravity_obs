@@ -7,6 +7,7 @@ const GRAVITY = 50.0
 var t = 6.0
 var last_say: float = 0.0
 var team: String = ""
+var username: String = ""
 static var next_color: String = "blue"
 
 
@@ -27,14 +28,19 @@ func _ready():
 	
 	velocity = Vector2.ZERO
 	
+	set_team()
+	
+	hide_team()
+	
+	%nametag.hide()
+
+
+func set_team():
 	team = next_color
 	if next_color == "red":
 		next_color = "blue"
 	else:
 		next_color = "red"
-	hide_team()
-	
-	%nametag.hide()
 
 
 func _process(_delta):
@@ -56,7 +62,7 @@ func _physics_process(delta):
 	t -= delta
 	if t <= 0:
 		t = randf() * 10.0 + 10.0
-		if not Helper.bball_in_progress:
+		if get_tree().current_scene.game == null:
 			apply_central_impulse(Vector2(0, -1000).rotated(randf() * PI/2 - PI/4))
 
 
@@ -77,6 +83,7 @@ func say(message:String):
 	
 		
 func add_head(image:Image = null, login:String = "", first_chatter:bool = false):
+	username = login
 	%nametag/nametag.text = login
 	if image:
 		var c: Color = image.get_pixel(1, 1)
