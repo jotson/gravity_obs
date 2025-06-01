@@ -152,7 +152,3 @@ viewport/transparent_background=true
 environment/default_environment="res://default_env.tres"
 quality/dynamic_fonts/use_oversampling=false
 quality/2d/use_pixel_snap=true
-
-[twitch]
-
-client_id="monjuytjs37yq38wueace2sen64hrq"

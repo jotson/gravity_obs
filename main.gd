@@ -315,6 +315,7 @@ func cmd_bball(_cmd : CommandInfo):
 	players.shuffle()
 	for username in players:
 		var node = profile_pics[username]["node"]
+		@warning_ignore("integer_division")
 		if i < players.size() / 2:
 			node.team = "red"
 		else:
@@ -637,19 +638,9 @@ func twitch_disconnect():
 
 
 func _on_authButton_pressed():
-	var uri = "https://id.twitch.tv/oauth2/authorize"
-	var client = HTTPClient.new()
-	var fields = {
-		"client_id": ProjectSettings.get("twitch/client_id"),
-		"redirect_uri": "http://localhost:8080",
-		"response_type": "token",
-		"force_verify": "true",
-		"scope": "chat:read chat:edit channel:read:redemptions"
-	}
-	var qs = client.query_string_from_dict(fields)
-
-	if OS.shell_open(uri + "?" + qs) != OK:
-		print_debug("Can't open browser")
+	%AutoLoginTimer.stop()
+	
+	Twitch.auth()
 
 
 func get_profile_pic(login:Array):
@@ -663,7 +654,7 @@ func get_profile_pic(login:Array):
 	var url = "https://api.twitch.tv/helix/users?"
 	for l in login:
 		url += "login=%s&" % l
-	var err = http.request(url, ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + ProjectSettings.get("twitch/client_id")], HTTPClient.METHOD_GET)
+	var err = http.request(url, ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + Helper.get_client_id()], HTTPClient.METHOD_GET)
 	if err != OK:
 		print("Error getting profile pic " + str(err))
 

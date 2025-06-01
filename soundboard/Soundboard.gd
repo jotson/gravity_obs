@@ -80,12 +80,14 @@ func get_sound_file(sound: String) -> String:
 func load_sound_file(sound: String) -> AudioStream:
 	sound = sound.replace(" ", "")
 	sound = sound.replace("!", "")
+	
 	sound = sound.replace("?", "")
 	sound = sound.replace("'", "")
 	sound = sound.replace(",", "")
 	sound = sound.replace(".", "")
 	sound = sound.to_lower()
-
+	print(sound)
+	
 	var stream: AudioStream
 	
 	var sound_file = get_sound_file(sound)

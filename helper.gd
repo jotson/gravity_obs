@@ -40,7 +40,42 @@ func get_saved_token():
 	return token
 
 
-func save_channel(channel):	
+func get_refresh_token():
+	var token = null
+	var config = ConfigFile.new()
+	if config.load(SETTINGS_FILE) == OK:
+		token = config.get_value("twitch", "refresh", null)
+
+	return token
+
+
+func get_client_id():
+	var client_id = null
+	var config = ConfigFile.new()
+	if config.load(SETTINGS_FILE) == OK:
+		client_id = config.get_value("twitch", "client_id", null)
+
+	return client_id
+
+
+func get_client_secret():
+	var client_secret = null
+	var config = ConfigFile.new()
+	if config.load(SETTINGS_FILE) == OK:
+		client_secret = config.get_value("twitch", "client_secret", null)
+
+	return client_secret
+
+
+func save_access_token(access_token, refresh_token):
+	var config = ConfigFile.new()
+	config.load(SETTINGS_FILE)
+	config.set_value("twitch", "token", access_token)
+	config.set_value("twitch", "refresh", refresh_token)
+	config.save(SETTINGS_FILE)
+
+
+func save_channel(channel):
 	var config = ConfigFile.new()
 	config.load(SETTINGS_FILE)
 	config.set_value("twitch", "channel", channel)
@@ -50,9 +85,7 @@ func save_channel(channel):
 func _input(_event):
 	if Input.is_action_just_pressed("disconnect"):
 		user_exit = true
-		Twitch.websocket.close()
-		TwitchPS.websocket.close()
-		OBS.websocket.close()
+		Twitch.close_all_connections()
 
 
 func add(object: Node):

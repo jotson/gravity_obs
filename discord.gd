@@ -40,7 +40,7 @@ func post_announcement():
 		print_debug("Signal not connected")
 
 	var data = JSON.stringify(discord_json)
-	var err = http.request(webhook_url, [ "Content-Type: application/json " ], HTTPClient.METHOD_POST, data)
+	var err = http.request(webhook_url, [ "Content-Type: application/json" ], HTTPClient.METHOD_POST, data)
 	if err != OK:
 		print("Could not make request to Discord: " + str(err))
 

@@ -73,7 +73,7 @@ func listen():
 
 	var headers = [
 		"Authorization: Bearer %s" % Helper.get_saved_token(),
-		"Client-Id: %s" % ProjectSettings.get("twitch/client_id"),
+		"Client-Id: %s" % Helper.get_client_id(),
 		"Content-Type: application/json",
 	]
 	var data = JSON.stringify(
