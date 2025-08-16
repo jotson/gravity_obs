@@ -122,7 +122,7 @@ func auth():
 		"redirect_uri": "http://localhost:8080",
 		"response_type": "code",
 		"force_verify": "true",
-		"scope": "chat:read chat:edit channel:read:redemptions"
+		"scope": "chat:read chat:edit channel:read:redemptions moderator:read:followers"
 	}
 	var qs = client.query_string_from_dict(fields)
 

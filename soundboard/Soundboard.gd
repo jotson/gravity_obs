@@ -86,7 +86,7 @@ func load_sound_file(sound: String) -> AudioStream:
 	sound = sound.replace(",", "")
 	sound = sound.replace(".", "")
 	sound = sound.to_lower()
-	print(sound)
+	#prints("Play sound", sound)
 	
 	var stream: AudioStream
 	
@@ -144,4 +144,4 @@ func play_midi(pitch: int):
 	if sound_map["midi"].has(key):
 		play(sound_map["midi"][key], true)
 		midi.emit(pitch)
-		prints("Play midi", pitch)
+		#prints("Play midi", pitch)

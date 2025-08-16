@@ -6,6 +6,7 @@ var WINDOW_H = ProjectSettings.get("display/window/size/viewport_height")
 const SETTINGS_FILE = "user://twitch.ini"
 
 var user_exit := true
+var connected := false
 
 
 func set_transparent(value : bool):
