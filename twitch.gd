@@ -190,10 +190,14 @@ func refresh_access_token() -> void:
 	http.request(url, [ "Content-Type: application/x-www-form-urlencoded" ], HTTPClient.METHOD_POST, data)
 
 
-func close_all_connections():
+func close() -> void:
+	websocket.close()
+	
+
+func close_all_connections() -> void:
 	Helper.user_exit = true
-	Twitch.websocket.close()
-	TwitchPS.websocket.close()
-	OBS.websocket.close()
+	Twitch.close()
+	TwitchEventSub.close()
+	OBS.close()
 	Twitch.server = null
 	Twitch.server_peer = null

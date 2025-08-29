@@ -277,3 +277,7 @@ func send(message : Dictionary) -> void:
 	if err != OK:
 		print_debug("Failed to send message, error: " + str(err))
 	
+
+func close() -> void:
+	websocket.close()
+	

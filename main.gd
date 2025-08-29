@@ -47,7 +47,7 @@ func _ready():
 	if Twitch.got_channel_info.connect(twitch_got_channel_info) != OK:
 		print_debug("Signal not connected")
 
-	if TwitchPS.reward_redemption.connect(twitch_reward_redemption) != OK:
+	if TwitchEventSub.reward_redemption.connect(twitch_reward_redemption) != OK:
 		print_debug("Signal not connected")
 		
 	load_commands()
@@ -478,7 +478,7 @@ func twitch_login_attempt(success):
 
 
 func twitch_got_channel_info():
-	TwitchPS.connect_to_twitch()
+	TwitchEventSub.connect_to_twitch()
 
 
 func twitch_chat(sender_data, command : String, full_message : String):

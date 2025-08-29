@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://xp10god7js63"]
+
+[ext_resource type="Script" uid="uid://cj22f1enf5hc2" path="res://eventsub.gd" id="1_mtdio"]
+
+[node name="EventSub" type="Node"]
+script = ExtResource("1_mtdio")

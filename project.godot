@@ -27,8 +27,8 @@ Twitch="*res://twitch.gd"
 Helper="*res://helper.gd"
 Discord="*res://discord.gd"
 OBS="*res://obs.gd"
-TwitchPS="*res://twitcheventsub.gd"
 Soundboard="*res://soundboard/Soundboard.tscn"
+TwitchEventSub="*res://twitcheventsub.gd"
 
 [display]
 
