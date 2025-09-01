@@ -657,6 +657,7 @@ func get_profile_pic(login:Array):
 	
 	var url = "https://api.twitch.tv/helix/users?"
 	for l in login:
+		print("Getting profile pic for %s" % l)
 		url += "login=%s&" % l
 	var err = http.request(url, ["Authorization: Bearer " + Helper.get_saved_token(), "Client-Id: " + Helper.get_client_id()], HTTPClient.METHOD_GET)
 	if err != OK:
@@ -671,6 +672,7 @@ func received_profile_pic(_result: int, _response_code: int, _headers: PackedStr
 	test_json_conv.parse(data)
 	var message = test_json_conv.get_data()
 	for user in message.data:
+		print("Received profile pic info %s %s" % [user.login, user.profile_image_url])
 		if profile_pics.has(user.login):
 			profile_pics[user.login]["url"] = user.profile_image_url
 		get_profile_image(user.login, user.profile_image_url)
@@ -689,6 +691,8 @@ func get_profile_image(login:String, url:String):
 	
 func profile_image_received(_result: int, _response_code: int, _headers: PackedStringArray, body: PackedByteArray, http: HTTPRequest, login: String, url: String):
 	http.queue_free()
+	
+	print("Received profile pic bytes %d" % [_response_code])
 	
 	var image = Image.new()
 	if url.ends_with("png"):
