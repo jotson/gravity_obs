@@ -35,4 +35,5 @@ func reconnect(reconnect_url: String) -> void:
 	
 
 func close() -> void:
-	the_sub.close()
+	if the_sub:
+		the_sub.close()
